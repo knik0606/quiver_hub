@@ -35,7 +35,7 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = const FirebaseOptions(
+  static const FirebaseOptions web = FirebaseOptions(
     apiKey: "AIzaSyDvU1zZnyk39pbxkbJNWUt93kSnDva3dvM",
     appId: "1:892141263609:web:6be24bfdeb300f1d926028",
     messagingSenderId: "892141263609",
@@ -45,7 +45,7 @@ class DefaultFirebaseOptions {
     measurementId: "G-KJQ01Y90VX",
   );
 
-  static const FirebaseOptions android = const FirebaseOptions(
+  static const FirebaseOptions android = FirebaseOptions(
     apiKey: "AIzaSyB37UqLA6Af0EVK0LIbQqzqyFvR6bhBD2g",
     appId: "1:892141263609:android:f435fc520acaf234926028",
     messagingSenderId: "892141263609",
@@ -53,7 +53,7 @@ class DefaultFirebaseOptions {
     storageBucket: "quiver-hub.appspot.com",
   );
 
-  static const FirebaseOptions ios = const FirebaseOptions(
+  static const FirebaseOptions ios = FirebaseOptions(
     apiKey: "AIzaSyB-_ATtdDJFJC4JUPsyd4Aa6w2yIkICzwg",
     appId: "1:892141263609:ios:304e5ff82a1e034c926028",
     messagingSenderId: "892141263609",
