@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "892141263609",
+    "project_id": "quiver-hub",
+    "storage_bucket": "quiver-hub.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:892141263609:android:f435fc520acaf234926028",
+        "android_client_info": {
+          "package_name": "com.example.quiver_hub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB37UqLA6Af0EVK0LIbQqzqyFvR6bhBD2g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
