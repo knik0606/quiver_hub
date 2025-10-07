@@ -1,54 +1,13 @@
 {
-  "flutter": {
-    "platforms": {
-      "android": {
-        "default": {
-          "projectId": "quiver-hub",
-          "appId": "1:892141263609:android:f435fc520acaf234926028",
-          "fileOutput": "android/app/google-services.json"
-        }
-      },
-      "ios": {
-        "default": {
-          "projectId": "quiver-hub",
-          "appId": "1:892141263609:ios:304e5ff82a1e034c926028",
-          "uploadDebugSymbols": false,
-          "fileOutput": "ios/Runner/GoogleService-Info.plist"
-        }
-      },
-      "macos": {
-        "default": {
-          "projectId": "quiver-hub",
-          "appId": "1:892141263609:ios:304e5ff82a1e034c926028",
-          "uploadDebugSymbols": false,
-          "fileOutput": "macos/Runner/GoogleService-Info.plist"
-        }
-      },
-      "dart": {
-        "lib/firebase_options.dart": {
-          "projectId": "quiver-hub",
-          "configurations": {
-            "android": "1:892141263609:android:f435fc520acaf234926028",
-            "ios": "1:892141263609:ios:304e5ff82a1e034c926028",
-            "macos": "1:892141263609:ios:304e5ff82a1e034c926028",
-            "web": "1:892141263609:web:6be24bfdeb300f1d926028",
-            "windows": "1:892141263609:web:4428771ec27a3680926028"
-          }
-        }
-      }
-    }
+  "hosting": {
+    "public": "admin_web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
   },
-  "functions": [
-    {
-      "source": "functions",
-      "codebase": "default",
-      "ignore": [
-        "node_modules",
-        ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log",
-        "*.local"
-      ]
-    }
-  ]
+  "functions": {
+    "source": "functions"
+  }
 }

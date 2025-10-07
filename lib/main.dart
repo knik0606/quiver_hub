@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:intl/intl.dart';
 import 'firebase_options.dart';
 import 'admin_page.dart';
+import 'message_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,8 +19,108 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final _audioPlayer = AudioPlayer();
+  StreamSubscription<QuerySnapshot>? _globalMessageSubscription;
+  int _globalMessageCount = -1;
+  bool _hasNewMessageGlobal = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeAudio();
+    _listenForNewMessagesGlobal();
+  }
+
+  // 오디오 초기화 (웹 호환 강화)
+  Future<void> _initializeAudio() async {
+    try {
+      // audioplayers: preload for web
+      await _audioPlayer.setVolume(1.0);
+    } catch (e) {
+      debugPrint('Global audio init error: $e');
+    }
+  }
+
+  // 앱 전체 새 메시지 감지 (다른 화면 포함 알림)
+  void _listenForNewMessagesGlobal() {
+    _globalMessageSubscription = FirebaseFirestore.instance
+        .collection('chats')
+        .doc('main_thread')
+        .collection('messages')
+        .orderBy('timestamp')
+        .snapshots()
+        .listen((snapshot) async {
+      if (_globalMessageCount == -1) {
+        _globalMessageCount = snapshot.docs.length;
+        return;
+      }
+
+      if (snapshot.docChanges.isNotEmpty &&
+          snapshot.docs.length > _globalMessageCount) {
+        bool hasNewAdminMessage = false;
+        for (var change in snapshot.docChanges) {
+          if (change.type == DocumentChangeType.added) {
+            final data = change.doc.data();
+            if (data != null && data['senderType'] == 'ADMIN') {
+              hasNewAdminMessage = true;
+              break;
+            }
+          }
+        }
+        if (hasNewAdminMessage && mounted) {
+          setState(() {
+            _hasNewMessageGlobal = true; // 글로벌 배지 업데이트
+          });
+          await _playGlobalNotificationSound();
+        }
+      }
+      _globalMessageCount = snapshot.docs.length;
+    });
+  }
+
+  // 글로벌 알림 소리 재생
+  Future<void> _playGlobalNotificationSound() async {
+    try {
+      await _audioPlayer.stop();
+      await _audioPlayer
+          .play(AssetSource('audio/digital-quick.wav')); // 올바른 play 호출 (인수 추가)
+    } catch (e) {
+      debugPrint('Global sound play error: $e');
+    }
+  }
+
+  // 읽음 상태 업데이트 (배지 사라짐)
+  Future<void> _markAsRead() async {
+    try {
+      final now = FieldValue.serverTimestamp();
+      await FirebaseFirestore.instance
+          .collection('settings')
+          .doc('user_settings')
+          .set({'lastReadMessageTime': now}, SetOptions(merge: true));
+      if (mounted) {
+        setState(() {
+          _hasNewMessageGlobal = false;
+        });
+      }
+    } catch (e) {
+      debugPrint('Mark as read error: $e');
+    }
+  }
+
+  @override
+  void dispose() {
+    _globalMessageSubscription?.cancel();
+    _audioPlayer.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +130,23 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MainPage(),
+      home: MainPage(
+        hasNewMessage: _hasNewMessageGlobal, // MainPage에 배지 전달
+        onMarkAsRead: _markAsRead, // 읽음 콜백
+      ),
     );
   }
 }
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  final bool hasNewMessage;
+  final VoidCallback onMarkAsRead;
+
+  const MainPage({
+    super.key,
+    required this.hasNewMessage,
+    required this.onMarkAsRead,
+  });
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -43,12 +156,12 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
   bool _isAdminUnlocked = false;
   Timer? _lockTimer;
-  String _appTitle = 'Quiver Hub'; // AppBar 제목을 위한 변수
+  String _appTitle = 'Quiver Hub';
 
+  // 불변 final
   final bool _hasNewNotices = true;
   final bool _hasNewSchedule = false;
   final bool _hasNewAttendanceUpdate = false;
-  final bool _hasNewMessage = true;
 
   @override
   void initState() {
@@ -56,7 +169,6 @@ class _MainPageState extends State<MainPage> {
     _fetchSettings();
   }
 
-  // Firestore에서 설정을 가져오는 함수
   void _fetchSettings() {
     FirebaseFirestore.instance
         .collection('settings')
@@ -72,10 +184,11 @@ class _MainPageState extends State<MainPage> {
   }
 
   static const List<Widget> _pages = <Widget>[
-    Center(child: Text('Notices Page')),
-    Center(child: Text('Schedule Page')),
-    AthleteListPage(),
-    AdminPage(),
+    // const 제거 (lint)
+    const Center(child: Text('Notices Page')),
+    const Center(child: Text('Schedule Page')),
+    const AthleteListPage(),
+    const AdminPage(),
   ];
 
   void _resetLockTimer() {
@@ -88,7 +201,8 @@ class _MainPageState extends State<MainPage> {
         if (ScaffoldMessenger.of(context).mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-                content: Text('Admin mode has been locked due to inactivity.')),
+              content: Text('Admin mode has been locked due to inactivity.'),
+            ),
           );
         }
       }
@@ -114,17 +228,15 @@ class _MainPageState extends State<MainPage> {
 
   Future<void> _showPasswordDialog() async {
     final passwordController = TextEditingController();
-
     final settingsDoc = await FirebaseFirestore.instance
         .collection('settings')
         .doc('admin_settings')
         .get();
-
     final correctPassword = settingsDoc.data()?['adminPassword'] ?? '1234';
 
     if (!mounted) return;
 
-    return showDialog<void>(
+    showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
@@ -145,11 +257,14 @@ class _MainPageState extends State<MainPage> {
               child: const Text('OK'),
               onPressed: () {
                 if (passwordController.text == correctPassword) {
-                  setState(() {
-                    _isAdminUnlocked = true;
-                    _selectedIndex = 3;
-                  });
-                  _resetLockTimer();
+                  if (mounted) {
+                    // mounted 체크 추가 (lint)
+                    setState(() {
+                      _isAdminUnlocked = true;
+                      _selectedIndex = 3;
+                    });
+                    _resetLockTimer();
+                  }
                   Navigator.of(context).pop();
                 } else {
                   Navigator.of(context).pop();
@@ -194,16 +309,22 @@ class _MainPageState extends State<MainPage> {
 
     return Scaffold(
       appBar: AppBar(
-        // ▼▼▼▼▼ 이 부분을 수정했습니다! ▼▼▼▼▼
         title: Text(_appTitle),
       ),
       body: _pages.elementAt(displayIndex),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // TODO: 메시지 보내기 화면 구현
+          widget.onMarkAsRead(); // await 제거 (void라 불필요, 에러 해결)
+          if (mounted) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const MessagePage()),
+            );
+          }
         },
         tooltip: 'Send a message',
-        child: _buildIconWithBadge(Icons.message_outlined, _hasNewMessage),
+        child:
+            _buildIconWithBadge(Icons.message_outlined, widget.hasNewMessage),
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -235,41 +356,56 @@ class _MainPageState extends State<MainPage> {
   }
 }
 
-// AthleteListPage 코드는 변경이 필요 없으므로 그대로 둡니다.
+// AthleteListPage (변경 없음 – 에러 없음)
 class AthleteListPage extends StatelessWidget {
   const AthleteListPage({super.key});
 
-  // Firestore의 선수 상태를 업데이트하고, 이메일 발송을 요청하는 함수
-  Future<void> _updateAthleteStatus(
-      String docId, String athleteName, String newStatus) async {
+  Future<void> _updateAthleteStatus(String docId, String athleteName,
+      String newStatus, BuildContext context) async {
+    if (!context.mounted) return; // mounted 체크 추가
+
+    ScaffoldMessenger.of(context)
+        .showSnackBar(const SnackBar(content: Text('Updating status...')));
+
     final athletesCollection =
         FirebaseFirestore.instance.collection('athletes');
     final mailCollection = FirebaseFirestore.instance.collection('mail');
     final settingsDoc =
         FirebaseFirestore.instance.collection('settings').doc('admin_settings');
 
-    // 1. 선수의 상태를 먼저 업데이트합니다.
     await athletesCollection.doc(docId).update({'status': newStatus});
 
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('$athleteName updated to $newStatus')),
+      );
+    }
+
     try {
-      // 2. Admin 페이지에 저장된 알림 이메일 주소를 가져옵니다.
       final settingSnapshot = await settingsDoc.get();
       final recipientEmail = settingSnapshot.data()?['notificationEmail'];
 
-      // 3. 알림 이메일 주소가 설정되어 있을 때만 메일을 보냅니다.
       if (recipientEmail != null && recipientEmail.isNotEmpty) {
-        // 4. 'mail' 컬렉션에 이메일 내용을 담은 문서를 생성합니다.
+        final now = DateTime.now();
+        final timeString = DateFormat('HH:mm').format(now);
+        final dateString = DateFormat('yy/MM/dd').format(now);
+
+        final emailSubject =
+            '[$newStatus] - $athleteName ($timeString) - $dateString';
+        final emailBody = '''
+          <p><b>$athleteName</b> - [$newStatus]</p>
+          <p><b>Time:</b> $timeString - $dateString</p>
+        ''';
+
         await mailCollection.add({
           'to': recipientEmail,
-          'subject': 'Attendance Update: $athleteName',
-          'html': '''
-            <p><b>$athleteName</b> has updated their status to <b>$newStatus</b>.</p>
-            <p>Time: ${DateTime.now().toIso8601String()}</p>
-          ''',
+          'subject': emailSubject,
+          'html': emailBody,
         });
       }
     } catch (e) {
-      print('Failed to send email notification: $e');
+      debugPrint('Email send error: $e');
     }
   }
 
@@ -297,16 +433,25 @@ class AthleteListPage extends StatelessWidget {
             final String athleteName = athlete['name'] ?? 'No Name';
             final String athleteStatus = athlete['status'] ?? 'Unknown';
 
+            final Color outBgColor =
+                athleteStatus == 'OUT' ? Colors.grey : Colors.orange;
+            final Color inBgColor =
+                athleteStatus == 'IN' ? Colors.grey : Colors.green;
+            const Color fgColor = Colors.white;
+
             return Slidable(
               startActionPane: ActionPane(
                 motion: const StretchMotion(),
                 children: [
                   SlidableAction(
-                    onPressed: (context) {
-                      _updateAthleteStatus(athlete.id, athleteName, 'OUT');
-                    },
-                    backgroundColor: Colors.orange,
-                    foregroundColor: Colors.white,
+                    onPressed: athleteStatus == 'OUT'
+                        ? null
+                        : (context) {
+                            _updateAthleteStatus(
+                                athlete.id, athleteName, 'OUT', context);
+                          },
+                    backgroundColor: outBgColor,
+                    foregroundColor: fgColor,
                     icon: Icons.logout,
                     label: 'OUT',
                   ),
@@ -316,11 +461,14 @@ class AthleteListPage extends StatelessWidget {
                 motion: const StretchMotion(),
                 children: [
                   SlidableAction(
-                    onPressed: (context) {
-                      _updateAthleteStatus(athlete.id, athleteName, 'IN');
-                    },
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
+                    onPressed: athleteStatus == 'IN'
+                        ? null
+                        : (context) {
+                            _updateAthleteStatus(
+                                athlete.id, athleteName, 'IN', context);
+                          },
+                    backgroundColor: inBgColor,
+                    foregroundColor: fgColor,
                     icon: Icons.login,
                     label: 'IN',
                   ),

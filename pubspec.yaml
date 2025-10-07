@@ -20,10 +20,13 @@ dependencies:
   firebase_storage: ^12.1.1
 
   # UI 기능 패키지
-  flutter_slidable: ^3.1.0
+  flutter_slidable: ^3.1.2
 
   # 유틸리티 패키지
   image_picker: ^1.1.2
+  intl: ^0.20.2
+  audioplayers: ^6.5.1
+  just_audio: ^0.9.40 # Grok에서 추가
 
 dev_dependencies:
   flutter_test:
@@ -33,6 +36,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/audio/
 
   # assets:
   #   - images/a_dot_burr.jpeg
