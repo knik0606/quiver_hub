@@ -10,6 +10,8 @@ import 'admin_page.dart';
 import 'message_page.dart';
 
 void main() async {
+  FirebaseFirestore.instance.settings =
+      const Settings(persistenceEnabled: true);
   WidgetsFlutterBinding.ensureInitialized();
   if (Firebase.apps.isEmpty) {
     await Firebase.initializeApp(
