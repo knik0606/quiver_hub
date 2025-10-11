@@ -52,3 +52,4 @@ app.*.map.json
 /windows/flutter/generated_*.h
 /windows/flutter/generated_*.cc
 /windows/flutter/generated_plugins.cmakeg
+quiver-hub-6d49720fd4e8.json

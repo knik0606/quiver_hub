@@ -10,14 +10,20 @@ import 'admin_page.dart';
 import 'message_page.dart';
 
 void main() async {
-  FirebaseFirestore.instance.settings =
-      const Settings(persistenceEnabled: true);
+  // 1. Flutter 엔진 초기화 (가장 먼저!)
   WidgetsFlutterBinding.ensureInitialized();
+
+  // 2. Firebase 앱 초기화 (다음으로!)
   if (Firebase.apps.isEmpty) {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
   }
+
+  // 3. Firestore 설정 (Firebase 초기화 이후에!)
+  FirebaseFirestore.instance.settings =
+      const Settings(persistenceEnabled: true);
+
   runApp(const MyApp());
 }
 
@@ -376,6 +382,14 @@ class AthleteListPage extends StatelessWidget {
         FirebaseFirestore.instance.collection('settings').doc('admin_settings');
 
     await athletesCollection.doc(docId).update({'status': newStatus});
+
+    final logsCollection =
+        FirebaseFirestore.instance.collection('attendance_logs');
+    await logsCollection.add({
+      'name': athleteName,
+      'status': newStatus,
+      'timestamp': FieldValue.serverTimestamp(), // 서버 시간 기준 기록
+    });
 
     if (context.mounted) {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
