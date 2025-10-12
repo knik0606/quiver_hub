@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'firebase_options.dart';
 import 'admin_page.dart';
 import 'message_page.dart';
+import 'notices_page.dart';
 
 void main() async {
   // 1. Flutter 엔진 초기화 (가장 먼저!)
@@ -166,10 +168,55 @@ class _MainPageState extends State<MainPage> {
   Timer? _lockTimer;
   String _appTitle = 'Quiver Hub';
 
-  // 불변 final
   final bool _hasNewNotices = true;
   final bool _hasNewSchedule = false;
   final bool _hasNewAttendanceUpdate = false;
+
+  // ▼▼▼ 데이터 동기화 함수 ▼▼▼
+  Future<void> _syncData() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const Dialog(
+          child: Padding(
+            padding: EdgeInsets.all(20.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(width: 20),
+                Text("Syncing data..."),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
+    try {
+      final callable =
+          FirebaseFunctions.instance.httpsCallable('syncSheetsToFirestore');
+      final result = await callable.call();
+      debugPrint('Sync result: ${result.data}');
+
+      if (mounted) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Data synced successfully!')),
+        );
+      }
+    } on FirebaseFunctionsException catch (e) {
+      debugPrint('Sync error: ${e.code} - ${e.message}');
+      if (mounted) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Sync failed: ${e.message}')),
+        );
+      }
+    }
+  }
+  // ▲▲▲ 여기까지 ▲▲▲
 
   @override
   void initState() {
@@ -192,8 +239,7 @@ class _MainPageState extends State<MainPage> {
   }
 
   static const List<Widget> _pages = <Widget>[
-    // const 제거 (lint)
-    const Center(child: Text('Notices Page')),
+    const NoticesPage(),
     const Center(child: Text('Schedule Page')),
     const AthleteListPage(),
     const AdminPage(),
@@ -266,7 +312,6 @@ class _MainPageState extends State<MainPage> {
               onPressed: () {
                 if (passwordController.text == correctPassword) {
                   if (mounted) {
-                    // mounted 체크 추가 (lint)
                     setState(() {
                       _isAdminUnlocked = true;
                       _selectedIndex = 3;
@@ -318,11 +363,20 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_appTitle),
+        // ▼▼▼ 새로고침 버튼 ▼▼▼
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.sync),
+            tooltip: 'Sync data from Sheet',
+            onPressed: _syncData,
+          ),
+        ],
+        // ▲▲▲ 여기까지 ▲▲▲
       ),
       body: _pages.elementAt(displayIndex),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          widget.onMarkAsRead(); // await 제거 (void라 불필요, 에러 해결)
+          widget.onMarkAsRead();
           if (mounted) {
             Navigator.push(
               context,

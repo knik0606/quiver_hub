@@ -1,14 +1,26 @@
 const {onDocumentCreated} = require("firebase-functions/v2/firestore");
-const {onCall} = require("firebase-functions/v2/https");
+const {onCall, HttpsError} = require("firebase-functions/v2/https"); // HttpsError를 직접 import
 const {defineSecret} = require("firebase-functions/params");
 const admin = require("firebase-admin");
 const {google} = require("googleapis");
-const functions = require("firebase-functions");
 
 admin.initializeApp();
 
 const GOOGLE_SERVICE_ACCOUNT_KEY = defineSecret("GOOGLE_SERVICE_ACCOUNT_KEY");
 const SPREADSHEET_ID = "1C_jy4xH6TqCbYF1BfICAPRnhJQsN_JZ8IkXS77mZfcU";
+
+function convertGoogleDriveUrl(url) {
+    if (!url || !url.includes("drive.google.com")) {
+        return "";
+    }
+    const regex = /drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/;
+    const match = url.match(regex);
+    if (match && match[1]) {
+        const fileId = match[1];
+        return `https://drive.google.com/uc?export=view&id=${fileId}`;
+    }
+    return "";
+}
 
 // 기존 출석 기록 함수
 exports.logAttendanceToSheet = onDocumentCreated({
@@ -60,20 +72,19 @@ exports.syncSheetsToFirestore = onCall({
     secrets: [GOOGLE_SERVICE_ACCOUNT_KEY],
 }, async (request) => {
     console.log("syncSheetsToFirestore 함수가 호출되었습니다.");
-
     const credentials = JSON.parse(GOOGLE_SERVICE_ACCOUNT_KEY.value());
     const auth = new google.auth.GoogleAuth({
         credentials,
         scopes: ["https://www.googleapis.com/auth/spreadsheets"],
     });
     const sheets = google.sheets({version: "v4", auth});
+    const db = admin.firestore();
 
     try {
         const noticesPromise = sheets.spreadsheets.values.get({
             spreadsheetId: SPREADSHEET_ID,
-            range: "Notices!A2:B",
+            range: "Notices!A2:C",
         });
-
         const schedulesPromise = sheets.spreadsheets.values.get({
             spreadsheetId: SPREADSHEET_ID,
             range: "Schedules!A2:B",
@@ -83,20 +94,50 @@ exports.syncSheetsToFirestore = onCall({
             noticesPromise,
             schedulesPromise,
         ]);
-
         const notices = noticesResponse.data.values || [];
         const schedules = schedulesResponse.data.values || [];
 
-        console.log("읽어온 공지사항:", JSON.stringify(notices, null, 2));
-        console.log("읽어온 스케줄:", JSON.stringify(schedules, null, 2));
+        const noticesSnapshot = await db.collection("notices").get();
+        const noticesBatch = db.batch();
+        noticesSnapshot.docs.forEach((doc) => noticesBatch.delete(doc.ref));
+        await noticesBatch.commit();
 
+        const schedulesSnapshot = await db.collection("schedules").get();
+        const schedulesBatch = db.batch();
+        schedulesSnapshot.docs.forEach((doc) => schedulesBatch.delete(doc.ref));
+        await schedulesBatch.commit();
+
+        const noticesWriteBatch = db.batch();
+        notices.forEach((row, index) => {
+            const docRef = db.collection("notices").doc();
+            noticesWriteBatch.set(docRef, {
+                pageNumber: row[0] || "",
+                content: row[1] || "",
+                imageUrl: convertGoogleDriveUrl(row[2] || ""),
+                order: index,
+            });
+        });
+        await noticesWriteBatch.commit();
+
+        const schedulesWriteBatch = db.batch();
+        schedules.forEach((row, index) => {
+            const docRef = db.collection("schedules").doc();
+            schedulesWriteBatch.set(docRef, {
+                page: row[0] || "",
+                imageUrl: convertGoogleDriveUrl(row[1] || ""),
+                order: index,
+            });
+        });
+        await schedulesWriteBatch.commit();
+
+        console.log(`Notices ${notices.length}개, Schedules ${schedules.length}개 동기화 완료.`);
         return {
             status: "success",
             noticesCount: notices.length,
             schedulesCount: schedules.length,
         };
     } catch (err) {
-        console.error("시트 읽기 오류:", err);
-        throw new functions.https.HttpsError("internal", "시트를 읽는 도중 에러가 발생했습니다.");
+        console.error("시트 동기화 오류:", err);
+        throw new HttpsError("internal", "시트를 동기화하는 도중 에러가 발생했습니다.");
     }
 });

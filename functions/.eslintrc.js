@@ -15,5 +15,7 @@ module.exports = {
         "quotes": ["error", "double"],
         "indent": ["error", 4], // 들여쓰기를 4칸으로 강제
         "max-len": "off", // 최대 길이 제한 해제
+        "require-jsdoc": "off", // <-- 이 줄을 추가하세요.
+
     },
 };
