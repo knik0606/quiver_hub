@@ -107,7 +107,9 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Quiver Hub',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme:
+            ColorScheme.fromSeed(seedColor: Colors.blue), // 보라색 -> 파랑색으로 변경
+        scaffoldBackgroundColor: Colors.blue[50], // 배경을 아주 연한 파랑색으로 설정
         useMaterial3: true,
       ),
       home: MainPage(
