@@ -10,22 +10,17 @@ import 'firebase_options.dart';
 import 'admin_page.dart';
 import 'message_page.dart';
 import 'notices_page.dart';
+import 'schedules_page.dart';
 
 void main() async {
-  // 1. Flutter 엔진 초기화 (가장 먼저!)
   WidgetsFlutterBinding.ensureInitialized();
-
-  // 2. Firebase 앱 초기화 (다음으로!)
   if (Firebase.apps.isEmpty) {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
   }
-
-  // 3. Firestore 설정 (Firebase 초기화 이후에!)
   FirebaseFirestore.instance.settings =
       const Settings(persistenceEnabled: true);
-
   runApp(const MyApp());
 }
 
@@ -49,17 +44,14 @@ class _MyAppState extends State<MyApp> {
     _listenForNewMessagesGlobal();
   }
 
-  // 오디오 초기화 (웹 호환 강화)
   Future<void> _initializeAudio() async {
     try {
-      // audioplayers: preload for web
       await _audioPlayer.setVolume(1.0);
     } catch (e) {
       debugPrint('Global audio init error: $e');
     }
   }
 
-  // 앱 전체 새 메시지 감지 (다른 화면 포함 알림)
   void _listenForNewMessagesGlobal() {
     _globalMessageSubscription = FirebaseFirestore.instance
         .collection('chats')
@@ -72,7 +64,6 @@ class _MyAppState extends State<MyApp> {
         _globalMessageCount = snapshot.docs.length;
         return;
       }
-
       if (snapshot.docChanges.isNotEmpty &&
           snapshot.docs.length > _globalMessageCount) {
         bool hasNewAdminMessage = false;
@@ -87,41 +78,20 @@ class _MyAppState extends State<MyApp> {
         }
         if (hasNewAdminMessage && mounted) {
           setState(() {
-            _hasNewMessageGlobal = true; // 글로벌 배지 업데이트
+            _hasNewMessageGlobal = true;
           });
-          await _playGlobalNotificationSound();
+          await _audioPlayer.play(AssetSource('audio/digital-quick.wav'));
         }
       }
       _globalMessageCount = snapshot.docs.length;
     });
   }
 
-  // 글로벌 알림 소리 재생
-  Future<void> _playGlobalNotificationSound() async {
-    try {
-      await _audioPlayer.stop();
-      await _audioPlayer
-          .play(AssetSource('audio/digital-quick.wav')); // 올바른 play 호출 (인수 추가)
-    } catch (e) {
-      debugPrint('Global sound play error: $e');
-    }
-  }
-
-  // 읽음 상태 업데이트 (배지 사라짐)
-  Future<void> _markAsRead() async {
-    try {
-      final now = FieldValue.serverTimestamp();
-      await FirebaseFirestore.instance
-          .collection('settings')
-          .doc('user_settings')
-          .set({'lastReadMessageTime': now}, SetOptions(merge: true));
-      if (mounted) {
-        setState(() {
-          _hasNewMessageGlobal = false;
-        });
-      }
-    } catch (e) {
-      debugPrint('Mark as read error: $e');
+  void _markAsRead() {
+    if (mounted) {
+      setState(() {
+        _hasNewMessageGlobal = false;
+      });
     }
   }
 
@@ -141,8 +111,8 @@ class _MyAppState extends State<MyApp> {
         useMaterial3: true,
       ),
       home: MainPage(
-        hasNewMessage: _hasNewMessageGlobal, // MainPage에 배지 전달
-        onMarkAsRead: _markAsRead, // 읽음 콜백
+        hasNewMessage: _hasNewMessageGlobal,
+        onMarkAsRead: _markAsRead,
       ),
     );
   }
@@ -167,12 +137,12 @@ class _MainPageState extends State<MainPage> {
   bool _isAdminUnlocked = false;
   Timer? _lockTimer;
   String _appTitle = 'Quiver Hub';
+  final PageController _schedulePageController = PageController();
 
   final bool _hasNewNotices = true;
   final bool _hasNewSchedule = false;
   final bool _hasNewAttendanceUpdate = false;
 
-  // ▼▼▼ 데이터 동기화 함수 ▼▼▼
   Future<void> _syncData() async {
     showDialog(
       context: context,
@@ -193,13 +163,11 @@ class _MainPageState extends State<MainPage> {
         );
       },
     );
-
     try {
       final callable =
           FirebaseFunctions.instance.httpsCallable('syncSheetsToFirestore');
       final result = await callable.call();
       debugPrint('Sync result: ${result.data}');
-
       if (mounted) {
         Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
@@ -216,12 +184,18 @@ class _MainPageState extends State<MainPage> {
       }
     }
   }
-  // ▲▲▲ 여기까지 ▲▲▲
 
   @override
   void initState() {
     super.initState();
     _fetchSettings();
+  }
+
+  @override
+  void dispose() {
+    _lockTimer?.cancel();
+    _schedulePageController.dispose();
+    super.dispose();
   }
 
   void _fetchSettings() {
@@ -237,13 +211,6 @@ class _MainPageState extends State<MainPage> {
       }
     });
   }
-
-  static const List<Widget> _pages = <Widget>[
-    const NoticesPage(),
-    const Center(child: Text('Schedule Page')),
-    const AthleteListPage(),
-    const AdminPage(),
-  ];
 
   void _resetLockTimer() {
     _lockTimer?.cancel();
@@ -274,12 +241,6 @@ class _MainPageState extends State<MainPage> {
     }
   }
 
-  @override
-  void dispose() {
-    _lockTimer?.cancel();
-    super.dispose();
-  }
-
   Future<void> _showPasswordDialog() async {
     final passwordController = TextEditingController();
     final settingsDoc = await FirebaseFirestore.instance
@@ -289,48 +250,43 @@ class _MainPageState extends State<MainPage> {
     final correctPassword = settingsDoc.data()?['adminPassword'] ?? '1234';
 
     if (!mounted) return;
-
     showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Enter Admin Password'),
-          content: TextField(
-            controller: passwordController,
-            obscureText: true,
-            keyboardType: TextInputType.number,
-            autofocus: true,
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                if (passwordController.text == correctPassword) {
-                  if (mounted) {
-                    setState(() {
-                      _isAdminUnlocked = true;
-                      _selectedIndex = 3;
-                    });
-                    _resetLockTimer();
-                  }
-                  Navigator.of(context).pop();
-                } else {
-                  Navigator.of(context).pop();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Incorrect password')),
-                  );
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+              title: const Text('Enter Admin Password'),
+              content: TextField(
+                controller: passwordController,
+                obscureText: true,
+                keyboardType: TextInputType.number,
+                autofocus: true,
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Cancel'),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    if (passwordController.text == correctPassword) {
+                      if (mounted) {
+                        setState(() {
+                          _isAdminUnlocked = true;
+                          _selectedIndex = 3;
+                        });
+                        _resetLockTimer();
+                      }
+                      Navigator.of(context).pop();
+                    } else {
+                      Navigator.of(context).pop();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Incorrect password')),
+                      );
+                    }
+                  },
+                ),
+              ],
+            ));
   }
 
   Widget _buildIconWithBadge(IconData iconData, bool hasBadge) {
@@ -360,20 +316,47 @@ class _MainPageState extends State<MainPage> {
     final int displayIndex =
         (_selectedIndex == 3 && !_isAdminUnlocked) ? 2 : _selectedIndex;
 
+    final List<Widget> pages = <Widget>[
+      const NoticesPage(),
+      SchedulesPage(pageController: _schedulePageController),
+      const AthleteListPage(),
+      const AdminPage(),
+    ];
+
     return Scaffold(
       appBar: AppBar(
         title: Text(_appTitle),
-        // ▼▼▼ 새로고침 버튼 ▼▼▼
         actions: [
+          if (displayIndex == 1) ...[
+            IconButton(
+              icon: const Icon(Icons.arrow_back_ios),
+              tooltip: 'Previous Page',
+              onPressed: () {
+                _schedulePageController.previousPage(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                );
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.arrow_forward_ios),
+              tooltip: 'Next Page',
+              onPressed: () {
+                _schedulePageController.nextPage(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                );
+              },
+            ),
+          ],
           IconButton(
             icon: const Icon(Icons.sync),
             tooltip: 'Sync data from Sheet',
             onPressed: _syncData,
           ),
         ],
-        // ▲▲▲ 여기까지 ▲▲▲
       ),
-      body: _pages.elementAt(displayIndex),
+      body: pages.elementAt(displayIndex),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           widget.onMarkAsRead();
@@ -418,16 +401,13 @@ class _MainPageState extends State<MainPage> {
   }
 }
 
-// AthleteListPage (변경 없음 – 에러 없음)
 class AthleteListPage extends StatelessWidget {
   const AthleteListPage({super.key});
 
+  // ▼▼▼ [복구] 이메일 발송 로직 포함된 전체 함수 ▼▼▼
   Future<void> _updateAthleteStatus(String docId, String athleteName,
       String newStatus, BuildContext context) async {
-    if (!context.mounted) return; // mounted 체크 추가
-
-    ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text('Updating status...')));
+    if (!context.mounted) return;
 
     final athletesCollection =
         FirebaseFirestore.instance.collection('athletes');
@@ -442,11 +422,10 @@ class AthleteListPage extends StatelessWidget {
     await logsCollection.add({
       'name': athleteName,
       'status': newStatus,
-      'timestamp': FieldValue.serverTimestamp(), // 서버 시간 기준 기록
+      'timestamp': FieldValue.serverTimestamp(),
     });
 
     if (context.mounted) {
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('$athleteName updated to $newStatus')),
       );
@@ -482,13 +461,13 @@ class AthleteListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('athletes').snapshots(),
+      stream: FirebaseFirestore.instance
+          .collection('athletes')
+          .orderBy('name')
+          .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
-        }
-        if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
         }
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
           return const Center(child: Text('No athletes found.'));
@@ -503,12 +482,6 @@ class AthleteListPage extends StatelessWidget {
             final String athleteName = athlete['name'] ?? 'No Name';
             final String athleteStatus = athlete['status'] ?? 'Unknown';
 
-            final Color outBgColor =
-                athleteStatus == 'OUT' ? Colors.grey : Colors.orange;
-            final Color inBgColor =
-                athleteStatus == 'IN' ? Colors.grey : Colors.green;
-            const Color fgColor = Colors.white;
-
             return Slidable(
               startActionPane: ActionPane(
                 motion: const StretchMotion(),
@@ -520,8 +493,8 @@ class AthleteListPage extends StatelessWidget {
                             _updateAthleteStatus(
                                 athlete.id, athleteName, 'OUT', context);
                           },
-                    backgroundColor: outBgColor,
-                    foregroundColor: fgColor,
+                    backgroundColor: Colors.orange,
+                    foregroundColor: Colors.white,
                     icon: Icons.logout,
                     label: 'OUT',
                   ),
@@ -537,8 +510,8 @@ class AthleteListPage extends StatelessWidget {
                             _updateAthleteStatus(
                                 athlete.id, athleteName, 'IN', context);
                           },
-                    backgroundColor: inBgColor,
-                    foregroundColor: fgColor,
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
                     icon: Icons.login,
                     label: 'IN',
                   ),

@@ -67,11 +67,14 @@ exports.logAttendanceToSheet = onDocumentCreated({
 });
 
 // Notices와 Schedules 동기화 함수
+// functions/index.js
+
 exports.syncSheetsToFirestore = onCall({
     region: "us-central1",
     secrets: [GOOGLE_SERVICE_ACCOUNT_KEY],
 }, async (request) => {
     console.log("syncSheetsToFirestore 함수가 호출되었습니다.");
+
     const credentials = JSON.parse(GOOGLE_SERVICE_ACCOUNT_KEY.value());
     const auth = new google.auth.GoogleAuth({
         credentials,
@@ -85,28 +88,32 @@ exports.syncSheetsToFirestore = onCall({
             spreadsheetId: SPREADSHEET_ID,
             range: "Notices!A2:C",
         });
+
+        // ▼▼▼ [수정] Schedules 시트 범위를 C열까지 읽도록 변경 ▼▼▼
         const schedulesPromise = sheets.spreadsheets.values.get({
             spreadsheetId: SPREADSHEET_ID,
-            range: "Schedules!A2:B",
+            range: "Schedules!A2:C", // B열 -> C열
         });
 
         const [noticesResponse, schedulesResponse] = await Promise.all([
             noticesPromise,
             schedulesPromise,
         ]);
+
         const notices = noticesResponse.data.values || [];
         const schedules = schedulesResponse.data.values || [];
 
+        // 기존 데이터 삭제 로직 (변경 없음)
         const noticesSnapshot = await db.collection("notices").get();
         const noticesBatch = db.batch();
         noticesSnapshot.docs.forEach((doc) => noticesBatch.delete(doc.ref));
         await noticesBatch.commit();
-
         const schedulesSnapshot = await db.collection("schedules").get();
         const schedulesBatch = db.batch();
         schedulesSnapshot.docs.forEach((doc) => schedulesBatch.delete(doc.ref));
         await schedulesBatch.commit();
 
+        // 새 데이터 추가 로직
         const noticesWriteBatch = db.batch();
         notices.forEach((row, index) => {
             const docRef = db.collection("notices").doc();
@@ -122,20 +129,17 @@ exports.syncSheetsToFirestore = onCall({
         const schedulesWriteBatch = db.batch();
         schedules.forEach((row, index) => {
             const docRef = db.collection("schedules").doc();
+            // ▼▼▼ [수정] 올바른 열의 데이터를 저장하도록 변경 ▼▼▼
             schedulesWriteBatch.set(docRef, {
-                page: row[0] || "",
-                imageUrl: convertGoogleDriveUrl(row[1] || ""),
+                page: row[1] || "", // A열(row[0]) -> B열(row[1])
+                imageUrl: convertGoogleDriveUrl(row[2] || ""), // B열(row[1]) -> C열(row[2])
                 order: index,
             });
         });
         await schedulesWriteBatch.commit();
-
+        
         console.log(`Notices ${notices.length}개, Schedules ${schedules.length}개 동기화 완료.`);
-        return {
-            status: "success",
-            noticesCount: notices.length,
-            schedulesCount: schedules.length,
-        };
+        return {status: "success", noticesCount: notices.length, schedulesCount: schedules.length};
     } catch (err) {
         console.error("시트 동기화 오류:", err);
         throw new HttpsError("internal", "시트를 동기화하는 도중 에러가 발생했습니다.");
