@@ -142,7 +142,7 @@ class _MainPageState extends State<MainPage> {
 
   // PageController는 더 이상 사용하지 않으므로 삭제했습니다.
 
-  final bool _hasNewNotices = true;
+  final bool _hasNewNotices = false;
   final bool _hasNewSchedule = false;
   final bool _hasNewAttendanceUpdate = false;
 
@@ -388,6 +388,8 @@ class AthleteListPage extends StatelessWidget {
   const AthleteListPage({super.key});
 
   // ▼▼▼ [복구] 이메일 발송 로직 포함된 전체 함수 ▼▼▼
+// lib/main.dart 의 AthleteListPage 내부
+
   Future<void> _updateAthleteStatus(String docId, String athleteName,
       String newStatus, BuildContext context) async {
     if (!context.mounted) return;
@@ -395,8 +397,6 @@ class AthleteListPage extends StatelessWidget {
     final athletesCollection =
         FirebaseFirestore.instance.collection('athletes');
     final mailCollection = FirebaseFirestore.instance.collection('mail');
-    final settingsDoc =
-        FirebaseFirestore.instance.collection('settings').doc('admin_settings');
 
     await athletesCollection.doc(docId).update({'status': newStatus});
 
@@ -414,30 +414,16 @@ class AthleteListPage extends StatelessWidget {
       );
     }
 
+    // ▼▼▼ 이 부분이 아래와 같이 간결해집니다 ▼▼▼
     try {
-      final settingSnapshot = await settingsDoc.get();
-      final recipientEmail = settingSnapshot.data()?['notificationEmail'];
-
-      if (recipientEmail != null && recipientEmail.isNotEmpty) {
-        final now = DateTime.now();
-        final timeString = DateFormat('HH:mm').format(now);
-        final dateString = DateFormat('yy/MM/dd').format(now);
-
-        final emailSubject =
-            '[$newStatus] - $athleteName ($timeString) - $dateString';
-        final emailBody = '''
-          <p><b>$athleteName</b> - [$newStatus]</p>
-          <p><b>Time:</b> $timeString - $dateString</p>
-        ''';
-
-        await mailCollection.add({
-          'to': recipientEmail,
-          'subject': emailSubject,
-          'html': emailBody,
-        });
-      }
+      // 이메일 발송에 필요한 최소 정보만 Firestore에 기록합니다.
+      // 제목과 내용은 Cloud Function에서 생성하게 됩니다.
+      await mailCollection.add({
+        'name': athleteName,
+        'status': newStatus,
+      });
     } catch (e) {
-      debugPrint('Email send error: $e');
+      debugPrint('Email request error: $e');
     }
   }
 
@@ -469,6 +455,9 @@ class AthleteListPage extends StatelessWidget {
               startActionPane: ActionPane(
                 motion: const StretchMotion(),
                 children: [
+                  // lib/main.dart 의 AthleteListPage 내부, build 메서드
+
+// OUT 버튼
                   SlidableAction(
                     onPressed: athleteStatus == 'OUT'
                         ? null
@@ -476,16 +465,15 @@ class AthleteListPage extends StatelessWidget {
                             _updateAthleteStatus(
                                 athlete.id, athleteName, 'OUT', context);
                           },
-                    backgroundColor: Colors.orange,
+                    // ▼▼▼ 상태에 따라 색상 변경 ▼▼▼
+                    backgroundColor:
+                        athleteStatus == 'OUT' ? Colors.grey : Colors.orange,
                     foregroundColor: Colors.white,
                     icon: Icons.logout,
                     label: 'OUT',
                   ),
-                ],
-              ),
-              endActionPane: ActionPane(
-                motion: const StretchMotion(),
-                children: [
+
+// IN 버튼
                   SlidableAction(
                     onPressed: athleteStatus == 'IN'
                         ? null
@@ -493,7 +481,9 @@ class AthleteListPage extends StatelessWidget {
                             _updateAthleteStatus(
                                 athlete.id, athleteName, 'IN', context);
                           },
-                    backgroundColor: Colors.green,
+                    // ▼▼▼ 상태에 따라 색상 변경 ▼▼▼
+                    backgroundColor:
+                        athleteStatus == 'IN' ? Colors.grey : Colors.green,
                     foregroundColor: Colors.white,
                     icon: Icons.login,
                     label: 'IN',
