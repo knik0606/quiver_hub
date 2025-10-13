@@ -139,7 +139,8 @@ class _MainPageState extends State<MainPage> {
   bool _isAdminUnlocked = false;
   Timer? _lockTimer;
   String _appTitle = 'Quiver Hub';
-  final PageController _schedulePageController = PageController();
+
+  // PageController는 더 이상 사용하지 않으므로 삭제했습니다.
 
   final bool _hasNewNotices = true;
   final bool _hasNewSchedule = false;
@@ -193,10 +194,10 @@ class _MainPageState extends State<MainPage> {
     _fetchSettings();
   }
 
+  // PageController가 없으므로 dispose에서도 관련 코드를 삭제했습니다.
   @override
   void dispose() {
     _lockTimer?.cancel();
-    _schedulePageController.dispose();
     super.dispose();
   }
 
@@ -213,6 +214,14 @@ class _MainPageState extends State<MainPage> {
       }
     });
   }
+
+  // _pages 리스트는 다시 간단한 static const 형태로 돌아왔습니다.
+  static const List<Widget> _pages = <Widget>[
+    NoticesPage(),
+    SchedulesPage(),
+    AthleteListPage(),
+    AdminPage(),
+  ];
 
   void _resetLockTimer() {
     _lockTimer?.cancel();
@@ -318,39 +327,11 @@ class _MainPageState extends State<MainPage> {
     final int displayIndex =
         (_selectedIndex == 3 && !_isAdminUnlocked) ? 2 : _selectedIndex;
 
-    final List<Widget> pages = <Widget>[
-      const NoticesPage(),
-      SchedulesPage(pageController: _schedulePageController),
-      const AthleteListPage(),
-      const AdminPage(),
-    ];
-
     return Scaffold(
       appBar: AppBar(
         title: Text(_appTitle),
+        // ▼▼▼ [수정] AppBar의 actions에서 페이지 넘김 버튼들을 삭제하고 새로고침 버튼만 남깁니다. ▼▼▼
         actions: [
-          if (displayIndex == 1) ...[
-            IconButton(
-              icon: const Icon(Icons.arrow_back_ios),
-              tooltip: 'Previous Page',
-              onPressed: () {
-                _schedulePageController.previousPage(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                );
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.arrow_forward_ios),
-              tooltip: 'Next Page',
-              onPressed: () {
-                _schedulePageController.nextPage(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                );
-              },
-            ),
-          ],
           IconButton(
             icon: const Icon(Icons.sync),
             tooltip: 'Sync data from Sheet',
@@ -358,7 +339,7 @@ class _MainPageState extends State<MainPage> {
           ),
         ],
       ),
-      body: pages.elementAt(displayIndex),
+      body: _pages.elementAt(displayIndex),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           widget.onMarkAsRead();
