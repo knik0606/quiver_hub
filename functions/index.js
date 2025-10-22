@@ -186,3 +186,69 @@ exports.syncSheetsToFirestore = onCall({
         throw new HttpsError("internal", "시트를 동기화하는 도중 에러가 발생했습니다.");
     }
 });
+
+// ▼▼▼ [새로 추가할 부분] 채팅 알림 이메일 발송 함수 ▼▼▼
+exports.sendNewMessageEmail = onDocumentCreated({
+    document: "chats/main_thread/messages/{messageId}", // 채팅 메시지 컬렉션을 감시
+    region: "us-central1",
+    secrets: [GMAIL_APP_PASSWORD], // Gmail 앱 비밀번호 시크릿 재사용
+}, async (event) => {
+    const messageData = event.data.data();
+    const messageId = event.params.messageId; // 메시지 문서 ID 가져오기
+
+    // Firestore에서 관리자 이메일 주소를 가져옵니다.
+    const settingsDoc = await admin.firestore().collection("settings").doc("admin_settings").get();
+    const recipientEmail = settingsDoc.data()?.notificationEmail;
+
+    if (!recipientEmail) {
+        console.error("수신자 이메일(채팅)이 설정되지 않았습니다.");
+        return;
+    }
+
+    // 새 메시지 정보
+    const senderType = messageData.senderType || "PLAYER";
+    const messageText = messageData.text || "";
+
+    // 서버 시간 기준 (한국 시간)
+    const now = new Date();
+    const kstDate = new Date(now.getTime() + (9 * 60 * 60 * 1000));
+    const timeString = kstDate.toTimeString().split(" ")[0].substring(0, 5); // HH:mm
+    const dateString = kstDate.toISOString().split("T")[0].replace(/-/g, "/").substring(2); // yy/MM/dd
+
+    // 이메일 제목과 내용 생성
+    const emailSubject = `[${senderType}] New Chat Message (${timeString}) - ${dateString}`;
+
+    // TODO: 삭제 링크와 웹앱 링크를 실제 URL로 변경해야 합니다.
+    const deleteLink = `YOUR_DELETE_FUNCTION_URL?messageId=${messageId}`; // 예시: 삭제 처리 함수 URL
+    const webAppLink = `YOUR_CHAT_WEB_APP_URL`; // 예시: 채팅 웹앱 URL
+
+    const emailBody = `
+        <p><b>Sender:</b> ${senderType}</p>
+        <p><b>Message:</b> ${messageText}</p>
+        <p><b>Time:</b> ${timeString} - ${dateString}</p>
+        <hr>
+        <p><a href="${deleteLink}">Delete this message</a></p>
+        <p><a href="${webAppLink}">Open Chat Web App</a></p>
+    `;
+
+    const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+            user: "kkukupo0@gmail.com", // 사용자님의 Gmail 주소
+            pass: GMAIL_APP_PASSWORD.value(), // Gmail 앱 비밀번호 시크릿 값
+        },
+    });
+
+    try {
+        await transporter.sendMail({
+            from: `"Quiver Hub Chat" <kkukupo0@gmail.com>`, // 보내는 사람 이름 변경
+            to: recipientEmail,
+            subject: emailSubject,
+            html: emailBody,
+        });
+        console.log("Chat notification email sent successfully to:", recipientEmail);
+    } catch (error) {
+        console.error("Error sending chat email:", error);
+    }
+});
+// ▲▲▲ 여기까지 새로 추가 ▲▲▲
