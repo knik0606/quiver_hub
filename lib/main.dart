@@ -5,7 +5,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:intl/intl.dart';
 import 'firebase_options.dart';
 import 'admin_page.dart';
 import 'message_page.dart';
