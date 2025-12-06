@@ -104,18 +104,37 @@ class _LandingPageState extends State<LandingPage> {
                   color: Colors.white,
                 ),
                 const SizedBox(height: 20),
-                const Text(
-                  'Quiver Hub',
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+                StreamBuilder<DocumentSnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('settings')
+                      .doc('admin_settings')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    String title = 'Quiver Hub';
+                    if (snapshot.hasData && snapshot.data != null) {
+                      final data = snapshot.data!.data() as Map<String, dynamic>?;
+                      if (data != null && data.containsKey('appTitle')) {
+                        title = data['appTitle'] ?? 'Quiver Hub';
+                      }
+                    }
+                    return Title(
+                      title: title,
+                      color: Colors.black,
+                      child: Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    );
+                  },
                 ),
                 const SizedBox(height: 48),
                 _buildButton(
                   context,
-                  label: 'TV Lobby Screen',
+                  label: '▶ Enter',
                   icon: Icons.tv,
                   onPressed: () {
                     Navigator.of(context).pushNamed('/tv_lobby');

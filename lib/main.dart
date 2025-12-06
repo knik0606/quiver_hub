@@ -425,57 +425,62 @@ class _MainPageState extends State<MainPage> {
     final int displayIndex =
         (_selectedIndex == 3 && !_isAdminUnlocked) ? 2 : _selectedIndex;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(_appTitle),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.sync),
-            tooltip: 'Sync data from Sheet',
-            onPressed: _syncData,
-          ),
-        ],
-      ),
-      body: _pages.elementAt(displayIndex),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          widget.onMarkAsRead();
-          if (mounted) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const MessagePage()),
-            );
-          }
-        },
-        tooltip: 'Send a message',
-        child:
-            _buildIconWithBadge(Icons.message_outlined, widget.hasNewMessage),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: _buildIconWithBadge(Icons.campaign_outlined, _hasNewNotices),
-            label: 'Notices',
-          ),
-          BottomNavigationBarItem(
-            icon: _buildIconWithBadge(
-                Icons.calendar_today_outlined, _hasNewSchedule),
-            label: 'Schedule',
-          ),
-          BottomNavigationBarItem(
-            icon: _buildIconWithBadge(
-                Icons.check_circle_outline, _hasNewAttendanceUpdate),
-            label: 'Attendance',
-          ),
-          BottomNavigationBarItem(
-            icon:
-                _buildIconWithBadge(Icons.admin_panel_settings_outlined, false),
-            label: 'Admin',
-          ),
-        ],
-        currentIndex: displayIndex,
-        onTap: _onItemTapped,
+    return Title(
+      title: _appTitle,
+      color: Colors.black,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(_appTitle),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.sync),
+              tooltip: 'Sync data from Sheet',
+              onPressed: _syncData,
+            ),
+          ],
+        ),
+        body: _pages.elementAt(displayIndex),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            widget.onMarkAsRead();
+            if (mounted) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const MessagePage()),
+              );
+            }
+          },
+          tooltip: 'Send a message',
+          child: _buildIconWithBadge(
+              Icons.message_outlined, widget.hasNewMessage),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon:
+                  _buildIconWithBadge(Icons.campaign_outlined, _hasNewNotices),
+              label: 'Notices',
+            ),
+            BottomNavigationBarItem(
+              icon: _buildIconWithBadge(
+                  Icons.calendar_today_outlined, _hasNewSchedule),
+              label: 'Schedule',
+            ),
+            BottomNavigationBarItem(
+              icon: _buildIconWithBadge(
+                  Icons.check_circle_outline, _hasNewAttendanceUpdate),
+              label: 'Attendance',
+            ),
+            BottomNavigationBarItem(
+              icon: _buildIconWithBadge(
+                  Icons.admin_panel_settings_outlined, false),
+              label: 'Admin',
+            ),
+          ],
+          currentIndex: displayIndex,
+          onTap: _onItemTapped,
+        ),
       ),
     );
   }
