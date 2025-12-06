@@ -20,6 +20,7 @@ class TvLobbyScreen extends StatelessWidget {
                 const AttendanceList(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
+                  isReadOnly: true,
                 ),
               ],
             ),

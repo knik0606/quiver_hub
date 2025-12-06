@@ -1,51 +1,143 @@
+import 'dart:html' as html;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class LandingPage extends StatelessWidget {
+class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
+
+  @override
+  State<LandingPage> createState() => _LandingPageState();
+}
+
+class _LandingPageState extends State<LandingPage> {
+  @override
+  void initState() {
+    super.initState();
+    _checkStandalone();
+  }
+
+  void _checkStandalone() {
+    // Check if running as PWA/Standalone
+    if (kIsWeb) {
+      final isStandalone =
+          html.window.matchMedia('(display-mode: standalone)').matches;
+      if (isStandalone) {
+        // Schedule navigation after build
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+           Navigator.of(context).pushReplacementNamed('/app');
+        });
+      }
+    }
+  }
+
+  Future<void> _showPasswordDialog() async {
+    final passwordController = TextEditingController();
+    String? correctPassword = '1234'; // Fallback
+    
+    try {
+      final settingsDoc = await FirebaseFirestore.instance
+          .collection('settings')
+          .doc('admin_settings')
+          .get();
+      correctPassword = settingsDoc.data()?['adminPassword'] ?? '1234';
+    } catch (e) {
+      debugPrint("Error fetching password: $e");
+    }
+
+    if (!mounted) return;
+    
+    showDialog<void>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+              backgroundColor: const Color(0xFF1E1E1E),
+              title: const Text('Enter Access Password', style: TextStyle(color: Colors.white)),
+              content: TextField(
+                controller: passwordController,
+                obscureText: true,
+                keyboardType: TextInputType.number,
+                autofocus: true,
+                style: const TextStyle(color: Colors.white),
+                decoration: const InputDecoration(
+                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white54)),
+                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.blue)),
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Cancel'),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    if (passwordController.text == correctPassword) {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pushNamed('/app');
+                    } else {
+                      Navigator.of(context).pop();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Incorrect password')),
+                      );
+                    }
+                  },
+                ),
+              ],
+            ));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF121212),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.sports_score,
-              size: 80,
-              color: Colors.white,
+      body: Stack(
+        children: [
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.sports_score,
+                  size: 80,
+                  color: Colors.white,
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  'Quiver Hub',
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 48),
+                _buildButton(
+                  context,
+                  label: 'TV Lobby Screen',
+                  icon: Icons.tv,
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/tv_lobby');
+                  },
+                  isPrimary: true,
+                ),
+                // "Open Attendance App" button removed as requested
+              ],
             ),
-            const SizedBox(height: 20),
-            const Text(
-              'Quiver Hub',
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+          ),
+          // Hidden button at bottom left
+          Positioned(
+            left: 0,
+            bottom: 0,
+            child: GestureDetector(
+              onTap: _showPasswordDialog,
+              child: Container(
+                width: 40,
+                height: 40,
+                color: Colors.transparent, // Invisible but clickable
               ),
             ),
-            const SizedBox(height: 48),
-            _buildButton(
-              context,
-              label: 'TV Lobby Screen',
-              icon: Icons.tv,
-              onPressed: () {
-                Navigator.of(context).pushNamed('/tv_lobby');
-              },
-            ),
-            const SizedBox(height: 16),
-            _buildButton(
-              context,
-              label: 'Open Attendance App',
-              icon: Icons.check_circle_outline,
-              onPressed: () {
-                Navigator.of(context).pushNamed('/app');
-              },
-              isPrimary: true,
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

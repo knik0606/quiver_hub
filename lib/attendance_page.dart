@@ -23,11 +23,13 @@ class AttendancePage extends StatelessWidget {
 class AttendanceList extends StatefulWidget {
   final ScrollPhysics? physics;
   final bool shrinkWrap;
+  final bool isReadOnly;
 
   const AttendanceList({
     super.key,
     this.physics,
     this.shrinkWrap = false,
+    this.isReadOnly = false,
   });
 
   @override
@@ -132,6 +134,7 @@ class _AttendanceListState extends State<AttendanceList> {
 
     return Slidable(
       key: Key(docId),
+      enabled: !widget.isReadOnly,
       // Swipe Right reveals startActionPane
       startActionPane: ActionPane(
         motion: const StretchMotion(),
