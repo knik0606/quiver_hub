@@ -7,80 +7,95 @@ class SchedulesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('schedules')
-            .orderBy('order')
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
-          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return const Center(child: Text('No schedules found.'));
-          }
-
-          final scheduleDocs = snapshot.data!.docs;
-
-          // PageView를 ListView.builder로 변경
-          return ListView.builder(
-            itemCount: scheduleDocs.length,
-            itemBuilder: (context, index) {
-              final scheduleData =
-                  scheduleDocs[index].data() as Map<String, dynamic>;
-              final String pageText = scheduleData['page'] ?? '';
-              final String imageUrl = scheduleData['imageUrl'] ?? '';
-
-              // NoticesPage와 유사한 카드 UI
-              return Card(
-                margin: const EdgeInsets.all(12.0),
-                elevation: 4,
-                clipBehavior: Clip.antiAlias, // 이미지가 카드를 벗어나지 않도록
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // 이미지가 있을 경우에만 표시
-                    if (imageUrl.isNotEmpty)
-                      Image.network(
-                        imageUrl,
-                        fit: BoxFit.cover,
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return const Center(
-                            heightFactor: 3, // 로딩 중 높이 확보
-                            child: CircularProgressIndicator(),
-                          );
-                        },
-                        errorBuilder: (context, error, stackTrace) {
-                          return const SizedBox(
-                            height: 100,
-                            child: Icon(Icons.error, color: Colors.red),
-                          );
-                        },
-                      ),
-                    // 텍스트가 있을 경우에만 표시
-                    if (pageText.isNotEmpty)
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          pageText,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                  ],
-                ),
-              );
-            },
-          );
-        },
-      ),
+      backgroundColor: const Color(0xFF121212),
+      body: const SchedulesList(),
     );
   }
 }
+
+class SchedulesList extends StatelessWidget {
+  const SchedulesList({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('schedules')
+          .orderBy('order')
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (snapshot.hasError) {
+          return Center(
+              child: Text('Error: ${snapshot.error}',
+                  style: const TextStyle(color: Colors.white)));
+        }
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return const Center(
+              child: Text('No schedules found.',
+                  style: TextStyle(color: Colors.grey)));
+        }
+
+        final scheduleDocs = snapshot.data!.docs;
+
+        return ListView.builder(
+          itemCount: scheduleDocs.length,
+          itemBuilder: (context, index) {
+            final scheduleData =
+                scheduleDocs[index].data() as Map<String, dynamic>;
+            final String pageText = scheduleData['page'] ?? '';
+            final String imageUrl = scheduleData['imageUrl'] ?? '';
+
+            return Card(
+              color: const Color(0xFF1E1E1E),
+              margin: const EdgeInsets.all(12.0),
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
+              clipBehavior: Clip.antiAlias,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  if (imageUrl.isNotEmpty)
+                    Image.network(
+                      imageUrl,
+                      fit: BoxFit.cover,
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return const Center(
+                          heightFactor: 3,
+                          child: CircularProgressIndicator(),
+                        );
+                      },
+                      errorBuilder: (context, error, stackTrace) {
+                        return const SizedBox(
+                          height: 100,
+                          child: Icon(Icons.error, color: Colors.red),
+                        );
+                      },
+                    ),
+                  if (pageText.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Text(
+                        pageText,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+}
+

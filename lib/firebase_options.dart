@@ -41,7 +41,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: "892141263609",
     projectId: "quiver-hub",
     authDomain: "quiver-hub.firebaseapp.com",
-    storageBucket: "quiver-hub.appspot.com",
+    storageBucket: "quiver-hub.firebasestorage.app",
     measurementId: "G-KJQ01Y90VX",
   );
 
@@ -50,7 +50,7 @@ class DefaultFirebaseOptions {
     appId: "1:892141263609:android:f435fc520acaf234926028",
     messagingSenderId: "892141263609",
     projectId: "quiver-hub",
-    storageBucket: "quiver-hub.appspot.com",
+    storageBucket: "quiver-hub.firebasestorage.app",
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
@@ -58,7 +58,7 @@ class DefaultFirebaseOptions {
     appId: "1:892141263609:ios:304e5ff82a1e034c926028",
     messagingSenderId: "892141263609",
     projectId: "quiver-hub",
-    storageBucket: "quiver-hub.appspot.com",
+    storageBucket: "quiver-hub.firebasestorage.app",
     iosBundleId: "com.example.quiverHub",
   );
 
