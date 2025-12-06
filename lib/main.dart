@@ -11,17 +11,102 @@ import 'notices_page.dart';
 import 'schedules_page.dart';
 import 'attendance_page.dart';
 import 'tv_lobby_screen.dart';
+import 'landing_page.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  if (Firebase.apps.isEmpty) {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+void main() {
+  runApp(const AppRoot());
+}
+
+class AppRoot extends StatefulWidget {
+  const AppRoot({super.key});
+
+  @override
+  State<AppRoot> createState() => _AppRootState();
+}
+
+class _AppRootState extends State<AppRoot> {
+  bool _initialized = false;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeFlutterFire();
   }
-  FirebaseFirestore.instance.settings =
-      const Settings(persistenceEnabled: true);
-  runApp(const MyApp());
+
+  Future<void> _initializeFlutterFire() async {
+    try {
+      WidgetsFlutterBinding.ensureInitialized();
+      
+      try {
+        await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform,
+        );
+      } catch (e) {
+        if (e.toString().contains("duplicate") || e.toString().contains("already exists")) {
+           // Ignore
+        } else {
+           rethrow;
+        }
+      }
+      
+      try {
+        FirebaseFirestore.instance.settings =
+            const Settings(persistenceEnabled: false);
+      } catch (e) {
+        // Ignore
+      }
+
+      setState(() {
+        _initialized = true;
+      });
+    } catch (e, stack) {
+      setState(() {
+        _error = "Init Error: $e";
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_error != null) {
+      return MaterialApp(
+        home: Scaffold(
+          backgroundColor: Colors.white,
+          body: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(20),
+              child: Text(
+                _error!,
+                style: const TextStyle(color: Colors.red, fontSize: 16), 
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    if (!_initialized) {
+      return const MaterialApp(
+        home: Scaffold(
+          backgroundColor: Colors.white,
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                 CircularProgressIndicator(),
+                 SizedBox(height: 20),
+                 Text("Initializing App...", style: TextStyle(color: Colors.black)),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    return const MyApp();
+  }
 }
 
 class MyApp extends StatefulWidget {
@@ -124,7 +209,8 @@ class _MyAppState extends State<MyApp> {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => MainPage(
+        '/': (context) => const LandingPage(),
+        '/app': (context) => MainPage(
               hasNewMessage: _hasNewMessageGlobal,
               onMarkAsRead: _markAsRead,
             ),
