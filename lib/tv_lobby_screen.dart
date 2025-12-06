@@ -10,38 +10,43 @@ class TvLobbyScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF121212),
-      body: Row(
-        children: [
-          // Notices Column
-          Expanded(
-            child: Column(
-              children: [
-                _buildHeader('Notices', Icons.campaign),
-                const Expanded(child: NoticesList()),
-              ],
-            ),
-          ),
-          const VerticalDivider(color: Colors.white24, width: 1),
-          // Schedules Column
-          Expanded(
-            child: Column(
-              children: [
-                _buildHeader('Schedules', Icons.calendar_today),
-                const Expanded(child: SchedulesList()),
-              ],
-            ),
-          ),
-          const VerticalDivider(color: Colors.white24, width: 1),
-          // Attendance Column
-          Expanded(
-            child: Column(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Attendance (Top) - Shows all content
+            Column(
               children: [
                 _buildHeader('Attendance', Icons.people),
-                const Expanded(child: AttendanceList()),
+                const AttendanceList(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                ),
               ],
             ),
-          ),
-        ],
+            const Divider(color: Colors.white24, height: 1),
+            // Schedules (Middle) - Fixed height ~600px
+            SizedBox(
+              height: 600,
+              child: Column(
+                children: [
+                  _buildHeader('Schedules', Icons.calendar_today),
+                  const Expanded(child: SchedulesList()),
+                ],
+              ),
+            ),
+            const Divider(color: Colors.white24, height: 1),
+            // Notices (Bottom) - Fixed height ~600px
+            SizedBox(
+              height: 600,
+              child: Column(
+                children: [
+                  _buildHeader('Notices', Icons.campaign),
+                  const Expanded(child: NoticesList()),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

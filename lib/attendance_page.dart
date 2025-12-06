@@ -21,13 +21,21 @@ class AttendancePage extends StatelessWidget {
 }
 
 class AttendanceList extends StatefulWidget {
-  const AttendanceList({super.key});
+  final ScrollPhysics? physics;
+  final bool shrinkWrap;
+
+  const AttendanceList({
+    super.key,
+    this.physics,
+    this.shrinkWrap = false,
+  });
 
   @override
   State<AttendanceList> createState() => _AttendanceListState();
 }
 
 class _AttendanceListState extends State<AttendanceList> {
+
   // Helper to get today's start and end timestamps
   DateTime get _startOfDay {
     final now = DateTime.now();
@@ -101,6 +109,8 @@ class _AttendanceListState extends State<AttendanceList> {
 
         return ListView.builder(
           padding: const EdgeInsets.all(16.0),
+          physics: widget.physics,
+          shrinkWrap: widget.shrinkWrap,
           itemCount: athleteDocs.length,
           itemBuilder: (context, index) {
             final athlete = athleteDocs[index];

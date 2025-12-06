@@ -14,7 +14,14 @@ class SchedulesPage extends StatelessWidget {
 }
 
 class SchedulesList extends StatelessWidget {
-  const SchedulesList({super.key});
+  final ScrollPhysics? physics;
+  final bool shrinkWrap;
+
+  const SchedulesList({
+    super.key,
+    this.physics,
+    this.shrinkWrap = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +31,7 @@ class SchedulesList extends StatelessWidget {
           .orderBy('order')
           .snapshots(),
       builder: (context, snapshot) {
+        // ... existing checks ...
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
@@ -41,6 +49,8 @@ class SchedulesList extends StatelessWidget {
         final scheduleDocs = snapshot.data!.docs;
 
         return ListView.builder(
+          physics: physics,
+          shrinkWrap: shrinkWrap,
           itemCount: scheduleDocs.length,
           itemBuilder: (context, index) {
             final scheduleData =

@@ -14,7 +14,14 @@ class NoticesPage extends StatelessWidget {
 }
 
 class NoticesList extends StatelessWidget {
-  const NoticesList({super.key});
+  final ScrollPhysics? physics;
+  final bool shrinkWrap;
+
+  const NoticesList({
+    super.key,
+    this.physics,
+    this.shrinkWrap = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +31,7 @@ class NoticesList extends StatelessWidget {
           .orderBy('order')
           .snapshots(),
       builder: (context, snapshot) {
+        // ... checks ...
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
@@ -41,6 +49,8 @@ class NoticesList extends StatelessWidget {
         final noticeDocs = snapshot.data!.docs;
 
         return ListView.builder(
+          physics: physics,
+          shrinkWrap: shrinkWrap,
           itemCount: noticeDocs.length,
           itemBuilder: (context, index) {
             final noticeData =
