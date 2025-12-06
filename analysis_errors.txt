@@ -1,0 +1,46 @@
+Analyzing quiver_hub...                                         
+
+warning - Duplicate import - lib\attendance_page.dart:6:8 - duplicate_import
+warning - Duplicate import - lib\attendance_page.dart:7:8 - duplicate_import
+warning - Duplicate import - lib\attendance_page.dart:8:8 - duplicate_import
+warning - Duplicate import - lib\attendance_page.dart:9:8 - duplicate_import
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\attendance_page.dart:186:44 - deprecated_member_use
+   info - 'dart:html' is deprecated and shouldn't be used. Use package:web and dart:js_interop instead - lib\landing_page.dart:1:1 - deprecated_member_use
+   info - Don't use web-only libraries outside Flutter web plugins - lib\landing_page.dart:1:1 - avoid_web_libraries_in_flutter
+   info - Use 'const' with the constructor to improve performance - lib\main.dart:57:13 - prefer_const_constructors
+warning - The stack trace variable 'stack' isn't used and can be removed - lib\main.dart:65:17 - unused_catch_stack
+   info - Don't put any logic in 'createState' - lib\main.dart:236:36 - no_logic_in_create_state
+  error - The method '_MainPageState' isn't defined for the type 'MainPage' - lib\main.dart:236:36 - undefined_method
+   info - Use 'const' for final variables initialized to a constant value - lib\main.dart:243:3 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\main.dart:244:3 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\main.dart:245:3 - prefer_const_declarations
+  error - Undefined name 'context' - lib\main.dart:249:16 - undefined_identifier
+  error - Undefined name 'mounted' - lib\main.dart:272:11 - undefined_identifier
+  error - Undefined name 'context' - lib\main.dart:273:22 - undefined_identifier
+  error - Undefined name 'context' - lib\main.dart:274:30 - undefined_identifier
+  error - Undefined name 'mounted' - lib\main.dart:280:11 - undefined_identifier
+  error - Undefined name 'context' - lib\main.dart:281:22 - undefined_identifier
+  error - Undefined name 'context' - lib\main.dart:282:30 - undefined_identifier
+  error - Invalid context for 'super' invocation - lib\main.dart:291:5 - super_in_invalid_context
+  error - Invalid context for 'super' invocation - lib\main.dart:298:5 - super_in_invalid_context
+  error - Undefined name 'mounted' - lib\main.dart:307:30 - undefined_identifier
+  error - The function 'setState' isn't defined - lib\main.dart:308:9 - undefined_function
+  error - Can't have modifier 'static' here - lib\main.dart:315:3 - extraneous_modifier
+  error - Undefined name 'mounted' - lib\main.dart:325:11 - undefined_identifier
+  error - The function 'setState' isn't defined - lib\main.dart:326:9 - undefined_function
+  error - Undefined name 'context' - lib\main.dart:329:34 - undefined_identifier
+  error - Undefined name 'context' - lib\main.dart:330:32 - undefined_identifier
+  error - The function 'setState' isn't defined - lib\main.dart:345:7 - undefined_function
+  error - Undefined name 'mounted' - lib\main.dart:359:10 - undefined_identifier
+  error - Undefined name 'context' - lib\main.dart:361:18 - undefined_identifier
+  error - Undefined name 'mounted' - lib\main.dart:379:27 - undefined_identifier
+  error - The function 'setState' isn't defined - lib\main.dart:380:25 - undefined_function
+   info - Use 'const' literals as arguments to constructors of '@immutable' classes - lib\main.dart:429:18 - prefer_const_literals_to_create_immutables
+   info - Use 'const' with the constructor to improve performance - lib\main.dart:430:11 - prefer_const_constructors
+  error - Undefined name 'widget' - lib\main.dart:440:11 - undefined_identifier
+  error - Undefined name 'mounted' - lib\main.dart:441:15 - undefined_identifier
+  error - Undefined name 'widget' - lib\main.dart:450:57 - undefined_identifier
+  error - Expected a method, getter, setter or operator declaration - lib\main.dart:480:1 - expected_executable
+   info - Use 'const' with the constructor to improve performance - lib\notices_page.dart:9:12 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\schedules_page.dart:9:12 - prefer_const_constructors
+

@@ -62,7 +62,7 @@ class _AppRootState extends State<AppRoot> {
       setState(() {
         _initialized = true;
       });
-    } catch (e, stack) {
+    } catch (e) {
       setState(() {
         _error = "Init Error: $e";
       });
@@ -235,6 +235,8 @@ class MainPage extends StatefulWidget {
   @override
   State<MainPage> createState() => _MainPageState();
 }
+
+class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
   bool _isAdminUnlocked = false;
   Timer? _lockTimer;

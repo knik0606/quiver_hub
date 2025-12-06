@@ -1,0 +1,9 @@
+Analyzing quiver_hub...                                         
+
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\attendance_page.dart:183:44 - deprecated_member_use
+   info - The import of 'package:flutter/foundation.dart' is unnecessary because all of the used elements are also provided by the import of 'package:flutter/material.dart' - lib\landing_page.dart:3:8 - unnecessary_import
+   info - Use 'const' with the constructor to improve performance - lib\main.dart:57:13 - prefer_const_constructors
+warning - The stack trace variable 'stack' isn't used and can be removed - lib\main.dart:65:17 - unused_catch_stack
+   info - Use 'const' with the constructor to improve performance - lib\notices_page.dart:9:12 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\schedules_page.dart:9:12 - prefer_const_constructors
+

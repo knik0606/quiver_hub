@@ -1,6 +1,6 @@
-import 'dart:html' as html;
+// import 'dart:html' as html;
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class LandingPage extends StatefulWidget {
@@ -19,6 +19,7 @@ class _LandingPageState extends State<LandingPage> {
 
   void _checkStandalone() {
     // Check if running as PWA/Standalone
+    /*
     if (kIsWeb) {
       final isStandalone =
           html.window.matchMedia('(display-mode: standalone)').matches;
@@ -29,6 +30,7 @@ class _LandingPageState extends State<LandingPage> {
         });
       }
     }
+    */
   }
 
   Future<void> _showPasswordDialog() async {
