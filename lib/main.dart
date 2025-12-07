@@ -13,6 +13,7 @@ import 'schedules_page.dart';
 import 'attendance_page.dart';
 import 'tv_lobby_screen.dart';
 import 'landing_page.dart';
+import 'admin_note_page.dart';
 
 void main() {
   runApp(const AppRoot());
@@ -217,6 +218,7 @@ class _MyAppState extends State<MyApp> {
               onMarkAsRead: _markAsRead,
             ),
         '/tv_lobby': (context) => const TvLobbyScreen(),
+        '/admin_note': (context) => const AdminNotePage(),
       },
     );
   }
@@ -439,7 +441,19 @@ class _MainPageState extends State<MainPage> {
             ),
           ],
         ),
-        body: _pages.elementAt(displayIndex),
+        body: Listener(
+          onPointerDown: (_) {
+            if (_isAdminUnlocked) _resetLockTimer();
+          },
+          onPointerMove: (_) {
+             // Optional: De-bounce this if too frequent, but for simple timer reset it's okay
+             if (_isAdminUnlocked) _resetLockTimer();
+          },
+          onPointerUp: (_) {
+            if (_isAdminUnlocked) _resetLockTimer();
+          },
+          child: _pages.elementAt(displayIndex),
+        ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             widget.onMarkAsRead();

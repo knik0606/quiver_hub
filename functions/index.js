@@ -136,21 +136,47 @@ exports.syncSheetsToFirestore = onCall({
             range: "Schedules!A2:C",
         });
 
-        const [noticesResponse, schedulesResponse] = await Promise.all([
+        const adminNotesPromise = sheets.spreadsheets.values.get({
+            spreadsheetId: SPREADSHEET_ID,
+            range: "AdminNote!A1:C12", // Strictly fetch up to row 12 as requested
+        });
+
+        const [noticesResponse, schedulesResponse, adminNotesResponse] = await Promise.all([
             noticesPromise,
             schedulesPromise,
+            adminNotesPromise,
         ]);
         const notices = noticesResponse.data.values || [];
         const schedules = schedulesResponse.data.values || [];
+        const adminNotesAll = adminNotesResponse.data.values || [];
+
+        // AdminNote Parsing
+        // Row 1 (Index 0): C1 has boardName
+        // Data starts from Row 3 (Index 2)
+        let boardNameFromSheet = "";
+        let adminNotesData = [];
+
+        if (adminNotesAll.length > 0) {
+            // Check C1 (Row 0, Col 2)
+            if (adminNotesAll[0] && adminNotesAll[0].length >= 3) {
+                boardNameFromSheet = adminNotesAll[0][2] || "";
+            }
+            // Data rows
+            if (adminNotesAll.length > 2) {
+                adminNotesData = adminNotesAll.slice(2); // Skip first 2 rows
+            }
+        }
 
         const noticesSnapshot = await db.collection("notices").get();
         const noticesBatch = db.batch();
         noticesSnapshot.docs.forEach((doc) => noticesBatch.delete(doc.ref));
         await noticesBatch.commit();
-        const schedulesSnapshot = await db.collection("schedules").get();
-        const schedulesBatch = db.batch();
-        schedulesSnapshot.docs.forEach((doc) => schedulesBatch.delete(doc.ref));
         await schedulesBatch.commit();
+
+        const adminNotesSnapshot = await db.collection("admin_notes").get();
+        const adminNotesBatch = db.batch();
+        adminNotesSnapshot.docs.forEach((doc) => adminNotesBatch.delete(doc.ref));
+        await adminNotesBatch.commit();
 
         const noticesWriteBatch = db.batch();
         notices.forEach((row, index) => {
@@ -175,11 +201,37 @@ exports.syncSheetsToFirestore = onCall({
         });
         await schedulesWriteBatch.commit();
 
+        const adminNotesWriteBatch = db.batch();
+        adminNotesData.forEach((row, index) => {
+            // Row structure based on image: A(index), B(Content), C(Image)
+            // We want B and C.
+            const content = row[1] || "";
+            const imageUrl = row[2] || "";
+
+            if (content || imageUrl) {
+                const docRef = db.collection("admin_notes").doc();
+                adminNotesWriteBatch.set(docRef, {
+                    content: content,
+                    imageUrl: convertGoogleDriveUrl(imageUrl),
+                    order: index,
+                });
+            }
+        });
+        await adminNotesWriteBatch.commit();
+
+        // Update Board Name if found
+        if (boardNameFromSheet) {
+            await db.collection("settings").doc("admin_settings").set({
+                boardName: boardNameFromSheet
+            }, { merge: true });
+        }
+
         console.log(`Notices ${notices.length}개, Schedules ${schedules.length}개 동기화 완료.`);
         return {
             status: "success",
             noticesCount: notices.length,
             schedulesCount: schedules.length,
+            adminNotesCount: adminNotesData.length,
         };
     } catch (err) {
         console.error("시트 동기화 오류:", err);

@@ -34,26 +34,49 @@ class _LandingPageState extends State<LandingPage> {
   }
 
   Future<void> _showPasswordDialog() async {
+    // ... existing implementation ...
+     _showGenericPasswordDialog(
+      context: context,
+      passwordField: 'adminPassword',
+      onSuccess: () => Navigator.of(context).pushNamed('/app'),
+    );
+  }
+
+  Future<void> _showBoardPasswordDialog(BuildContext context) async {
+    _showGenericPasswordDialog(
+      context: context,
+      passwordField: 'boardPassword',
+      onSuccess: () => Navigator.of(context).pushNamed('/admin_note'),
+      title: 'Enter Board Password',
+    );
+  }
+
+  Future<void> _showGenericPasswordDialog({
+    required BuildContext context,
+    required String passwordField,
+    required VoidCallback onSuccess,
+    String title = 'Enter Access Password',
+  }) async {
     final passwordController = TextEditingController();
-    String? correctPassword = '1234'; // Fallback
+    String? correctPassword = '1234'; 
     
     try {
       final settingsDoc = await FirebaseFirestore.instance
           .collection('settings')
           .doc('admin_settings')
           .get();
-      correctPassword = settingsDoc.data()?['adminPassword'] ?? '1234';
+      correctPassword = settingsDoc.data()?[passwordField] ?? ((passwordField == 'adminPassword') ? '1234' : '');
     } catch (e) {
       debugPrint("Error fetching password: $e");
     }
 
-    if (!mounted) return;
+    if (!context.mounted) return;
     
     showDialog<void>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
               backgroundColor: const Color(0xFF1E1E1E),
-              title: const Text('Enter Access Password', style: TextStyle(color: Colors.white)),
+              title: Text(title, style: const TextStyle(color: Colors.white)),
               content: TextField(
                 controller: passwordController,
                 obscureText: true,
@@ -75,7 +98,7 @@ class _LandingPageState extends State<LandingPage> {
                   onPressed: () {
                     if (passwordController.text == correctPassword) {
                       Navigator.of(context).pop();
-                      Navigator.of(context).pushNamed('/app');
+                      onSuccess();
                     } else {
                       Navigator.of(context).pop();
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -141,6 +164,27 @@ class _LandingPageState extends State<LandingPage> {
                   },
                   isPrimary: true,
                 ),
+                const SizedBox(height: 20),
+                 StreamBuilder<DocumentSnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('settings')
+                      .doc('admin_settings')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    String boardName = 'Admin Board';
+                    if (snapshot.hasData && snapshot.data != null) {
+                       final data = snapshot.data!.data() as Map<String, dynamic>?;
+                       boardName = data?['boardName'] ?? 'Admin Board';
+                    }
+                    return _buildButton(
+                      context,
+                      label: boardName,
+                      icon: Icons.dashboard,
+                      onPressed: () => _showBoardPasswordDialog(context),
+                      isPrimary: false, 
+                    );
+                  },
+                ),
                 // "Open Attendance App" button removed as requested
               ],
             ),
@@ -150,7 +194,7 @@ class _LandingPageState extends State<LandingPage> {
             left: 0,
             bottom: 0,
             child: GestureDetector(
-              onTap: _showPasswordDialog,
+              onTap: () => _showPasswordDialog(),
               child: Container(
                 width: 40,
                 height: 40,
