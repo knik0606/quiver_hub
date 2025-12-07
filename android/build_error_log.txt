@@ -1,0 +1,661 @@
+> Task :gradle:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :gradle:compileKotlin UP-TO-DATE
+> Task :gradle:compileJava NO-SOURCE
+> Task :gradle:compileGroovy NO-SOURCE
+> Task :gradle:pluginDescriptors UP-TO-DATE
+> Task :gradle:processResources UP-TO-DATE
+> Task :gradle:classes UP-TO-DATE
+> Task :gradle:jar UP-TO-DATE
+WARNING: We recommend using a newer Android Gradle plugin to use compileSdk = 36
+
+This Android Gradle plugin (8.7.3) was tested up to compileSdk = 35.
+
+You are strongly encouraged to update your project to use a newer
+Android Gradle plugin that has been tested with compileSdk = 36.
+
+If you are already using the latest version of the Android Gradle plugin,
+you may need to wait until a newer version with support for compileSdk = 36 is available.
+
+For more information refer to the compatibility table:
+https://d.android.com/r/tools/api-level-support
+
+To suppress this warning, add/update
+    android.suppressUnsupportedCompileSdk=36
+to this project's gradle.properties.
+> Task :app:ReleaseMinSdkCheck
+> Task :app:buildKotlinToolingMetadata UP-TO-DATE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:compileFlutterBuildRelease
+> Task :app:packJniLibsflutterBuildRelease UP-TO-DATE
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preReleaseBuild UP-TO-DATE
+> Task :audio_session:preBuild UP-TO-DATE
+> Task :audio_session:preReleaseBuild UP-TO-DATE
+> Task :audio_session:writeReleaseAarMetadata UP-TO-DATE
+> Task :audioplayers_android:preBuild UP-TO-DATE
+> Task :audioplayers_android:preReleaseBuild UP-TO-DATE
+> Task :audioplayers_android:writeReleaseAarMetadata UP-TO-DATE
+> Task :cloud_firestore:preBuild UP-TO-DATE
+> Task :cloud_firestore:preReleaseBuild UP-TO-DATE
+> Task :cloud_firestore:writeReleaseAarMetadata UP-TO-DATE
+> Task :cloud_functions:preBuild UP-TO-DATE
+> Task :cloud_functions:preReleaseBuild UP-TO-DATE
+> Task :cloud_functions:writeReleaseAarMetadata UP-TO-DATE
+> Task :firebase_auth:preBuild UP-TO-DATE
+> Task :firebase_auth:preReleaseBuild UP-TO-DATE
+> Task :firebase_auth:writeReleaseAarMetadata UP-TO-DATE
+> Task :firebase_core:preBuild UP-TO-DATE
+> Task :firebase_core:preReleaseBuild UP-TO-DATE
+> Task :firebase_core:writeReleaseAarMetadata UP-TO-DATE
+> Task :firebase_storage:preBuild UP-TO-DATE
+> Task :firebase_storage:preReleaseBuild UP-TO-DATE
+> Task :firebase_storage:writeReleaseAarMetadata UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:preBuild UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:preReleaseBuild UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:writeReleaseAarMetadata UP-TO-DATE
+> Task :image_picker_android:preBuild UP-TO-DATE
+> Task :image_picker_android:preReleaseBuild UP-TO-DATE
+> Task :image_picker_android:writeReleaseAarMetadata UP-TO-DATE
+> Task :just_audio:preBuild UP-TO-DATE
+> Task :just_audio:preReleaseBuild UP-TO-DATE
+> Task :just_audio:writeReleaseAarMetadata UP-TO-DATE
+> Task :path_provider_android:preBuild UP-TO-DATE
+> Task :path_provider_android:preReleaseBuild UP-TO-DATE
+> Task :path_provider_android:writeReleaseAarMetadata UP-TO-DATE
+> Task :url_launcher_android:preBuild UP-TO-DATE
+> Task :url_launcher_android:preReleaseBuild UP-TO-DATE
+> Task :url_launcher_android:writeReleaseAarMetadata UP-TO-DATE
+> Task :app:checkReleaseAarMetadata UP-TO-DATE
+> Task :app:cleanMergeReleaseAssets
+> Task :app:mergeReleaseShaders UP-TO-DATE
+> Task :app:compileReleaseShaders NO-SOURCE
+> Task :app:generateReleaseAssets UP-TO-DATE
+> Task :audio_session:mergeReleaseShaders UP-TO-DATE
+> Task :audio_session:compileReleaseShaders NO-SOURCE
+> Task :audio_session:generateReleaseAssets UP-TO-DATE
+> Task :audio_session:packageReleaseAssets UP-TO-DATE
+> Task :audioplayers_android:mergeReleaseShaders UP-TO-DATE
+> Task :audioplayers_android:compileReleaseShaders NO-SOURCE
+> Task :audioplayers_android:generateReleaseAssets UP-TO-DATE
+> Task :audioplayers_android:packageReleaseAssets UP-TO-DATE
+> Task :cloud_firestore:mergeReleaseShaders UP-TO-DATE
+> Task :cloud_firestore:compileReleaseShaders NO-SOURCE
+> Task :cloud_firestore:generateReleaseAssets UP-TO-DATE
+> Task :cloud_firestore:packageReleaseAssets UP-TO-DATE
+> Task :cloud_functions:mergeReleaseShaders UP-TO-DATE
+> Task :cloud_functions:compileReleaseShaders NO-SOURCE
+> Task :cloud_functions:generateReleaseAssets UP-TO-DATE
+> Task :cloud_functions:packageReleaseAssets UP-TO-DATE
+> Task :firebase_auth:mergeReleaseShaders UP-TO-DATE
+> Task :firebase_auth:compileReleaseShaders NO-SOURCE
+> Task :firebase_auth:generateReleaseAssets UP-TO-DATE
+> Task :firebase_auth:packageReleaseAssets UP-TO-DATE
+> Task :firebase_core:mergeReleaseShaders UP-TO-DATE
+> Task :firebase_core:compileReleaseShaders NO-SOURCE
+> Task :firebase_core:generateReleaseAssets UP-TO-DATE
+> Task :firebase_core:packageReleaseAssets UP-TO-DATE
+> Task :firebase_storage:mergeReleaseShaders UP-TO-DATE
+> Task :firebase_storage:compileReleaseShaders NO-SOURCE
+> Task :firebase_storage:generateReleaseAssets UP-TO-DATE
+> Task :firebase_storage:packageReleaseAssets UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:mergeReleaseShaders UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:compileReleaseShaders NO-SOURCE
+> Task :flutter_plugin_android_lifecycle:generateReleaseAssets UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:packageReleaseAssets UP-TO-DATE
+> Task :image_picker_android:mergeReleaseShaders UP-TO-DATE
+> Task :image_picker_android:compileReleaseShaders NO-SOURCE
+> Task :image_picker_android:generateReleaseAssets UP-TO-DATE
+> Task :image_picker_android:packageReleaseAssets UP-TO-DATE
+> Task :just_audio:mergeReleaseShaders UP-TO-DATE
+> Task :just_audio:compileReleaseShaders NO-SOURCE
+> Task :just_audio:generateReleaseAssets UP-TO-DATE
+> Task :just_audio:packageReleaseAssets UP-TO-DATE
+> Task :path_provider_android:mergeReleaseShaders UP-TO-DATE
+> Task :path_provider_android:compileReleaseShaders NO-SOURCE
+> Task :path_provider_android:generateReleaseAssets UP-TO-DATE
+> Task :path_provider_android:packageReleaseAssets UP-TO-DATE
+> Task :url_launcher_android:mergeReleaseShaders UP-TO-DATE
+> Task :url_launcher_android:compileReleaseShaders NO-SOURCE
+> Task :url_launcher_android:generateReleaseAssets UP-TO-DATE
+> Task :url_launcher_android:packageReleaseAssets UP-TO-DATE
+> Task :app:mergeReleaseAssets
+> Task :app:copyFlutterAssetsRelease
+> Task :app:generateReleaseResValues UP-TO-DATE
+> Task :app:processReleaseGoogleServices UP-TO-DATE
+> Task :audio_session:generateReleaseResValues UP-TO-DATE
+> Task :audio_session:generateReleaseResources UP-TO-DATE
+> Task :audio_session:packageReleaseResources UP-TO-DATE
+> Task :audioplayers_android:generateReleaseResValues UP-TO-DATE
+> Task :audioplayers_android:generateReleaseResources UP-TO-DATE
+> Task :audioplayers_android:packageReleaseResources UP-TO-DATE
+> Task :cloud_firestore:generateReleaseResValues UP-TO-DATE
+> Task :cloud_firestore:generateReleaseResources UP-TO-DATE
+> Task :cloud_firestore:packageReleaseResources UP-TO-DATE
+> Task :cloud_functions:generateReleaseResValues UP-TO-DATE
+> Task :cloud_functions:generateReleaseResources UP-TO-DATE
+> Task :cloud_functions:packageReleaseResources UP-TO-DATE
+> Task :firebase_auth:generateReleaseResValues UP-TO-DATE
+> Task :firebase_auth:generateReleaseResources UP-TO-DATE
+> Task :firebase_auth:packageReleaseResources UP-TO-DATE
+> Task :firebase_core:generateReleaseResValues UP-TO-DATE
+> Task :firebase_core:generateReleaseResources UP-TO-DATE
+> Task :firebase_core:packageReleaseResources UP-TO-DATE
+> Task :firebase_storage:generateReleaseResValues UP-TO-DATE
+> Task :firebase_storage:generateReleaseResources UP-TO-DATE
+> Task :firebase_storage:packageReleaseResources UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:generateReleaseResValues UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:generateReleaseResources UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:packageReleaseResources UP-TO-DATE
+> Task :image_picker_android:generateReleaseResValues UP-TO-DATE
+> Task :image_picker_android:generateReleaseResources UP-TO-DATE
+> Task :image_picker_android:packageReleaseResources UP-TO-DATE
+> Task :just_audio:generateReleaseResValues UP-TO-DATE
+> Task :just_audio:generateReleaseResources UP-TO-DATE
+> Task :just_audio:packageReleaseResources UP-TO-DATE
+> Task :path_provider_android:generateReleaseResValues UP-TO-DATE
+> Task :path_provider_android:generateReleaseResources UP-TO-DATE
+> Task :path_provider_android:packageReleaseResources UP-TO-DATE
+> Task :url_launcher_android:generateReleaseResValues UP-TO-DATE
+> Task :url_launcher_android:generateReleaseResources UP-TO-DATE
+> Task :url_launcher_android:packageReleaseResources UP-TO-DATE
+> Task :app:mapReleaseSourceSetPaths UP-TO-DATE
+> Task :app:generateReleaseResources UP-TO-DATE
+> Task :app:mergeReleaseResources UP-TO-DATE
+> Task :app:packageReleaseResources UP-TO-DATE
+> Task :app:parseReleaseLocalResources UP-TO-DATE
+> Task :app:createReleaseCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksRelease UP-TO-DATE
+> Task :audio_session:extractDeepLinksRelease UP-TO-DATE
+> Task :audio_session:processReleaseManifest UP-TO-DATE
+> Task :audioplayers_android:extractDeepLinksRelease UP-TO-DATE
+> Task :audioplayers_android:processReleaseManifest UP-TO-DATE
+> Task :cloud_firestore:extractDeepLinksRelease UP-TO-DATE
+> Task :cloud_firestore:processReleaseManifest UP-TO-DATE
+> Task :cloud_functions:extractDeepLinksRelease UP-TO-DATE
+> Task :cloud_functions:processReleaseManifest UP-TO-DATE
+> Task :firebase_auth:extractDeepLinksRelease UP-TO-DATE
+> Task :firebase_auth:processReleaseManifest UP-TO-DATE
+> Task :firebase_core:extractDeepLinksRelease UP-TO-DATE
+> Task :firebase_core:processReleaseManifest UP-TO-DATE
+> Task :firebase_storage:extractDeepLinksRelease UP-TO-DATE
+> Task :firebase_storage:processReleaseManifest UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:extractDeepLinksRelease UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:processReleaseManifest UP-TO-DATE
+> Task :image_picker_android:extractDeepLinksRelease UP-TO-DATE
+> Task :image_picker_android:processReleaseManifest UP-TO-DATE
+> Task :just_audio:extractDeepLinksRelease UP-TO-DATE
+> Task :just_audio:processReleaseManifest UP-TO-DATE
+> Task :path_provider_android:extractDeepLinksRelease UP-TO-DATE
+> Task :path_provider_android:processReleaseManifest UP-TO-DATE
+> Task :url_launcher_android:extractDeepLinksRelease UP-TO-DATE
+> Task :url_launcher_android:processReleaseManifest UP-TO-DATE
+> Task :app:processReleaseMainManifest UP-TO-DATE
+> Task :app:outputReleaseAppLinkSettings UP-TO-DATE
+> Task :app:processReleaseManifest UP-TO-DATE
+> Task :app:processReleaseManifestForPackage UP-TO-DATE
+> Task :audio_session:parseReleaseLocalResources UP-TO-DATE
+> Task :audio_session:generateReleaseRFile UP-TO-DATE
+> Task :audioplayers_android:parseReleaseLocalResources UP-TO-DATE
+> Task :audioplayers_android:generateReleaseRFile UP-TO-DATE
+> Task :cloud_firestore:parseReleaseLocalResources UP-TO-DATE
+> Task :cloud_firestore:generateReleaseRFile UP-TO-DATE
+> Task :cloud_functions:parseReleaseLocalResources UP-TO-DATE
+> Task :cloud_functions:generateReleaseRFile UP-TO-DATE
+> Task :firebase_auth:parseReleaseLocalResources UP-TO-DATE
+> Task :firebase_auth:generateReleaseRFile UP-TO-DATE
+> Task :firebase_core:parseReleaseLocalResources UP-TO-DATE
+> Task :firebase_core:generateReleaseRFile UP-TO-DATE
+> Task :firebase_storage:parseReleaseLocalResources UP-TO-DATE
+> Task :firebase_storage:generateReleaseRFile UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:parseReleaseLocalResources UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:generateReleaseRFile UP-TO-DATE
+> Task :image_picker_android:parseReleaseLocalResources UP-TO-DATE
+> Task :image_picker_android:generateReleaseRFile UP-TO-DATE
+> Task :just_audio:parseReleaseLocalResources UP-TO-DATE
+> Task :just_audio:generateReleaseRFile UP-TO-DATE
+> Task :path_provider_android:parseReleaseLocalResources UP-TO-DATE
+> Task :path_provider_android:generateReleaseRFile UP-TO-DATE
+> Task :url_launcher_android:parseReleaseLocalResources UP-TO-DATE
+> Task :url_launcher_android:generateReleaseRFile UP-TO-DATE
+> Task :app:processReleaseResources UP-TO-DATE
+> Task :audio_session:javaPreCompileRelease UP-TO-DATE
+> Task :audio_session:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :audio_session:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :audioplayers_android:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :audioplayers_android:compileReleaseKotlin UP-TO-DATE
+> Task :audioplayers_android:javaPreCompileRelease UP-TO-DATE
+> Task :audioplayers_android:compileReleaseJavaWithJavac NO-SOURCE
+> Task :audioplayers_android:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :cloud_firestore:generateReleaseBuildConfig UP-TO-DATE
+> Task :cloud_firestore:javaPreCompileRelease UP-TO-DATE
+> Task :firebase_core:generateReleaseBuildConfig UP-TO-DATE
+> Task :firebase_core:javaPreCompileRelease UP-TO-DATE
+> Task :firebase_core:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :firebase_core:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :cloud_firestore:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :cloud_firestore:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :cloud_functions:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :cloud_functions:generateReleaseBuildConfig UP-TO-DATE
+> Task :cloud_functions:compileReleaseKotlin UP-TO-DATE
+> Task :cloud_functions:javaPreCompileRelease UP-TO-DATE
+> Task :cloud_functions:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :cloud_functions:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :firebase_auth:generateReleaseBuildConfig UP-TO-DATE
+> Task :firebase_auth:javaPreCompileRelease UP-TO-DATE
+> Task :firebase_auth:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :firebase_auth:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :firebase_storage:generateReleaseBuildConfig UP-TO-DATE
+> Task :firebase_storage:javaPreCompileRelease UP-TO-DATE
+> Task :firebase_storage:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :firebase_storage:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:javaPreCompileRelease UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :image_picker_android:javaPreCompileRelease UP-TO-DATE
+> Task :image_picker_android:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :image_picker_android:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :just_audio:javaPreCompileRelease UP-TO-DATE
+> Task :just_audio:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :just_audio:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :path_provider_android:javaPreCompileRelease UP-TO-DATE
+> Task :path_provider_android:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :path_provider_android:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :url_launcher_android:generateReleaseBuildConfig UP-TO-DATE
+> Task :url_launcher_android:javaPreCompileRelease UP-TO-DATE
+> Task :url_launcher_android:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :url_launcher_android:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :app:compileReleaseKotlin UP-TO-DATE
+> Task :app:javaPreCompileRelease UP-TO-DATE
+> Task :app:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :app:extractProguardFiles UP-TO-DATE
+> Task :audio_session:bundleLibRuntimeToJarRelease UP-TO-DATE
+> Task :audio_session:processReleaseJavaRes NO-SOURCE
+> Task :audio_session:createFullJarRelease UP-TO-DATE
+> Task :audio_session:extractProguardFiles UP-TO-DATE
+> Task :audio_session:generateReleaseLintModel UP-TO-DATE
+> Task :audio_session:prepareLintJarForPublish UP-TO-DATE
+> Task :audioplayers_android:bundleLibRuntimeToJarRelease UP-TO-DATE
+> Task :audioplayers_android:processReleaseJavaRes UP-TO-DATE
+> Task :audioplayers_android:createFullJarRelease UP-TO-DATE
+> Task :audioplayers_android:extractProguardFiles UP-TO-DATE
+> Task :audioplayers_android:generateReleaseLintModel UP-TO-DATE
+> Task :audioplayers_android:prepareLintJarForPublish UP-TO-DATE
+> Task :cloud_firestore:bundleLibRuntimeToJarRelease UP-TO-DATE
+> Task :cloud_firestore:processReleaseJavaRes NO-SOURCE
+> Task :cloud_firestore:createFullJarRelease UP-TO-DATE
+> Task :cloud_firestore:extractProguardFiles UP-TO-DATE
+> Task :firebase_core:bundleLibRuntimeToJarRelease UP-TO-DATE
+> Task :firebase_core:processReleaseJavaRes NO-SOURCE
+> Task :firebase_core:createFullJarRelease UP-TO-DATE
+> Task :firebase_core:extractProguardFiles UP-TO-DATE
+> Task :firebase_core:generateReleaseLintModel UP-TO-DATE
+> Task :firebase_core:prepareLintJarForPublish UP-TO-DATE
+> Task :cloud_firestore:generateReleaseLintModel UP-TO-DATE
+> Task :cloud_firestore:prepareLintJarForPublish UP-TO-DATE
+> Task :cloud_functions:bundleLibRuntimeToJarRelease UP-TO-DATE
+> Task :cloud_functions:processReleaseJavaRes UP-TO-DATE
+> Task :cloud_functions:createFullJarRelease UP-TO-DATE
+> Task :cloud_functions:extractProguardFiles UP-TO-DATE
+> Task :cloud_functions:generateReleaseLintModel UP-TO-DATE
+> Task :cloud_functions:prepareLintJarForPublish UP-TO-DATE
+> Task :firebase_auth:bundleLibRuntimeToJarRelease UP-TO-DATE
+> Task :firebase_auth:processReleaseJavaRes NO-SOURCE
+> Task :firebase_auth:createFullJarRelease UP-TO-DATE
+> Task :firebase_auth:extractProguardFiles UP-TO-DATE
+> Task :firebase_auth:generateReleaseLintModel UP-TO-DATE
+> Task :firebase_auth:prepareLintJarForPublish UP-TO-DATE
+> Task :firebase_storage:bundleLibRuntimeToJarRelease UP-TO-DATE
+> Task :firebase_storage:processReleaseJavaRes NO-SOURCE
+> Task :firebase_storage:createFullJarRelease UP-TO-DATE
+> Task :firebase_storage:extractProguardFiles UP-TO-DATE
+> Task :firebase_storage:generateReleaseLintModel UP-TO-DATE
+> Task :firebase_storage:prepareLintJarForPublish UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:bundleLibRuntimeToJarRelease UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:processReleaseJavaRes NO-SOURCE
+> Task :flutter_plugin_android_lifecycle:createFullJarRelease UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:extractProguardFiles UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:generateReleaseLintModel UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:prepareLintJarForPublish UP-TO-DATE
+> Task :image_picker_android:bundleLibRuntimeToJarRelease UP-TO-DATE
+> Task :image_picker_android:processReleaseJavaRes NO-SOURCE
+> Task :image_picker_android:createFullJarRelease UP-TO-DATE
+> Task :image_picker_android:extractProguardFiles UP-TO-DATE
+> Task :image_picker_android:generateReleaseLintModel UP-TO-DATE
+> Task :image_picker_android:prepareLintJarForPublish UP-TO-DATE
+> Task :just_audio:bundleLibRuntimeToJarRelease UP-TO-DATE
+> Task :just_audio:processReleaseJavaRes NO-SOURCE
+> Task :just_audio:createFullJarRelease UP-TO-DATE
+> Task :just_audio:extractProguardFiles UP-TO-DATE
+> Task :just_audio:generateReleaseLintModel UP-TO-DATE
+> Task :just_audio:prepareLintJarForPublish UP-TO-DATE
+> Task :path_provider_android:bundleLibRuntimeToJarRelease UP-TO-DATE
+> Task :path_provider_android:processReleaseJavaRes NO-SOURCE
+> Task :path_provider_android:createFullJarRelease UP-TO-DATE
+> Task :path_provider_android:extractProguardFiles UP-TO-DATE
+> Task :path_provider_android:generateReleaseLintModel UP-TO-DATE
+> Task :path_provider_android:prepareLintJarForPublish UP-TO-DATE
+> Task :url_launcher_android:bundleLibRuntimeToJarRelease UP-TO-DATE
+> Task :url_launcher_android:processReleaseJavaRes NO-SOURCE
+> Task :url_launcher_android:createFullJarRelease UP-TO-DATE
+> Task :url_launcher_android:extractProguardFiles UP-TO-DATE
+> Task :url_launcher_android:generateReleaseLintModel UP-TO-DATE
+> Task :url_launcher_android:prepareLintJarForPublish UP-TO-DATE
+> Task :app:generateReleaseLintVitalReportModel UP-TO-DATE
+> Task :just_audio:mergeReleaseJniLibFolders UP-TO-DATE
+> Task :just_audio:mergeReleaseNativeLibs NO-SOURCE
+> Task :just_audio:stripReleaseDebugSymbols NO-SOURCE
+> Task :just_audio:copyReleaseJniLibsProjectAndLocalJars UP-TO-DATE
+> Task :just_audio:extractDeepLinksForAarRelease UP-TO-DATE
+> Task :just_audio:extractReleaseAnnotations UP-TO-DATE
+> Task :just_audio:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :just_audio:mergeReleaseConsumerProguardFiles UP-TO-DATE
+> Task :just_audio:prepareReleaseArtProfile UP-TO-DATE
+> Task :just_audio:mergeReleaseJavaResource UP-TO-DATE
+> Task :just_audio:syncReleaseLibJars UP-TO-DATE
+> Task :just_audio:bundleReleaseLocalLintAar UP-TO-DATE
+> Task :audio_session:mergeReleaseJniLibFolders UP-TO-DATE
+> Task :audio_session:mergeReleaseNativeLibs NO-SOURCE
+> Task :audio_session:stripReleaseDebugSymbols NO-SOURCE
+> Task :audio_session:copyReleaseJniLibsProjectAndLocalJars UP-TO-DATE
+> Task :audio_session:extractDeepLinksForAarRelease UP-TO-DATE
+> Task :audio_session:extractReleaseAnnotations UP-TO-DATE
+> Task :audio_session:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :audio_session:mergeReleaseConsumerProguardFiles UP-TO-DATE
+> Task :audio_session:prepareReleaseArtProfile UP-TO-DATE
+> Task :audio_session:mergeReleaseJavaResource UP-TO-DATE
+> Task :audio_session:syncReleaseLibJars UP-TO-DATE
+> Task :audio_session:bundleReleaseLocalLintAar UP-TO-DATE
+> Task :audioplayers_android:mergeReleaseJniLibFolders UP-TO-DATE
+> Task :audioplayers_android:mergeReleaseNativeLibs NO-SOURCE
+> Task :audioplayers_android:stripReleaseDebugSymbols NO-SOURCE
+> Task :audioplayers_android:copyReleaseJniLibsProjectAndLocalJars UP-TO-DATE
+> Task :audioplayers_android:extractDeepLinksForAarRelease UP-TO-DATE
+> Task :audioplayers_android:extractReleaseAnnotations UP-TO-DATE
+> Task :audioplayers_android:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :audioplayers_android:mergeReleaseConsumerProguardFiles UP-TO-DATE
+> Task :audioplayers_android:prepareReleaseArtProfile UP-TO-DATE
+> Task :audioplayers_android:mergeReleaseJavaResource UP-TO-DATE
+> Task :audioplayers_android:syncReleaseLibJars UP-TO-DATE
+> Task :audioplayers_android:bundleReleaseLocalLintAar UP-TO-DATE
+> Task :cloud_firestore:mergeReleaseJniLibFolders UP-TO-DATE
+> Task :cloud_firestore:mergeReleaseNativeLibs NO-SOURCE
+> Task :cloud_firestore:stripReleaseDebugSymbols NO-SOURCE
+> Task :cloud_firestore:copyReleaseJniLibsProjectAndLocalJars UP-TO-DATE
+> Task :cloud_firestore:extractDeepLinksForAarRelease UP-TO-DATE
+> Task :cloud_firestore:extractReleaseAnnotations UP-TO-DATE
+> Task :cloud_firestore:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :cloud_firestore:mergeReleaseConsumerProguardFiles UP-TO-DATE
+> Task :cloud_firestore:prepareReleaseArtProfile UP-TO-DATE
+> Task :cloud_firestore:mergeReleaseJavaResource UP-TO-DATE
+> Task :cloud_firestore:syncReleaseLibJars UP-TO-DATE
+> Task :cloud_firestore:bundleReleaseLocalLintAar UP-TO-DATE
+> Task :cloud_functions:mergeReleaseJniLibFolders UP-TO-DATE
+> Task :cloud_functions:mergeReleaseNativeLibs NO-SOURCE
+> Task :cloud_functions:stripReleaseDebugSymbols NO-SOURCE
+> Task :cloud_functions:copyReleaseJniLibsProjectAndLocalJars UP-TO-DATE
+> Task :cloud_functions:extractDeepLinksForAarRelease UP-TO-DATE
+> Task :cloud_functions:extractReleaseAnnotations UP-TO-DATE
+> Task :cloud_functions:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :cloud_functions:mergeReleaseConsumerProguardFiles UP-TO-DATE
+> Task :cloud_functions:prepareReleaseArtProfile UP-TO-DATE
+> Task :cloud_functions:mergeReleaseJavaResource UP-TO-DATE
+> Task :cloud_functions:syncReleaseLibJars UP-TO-DATE
+> Task :cloud_functions:bundleReleaseLocalLintAar UP-TO-DATE
+> Task :firebase_auth:mergeReleaseJniLibFolders UP-TO-DATE
+> Task :firebase_auth:mergeReleaseNativeLibs NO-SOURCE
+> Task :firebase_auth:stripReleaseDebugSymbols NO-SOURCE
+> Task :firebase_auth:copyReleaseJniLibsProjectAndLocalJars UP-TO-DATE
+> Task :firebase_auth:extractDeepLinksForAarRelease UP-TO-DATE
+> Task :firebase_auth:extractReleaseAnnotations UP-TO-DATE
+> Task :firebase_auth:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :firebase_auth:mergeReleaseConsumerProguardFiles UP-TO-DATE
+> Task :firebase_auth:prepareReleaseArtProfile UP-TO-DATE
+> Task :firebase_auth:mergeReleaseJavaResource UP-TO-DATE
+> Task :firebase_auth:syncReleaseLibJars UP-TO-DATE
+> Task :firebase_auth:bundleReleaseLocalLintAar UP-TO-DATE
+> Task :firebase_storage:mergeReleaseJniLibFolders UP-TO-DATE
+> Task :firebase_storage:mergeReleaseNativeLibs NO-SOURCE
+> Task :firebase_storage:stripReleaseDebugSymbols NO-SOURCE
+> Task :firebase_storage:copyReleaseJniLibsProjectAndLocalJars UP-TO-DATE
+> Task :firebase_storage:extractDeepLinksForAarRelease UP-TO-DATE
+> Task :firebase_storage:extractReleaseAnnotations UP-TO-DATE
+> Task :firebase_storage:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :firebase_storage:mergeReleaseConsumerProguardFiles UP-TO-DATE
+> Task :firebase_storage:prepareReleaseArtProfile UP-TO-DATE
+> Task :firebase_storage:mergeReleaseJavaResource UP-TO-DATE
+> Task :firebase_storage:syncReleaseLibJars UP-TO-DATE
+> Task :firebase_storage:bundleReleaseLocalLintAar UP-TO-DATE
+> Task :firebase_core:mergeReleaseJniLibFolders UP-TO-DATE
+> Task :firebase_core:mergeReleaseNativeLibs NO-SOURCE
+> Task :firebase_core:stripReleaseDebugSymbols NO-SOURCE
+> Task :firebase_core:copyReleaseJniLibsProjectAndLocalJars UP-TO-DATE
+> Task :firebase_core:extractDeepLinksForAarRelease UP-TO-DATE
+> Task :firebase_core:extractReleaseAnnotations UP-TO-DATE
+> Task :firebase_core:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :firebase_core:mergeReleaseConsumerProguardFiles UP-TO-DATE
+> Task :firebase_core:prepareReleaseArtProfile UP-TO-DATE
+> Task :firebase_core:mergeReleaseJavaResource UP-TO-DATE
+> Task :firebase_core:syncReleaseLibJars UP-TO-DATE
+> Task :firebase_core:bundleReleaseLocalLintAar UP-TO-DATE
+> Task :image_picker_android:mergeReleaseJniLibFolders UP-TO-DATE
+> Task :image_picker_android:mergeReleaseNativeLibs NO-SOURCE
+> Task :image_picker_android:stripReleaseDebugSymbols NO-SOURCE
+> Task :image_picker_android:copyReleaseJniLibsProjectAndLocalJars UP-TO-DATE
+> Task :image_picker_android:extractDeepLinksForAarRelease UP-TO-DATE
+> Task :image_picker_android:extractReleaseAnnotations UP-TO-DATE
+> Task :image_picker_android:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :image_picker_android:mergeReleaseConsumerProguardFiles UP-TO-DATE
+> Task :image_picker_android:prepareReleaseArtProfile UP-TO-DATE
+> Task :image_picker_android:mergeReleaseJavaResource UP-TO-DATE
+> Task :image_picker_android:syncReleaseLibJars UP-TO-DATE
+> Task :image_picker_android:bundleReleaseLocalLintAar UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:mergeReleaseJniLibFolders UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:mergeReleaseNativeLibs NO-SOURCE
+> Task :flutter_plugin_android_lifecycle:stripReleaseDebugSymbols NO-SOURCE
+> Task :flutter_plugin_android_lifecycle:copyReleaseJniLibsProjectAndLocalJars UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:extractDeepLinksForAarRelease UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:extractReleaseAnnotations UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:mergeReleaseConsumerProguardFiles UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:prepareReleaseArtProfile UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:mergeReleaseJavaResource UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:syncReleaseLibJars UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:bundleReleaseLocalLintAar UP-TO-DATE
+> Task :path_provider_android:mergeReleaseJniLibFolders UP-TO-DATE
+> Task :path_provider_android:mergeReleaseNativeLibs NO-SOURCE
+> Task :path_provider_android:stripReleaseDebugSymbols NO-SOURCE
+> Task :path_provider_android:copyReleaseJniLibsProjectAndLocalJars UP-TO-DATE
+> Task :path_provider_android:extractDeepLinksForAarRelease UP-TO-DATE
+> Task :path_provider_android:extractReleaseAnnotations UP-TO-DATE
+> Task :path_provider_android:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :path_provider_android:mergeReleaseConsumerProguardFiles UP-TO-DATE
+> Task :path_provider_android:prepareReleaseArtProfile UP-TO-DATE
+> Task :path_provider_android:mergeReleaseJavaResource UP-TO-DATE
+> Task :path_provider_android:syncReleaseLibJars UP-TO-DATE
+> Task :path_provider_android:bundleReleaseLocalLintAar UP-TO-DATE
+> Task :url_launcher_android:mergeReleaseJniLibFolders UP-TO-DATE
+> Task :url_launcher_android:mergeReleaseNativeLibs NO-SOURCE
+> Task :url_launcher_android:stripReleaseDebugSymbols NO-SOURCE
+> Task :url_launcher_android:copyReleaseJniLibsProjectAndLocalJars UP-TO-DATE
+> Task :url_launcher_android:extractDeepLinksForAarRelease UP-TO-DATE
+> Task :url_launcher_android:extractReleaseAnnotations UP-TO-DATE
+> Task :url_launcher_android:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :url_launcher_android:mergeReleaseConsumerProguardFiles UP-TO-DATE
+> Task :url_launcher_android:prepareReleaseArtProfile UP-TO-DATE
+> Task :url_launcher_android:mergeReleaseJavaResource UP-TO-DATE
+> Task :url_launcher_android:syncReleaseLibJars UP-TO-DATE
+> Task :url_launcher_android:bundleReleaseLocalLintAar UP-TO-DATE
+> Task :audio_session:writeReleaseLintModelMetadata UP-TO-DATE
+> Task :audioplayers_android:writeReleaseLintModelMetadata UP-TO-DATE
+> Task :firebase_core:writeReleaseLintModelMetadata UP-TO-DATE
+> Task :cloud_firestore:writeReleaseLintModelMetadata UP-TO-DATE
+> Task :cloud_functions:writeReleaseLintModelMetadata UP-TO-DATE
+> Task :firebase_auth:writeReleaseLintModelMetadata UP-TO-DATE
+> Task :firebase_storage:writeReleaseLintModelMetadata UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:lintVitalAnalyzeRelease
+> Task :flutter_plugin_android_lifecycle:writeReleaseLintModelMetadata UP-TO-DATE
+> Task :audio_session:lintVitalAnalyzeRelease
+> Task :image_picker_android:writeReleaseLintModelMetadata UP-TO-DATE
+> Task :firebase_core:lintVitalAnalyzeRelease
+> Task :just_audio:writeReleaseLintModelMetadata UP-TO-DATE
+> Task :firebase_storage:lintVitalAnalyzeRelease
+> Task :path_provider_android:writeReleaseLintModelMetadata UP-TO-DATE
+> Task :cloud_firestore:lintVitalAnalyzeRelease
+> Task :url_launcher_android:writeReleaseLintModelMetadata UP-TO-DATE
+> Task :audio_session:generateReleaseLintVitalModel UP-TO-DATE
+> Task :audioplayers_android:generateReleaseLintVitalModel UP-TO-DATE
+> Task :cloud_firestore:generateReleaseLintVitalModel UP-TO-DATE
+> Task :cloud_functions:generateReleaseLintVitalModel UP-TO-DATE
+> Task :firebase_auth:generateReleaseLintVitalModel UP-TO-DATE
+> Task :firebase_core:generateReleaseLintVitalModel UP-TO-DATE
+> Task :firebase_storage:generateReleaseLintVitalModel UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:generateReleaseLintVitalModel UP-TO-DATE
+> Task :image_picker_android:generateReleaseLintVitalModel UP-TO-DATE
+> Task :just_audio:generateReleaseLintVitalModel UP-TO-DATE
+> Task :path_provider_android:generateReleaseLintVitalModel UP-TO-DATE
+> Task :url_launcher_android:generateReleaseLintVitalModel UP-TO-DATE
+> Task :app:configureCMakeRelease[arm64-v8a]
+> Task :app:buildCMakeRelease[arm64-v8a]
+> Task :app:configureCMakeRelease[armeabi-v7a]
+> Task :app:buildCMakeRelease[armeabi-v7a]
+> Task :path_provider_android:lintVitalAnalyzeRelease
+> Task :url_launcher_android:lintVitalAnalyzeRelease
+> Task :just_audio:lintVitalAnalyzeRelease
+> Task :image_picker_android:lintVitalAnalyzeRelease
+> Task :firebase_auth:lintVitalAnalyzeRelease
+> Task :cloud_functions:lintVitalAnalyzeRelease
+> Task :audioplayers_android:lintVitalAnalyzeRelease
+> Task :app:configureCMakeRelease[x86_64]
+> Task :app:buildCMakeRelease[x86_64]
+> Task :app:mergeReleaseJniLibFolders
+> Task :audio_session:copyReleaseJniLibsProjectOnly
+> Task :audioplayers_android:copyReleaseJniLibsProjectOnly
+> Task :cloud_firestore:copyReleaseJniLibsProjectOnly
+> Task :cloud_functions:copyReleaseJniLibsProjectOnly
+> Task :firebase_auth:copyReleaseJniLibsProjectOnly
+> Task :firebase_core:copyReleaseJniLibsProjectOnly
+> Task :firebase_storage:copyReleaseJniLibsProjectOnly
+> Task :flutter_plugin_android_lifecycle:copyReleaseJniLibsProjectOnly
+> Task :image_picker_android:copyReleaseJniLibsProjectOnly
+> Task :just_audio:copyReleaseJniLibsProjectOnly
+> Task :path_provider_android:copyReleaseJniLibsProjectOnly
+> Task :url_launcher_android:copyReleaseJniLibsProjectOnly
+> Task :just_audio:exportReleaseConsumerProguardFiles
+> Task :app:lintVitalAnalyzeRelease
+> Task :audio_session:exportReleaseConsumerProguardFiles
+> Task :audioplayers_android:exportReleaseConsumerProguardFiles
+> Task :cloud_firestore:exportReleaseConsumerProguardFiles
+> Task :cloud_functions:exportReleaseConsumerProguardFiles
+> Task :firebase_auth:exportReleaseConsumerProguardFiles
+> Task :firebase_storage:exportReleaseConsumerProguardFiles
+> Task :firebase_core:exportReleaseConsumerProguardFiles
+> Task :image_picker_android:exportReleaseConsumerProguardFiles
+> Task :path_provider_android:exportReleaseConsumerProguardFiles
+> Task :flutter_plugin_android_lifecycle:exportReleaseConsumerProguardFiles
+> Task :url_launcher_android:exportReleaseConsumerProguardFiles
+> Task :app:lintVitalReportRelease
+> Task :app:lintVitalRelease
+> Task :app:checkReleaseDuplicateClasses
+> Task :app:mergeReleaseGeneratedProguardFiles
+> Task :app:mergeReleaseArtProfile
+> Task :app:processReleaseJavaRes
+> Task :app:mergeReleaseStartupProfile
+> Task :app:compressReleaseAssets
+> Task :app:extractReleaseVersionControlInfo
+> Task :app:expandReleaseArtProfileWildcards
+> Task :app:collectReleaseDependencies
+> Task :app:sdkReleaseDependencyData
+> Task :app:validateSigningRelease
+> Task :app:writeReleaseAppMetadata
+> Task :app:writeReleaseSigningConfigVersions
+> Task :audio_session:bundleReleaseAar
+> Task :app:mergeReleaseNativeLibs
+> Task :audio_session:mapReleaseSourceSetPaths
+> Task :app:stripReleaseDebugSymbols
+> Task :audio_session:mergeReleaseResources
+> Task :app:mergeReleaseJavaResource
+> Task :app:extractReleaseNativeSymbolTables
+> Task :app:convertLinkedResourcesToProtoRelease
+> Task :audioplayers_android:bundleReleaseAar
+> Task :audioplayers_android:mapReleaseSourceSetPaths
+
+> Task :app:minifyReleaseWithR8
+Supplied proguard configuration does not exist: C:\Users\kkuku\Documents\FlutterProjects\quiver_hub\android\app\proguard-rules.pro
+
+> Task :audio_session:verifyReleaseResources
+> Task :audioplayers_android:mergeReleaseResources
+> Task :audio_session:assembleRelease
+> Task :cloud_firestore:bundleReleaseAar
+> Task :cloud_firestore:mapReleaseSourceSetPaths
+> Task :audioplayers_android:verifyReleaseResources
+> Task :cloud_firestore:mergeReleaseResources
+> Task :audioplayers_android:assembleRelease
+> Task :firebase_core:compileReleaseLibraryResources
+> Task :cloud_functions:bundleReleaseAar
+> Task :cloud_functions:mapReleaseSourceSetPaths
+> Task :app:mergeReleaseNativeDebugMetadata
+> Task :cloud_firestore:verifyReleaseResources
+> Task :cloud_functions:mergeReleaseResources
+> Task :cloud_firestore:assembleRelease
+> Task :firebase_auth:bundleReleaseAar
+> Task :firebase_auth:mapReleaseSourceSetPaths
+> Task :cloud_functions:verifyReleaseResources
+> Task :firebase_auth:mergeReleaseResources
+> Task :cloud_functions:assembleRelease
+> Task :firebase_core:bundleReleaseAar
+> Task :firebase_core:mapReleaseSourceSetPaths
+> Task :firebase_auth:verifyReleaseResources
+> Task :firebase_core:mergeReleaseResources
+> Task :firebase_auth:assembleRelease
+> Task :firebase_storage:bundleReleaseAar
+> Task :firebase_storage:mapReleaseSourceSetPaths
+> Task :firebase_core:verifyReleaseResources
+> Task :firebase_storage:mergeReleaseResources
+> Task :firebase_core:assembleRelease
+> Task :flutter_plugin_android_lifecycle:bundleReleaseAar
+> Task :flutter_plugin_android_lifecycle:mapReleaseSourceSetPaths
+> Task :firebase_storage:verifyReleaseResources
+> Task :flutter_plugin_android_lifecycle:mergeReleaseResources
+> Task :firebase_storage:assembleRelease
+> Task :image_picker_android:bundleReleaseAar
+> Task :image_picker_android:mapReleaseSourceSetPaths
+> Task :flutter_plugin_android_lifecycle:compileReleaseLibraryResources
+> Task :flutter_plugin_android_lifecycle:verifyReleaseResources
+> Task :image_picker_android:mergeReleaseResources
+> Task :flutter_plugin_android_lifecycle:assembleRelease
+> Task :just_audio:bundleReleaseAar
+> Task :just_audio:mapReleaseSourceSetPaths
+> Task :audio_session:compileReleaseLibraryResources
+> Task :image_picker_android:verifyReleaseResources
+> Task :just_audio:mergeReleaseResources
+> Task :image_picker_android:assembleRelease
+> Task :path_provider_android:bundleReleaseAar
+> Task :path_provider_android:mapReleaseSourceSetPaths
+> Task :just_audio:verifyReleaseResources
+> Task :path_provider_android:mergeReleaseResources
+> Task :just_audio:assembleRelease
+> Task :url_launcher_android:bundleReleaseAar
+> Task :url_launcher_android:mapReleaseSourceSetPaths
+> Task :path_provider_android:verifyReleaseResources
+> Task :url_launcher_android:mergeReleaseResources
+> Task :path_provider_android:assembleRelease
+> Task :url_launcher_android:verifyReleaseResources
+> Task :url_launcher_android:assembleRelease
+> Task :app:compileReleaseArtProfile
+> Task :app:shrinkReleaseRes
+> Task :app:convertShrunkResourcesToBinaryRelease
+> Task :app:optimizeReleaseResources
+> Task :app:packageRelease
+> Task :app:createReleaseApkListingFileRedirect
+> Task :app:assembleRelease
+
+[Incubating] Problems report is available at: file:///C:/Users/kkuku/Documents/FlutterProjects/quiver_hub/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.12/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 2m 51s
+525 actionable tasks: 129 executed, 396 up-to-date
