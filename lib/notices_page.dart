@@ -1,5 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/link.dart';
+import 'package:url_launcher/url_launcher.dart'; // Keep for other uses if needed, or remove if unused. Keeping for safety.
+import 'utils/launcher_helper.dart';
+import 'widgets/web_compatible_image.dart';
 
 class NoticesPage extends StatelessWidget {
   const NoticesPage({super.key});
@@ -81,29 +86,33 @@ class NoticesList extends StatelessWidget {
                     ),
                     if (imageUrl.isNotEmpty) ...[
                       const SizedBox(height: 16),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(12.0),
-                        child: Image.network(
-                          imageUrl,
+                      const SizedBox(height: 16),
+                      if (kIsWeb)
+                        SizedBox(
                           width: double.infinity,
-                          fit: BoxFit.cover,
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          },
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              height: 150,
-                              color: Colors.grey[800],
-                              child: const Center(
-                                  child: Icon(Icons.broken_image,
-                                      color: Colors.white54)),
-                            );
-                          },
+                          child: ElevatedButton.icon(
+                            onPressed: () => LauncherHelper.launch(imageUrl.trim()),
+                            icon: const Icon(Icons.open_in_new),
+                            label: const Text('View Image'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blueAccent,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(vertical: 22),
+                            ),
+                          ),
+                        )
+                      else
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(12.0),
+                          child: SizedBox(
+                            height: 300,
+                            width: double.infinity,
+                            child: WebCompatibleImage(
+                              imageUrl: imageUrl,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                         ),
-                      ),
                     ],
                   ],
                 ),

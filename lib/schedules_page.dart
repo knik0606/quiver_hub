@@ -1,5 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/link.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'utils/launcher_helper.dart';
+import 'widgets/web_compatible_image.dart';
 
 class SchedulesPage extends StatelessWidget {
   const SchedulesPage({super.key});
@@ -69,23 +74,33 @@ class SchedulesList extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   if (imageUrl.isNotEmpty)
-                    Image.network(
-                      imageUrl,
-                      fit: BoxFit.cover,
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return const Center(
-                          heightFactor: 3,
-                          child: CircularProgressIndicator(),
-                        );
-                      },
-                      errorBuilder: (context, error, stackTrace) {
-                        return const SizedBox(
-                          height: 100,
-                          child: Icon(Icons.error, color: Colors.red),
-                        );
-                      },
-                    ),
+                  if (imageUrl.isNotEmpty)
+                    if (kIsWeb)
+                      SizedBox(
+                        width: double.infinity,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ElevatedButton.icon(
+                            onPressed: () => LauncherHelper.launch(imageUrl.trim()),
+                            icon: const Icon(Icons.open_in_new),
+                            label: const Text('View Image'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blueAccent,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(vertical: 22),
+                            ),
+                          ),
+                        ),
+                      )
+                    else
+                      SizedBox(
+                        height: 200, // Fixed height for list item
+                        width: double.infinity,
+                        child: WebCompatibleImage(
+                          imageUrl: imageUrl,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                   if (pageText.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.all(20.0),
