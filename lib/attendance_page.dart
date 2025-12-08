@@ -233,6 +233,13 @@ class _AttendanceListState extends State<AttendanceList> {
           .orderBy('timestamp', descending: true)
           .snapshots(),
       builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          debugPrint("Firestore Error: ${snapshot.error}");
+          return SelectableText(
+            'Error: ${snapshot.error}',
+            style: const TextStyle(color: Colors.red),
+          );
+        }
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
             child: SizedBox(

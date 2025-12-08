@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:cloud_functions/cloud_functions.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -14,6 +14,7 @@ import 'attendance_page.dart';
 import 'tv_lobby_screen.dart';
 import 'landing_page.dart';
 import 'admin_note_page.dart';
+import 'utils/sync_helper.dart';
 
 void main() {
   runApp(const AppRoot());
@@ -210,9 +211,12 @@ class _MyAppState extends State<MyApp> {
           unselectedItemColor: Colors.white54,
         ),
       ),
-      initialRoute: kIsWeb ? '/' : '/app',
+      initialRoute: kIsWeb ? '/' : '/app', // Web starts at Landing, Mobile starts at App
       routes: {
-        '/': (context) => const LandingPage(),
+        '/': (context) => kIsWeb ? const LandingPage() : MainPage(
+              hasNewMessage: _hasNewMessageGlobal,
+              onMarkAsRead: _markAsRead,
+            ),
         '/app': (context) => MainPage(
               hasNewMessage: _hasNewMessageGlobal,
               onMarkAsRead: _markAsRead,
@@ -249,45 +253,7 @@ class _MainPageState extends State<MainPage> {
   final bool _hasNewAttendanceUpdate = false;
 
   Future<void> _syncData() async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return const Dialog(
-          child: Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CircularProgressIndicator(),
-                SizedBox(width: 20),
-                Text("Syncing data..."),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-    try {
-      final callable =
-          FirebaseFunctions.instance.httpsCallable('syncSheetsToFirestore');
-      final result = await callable.call();
-      debugPrint('Sync result: ${result.data}');
-      if (mounted) {
-        Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Data synced successfully!')),
-        );
-      }
-    } on FirebaseFunctionsException catch (e) {
-      debugPrint('Sync error: ${e.code} - ${e.message}');
-      if (mounted) {
-        Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Sync failed: ${e.message}')),
-        );
-      }
-    }
+    await SyncHelper.syncData(context);
   }
 
   @override
@@ -454,20 +420,23 @@ class _MainPageState extends State<MainPage> {
           },
           child: _pages.elementAt(displayIndex),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            widget.onMarkAsRead();
-            if (mounted) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const MessagePage()),
-              );
-            }
-          },
-          tooltip: 'Send a message',
-          child: _buildIconWithBadge(
-              Icons.message_outlined, widget.hasNewMessage),
-        ),
+        floatingActionButton: displayIndex != 3 // Hide on Admin Page (index 3)
+            ? FloatingActionButton(
+                onPressed: () {
+                  widget.onMarkAsRead();
+                  if (mounted) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const MessagePage()),
+                    );
+                  }
+                },
+                tooltip: 'Send a message',
+                child: _buildIconWithBadge(
+                    Icons.message_outlined, widget.hasNewMessage),
+              )
+            : null,
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           items: <BottomNavigationBarItem>[

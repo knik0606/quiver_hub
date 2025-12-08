@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_functions/cloud_functions.dart';
+
+import 'utils/sync_helper.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({super.key});
@@ -18,6 +19,7 @@ class _AdminPageState extends State<AdminPage> {
   final _adminBoardPasswordController = TextEditingController();
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -107,53 +109,16 @@ class _AdminPageState extends State<AdminPage> {
   }
 
   Future<void> _syncData() async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return const Dialog(
-          backgroundColor: Color(0xFF1E1E1E),
-          child: Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CircularProgressIndicator(),
-                SizedBox(width: 20),
-                Text("Syncing Admin Notes...", style: TextStyle(color: Colors.white)),
-              ],
-            ),
-          ),
-        );
+    await SyncHelper.syncData(
+      context, 
+      onLoading: (isLoading) {
+        if (mounted) {
+          setState(() {
+            _isLoading = isLoading;
+          });
+        }
       },
     );
-    try {
-      final callable =
-          FirebaseFunctions.instance.httpsCallable('syncSheetsToFirestore');
-      final result = await callable.call();
-      debugPrint('Sync result: ${result.data}');
-      if (mounted) {
-        Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Data synced successfully!')),
-        );
-      }
-    } on FirebaseFunctionsException catch (e) {
-      debugPrint('Sync error: ${e.code} - ${e.message}');
-      if (mounted) {
-        Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Sync failed: ${e.message}')),
-        );
-      }
-    } catch (e) {
-       if (mounted) {
-        Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Sync failed: $e')),
-        );
-      }
-    }
   }
 
   @override
@@ -172,115 +137,133 @@ class _AdminPageState extends State<AdminPage> {
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Manage Athletes',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.white)),
-            const SizedBox(height: 8),
-            Row(
+      child: Stack(
+        children: [
+          SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: TextField(
-                    controller: _athleteNameController,
-                    style: textStyle,
-                    decoration: inputDecoration.copyWith(labelText: 'Athlete Name'),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                IconButton.filled(
-                  icon: const Icon(Icons.add),
-                  onPressed: _addAthlete,
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            const Text('Current Athletes:', style: textStyle),
-            StreamBuilder<QuerySnapshot>(
-              stream: _firestore.collection('athletes').snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) return const CircularProgressIndicator();
-                return ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (context, index) {
-                    var athlete = snapshot.data!.docs[index];
-                    return ListTile(
-                      title: Text(athlete['name'], style: textStyle),
-                      trailing: IconButton(
-                        icon:
-                            const Icon(Icons.delete_outline, color: Colors.red),
-                        onPressed: () => _deleteAthlete(athlete.id),
+                Text('Manage Athletes',
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.white)),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _athleteNameController,
+                        style: textStyle,
+                        decoration: inputDecoration.copyWith(labelText: 'Athlete Name'),
                       ),
+                    ),
+                    const SizedBox(width: 8),
+                    IconButton.filled(
+                      icon: const Icon(Icons.add),
+                      onPressed: _addAthlete,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                const Text('Current Athletes:', style: textStyle),
+                StreamBuilder<QuerySnapshot>(
+                  stream: _firestore.collection('athletes').snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) return const CircularProgressIndicator();
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        var athlete = snapshot.data!.docs[index];
+                        return ListTile(
+                          title: Text(athlete['name'], style: textStyle),
+                          trailing: IconButton(
+                            icon:
+                                const Icon(Icons.delete_outline, color: Colors.red),
+                            onPressed: () => _deleteAthlete(athlete.id),
+                          ),
+                        );
+                      },
                     );
                   },
-                );
-              },
-            ),
-            const Divider(height: 40, color: Colors.white24),
-            Text('Settings', style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.white)),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _appTitleController,
-              style: textStyle,
-              decoration: inputDecoration.copyWith(labelText: 'App Title'),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _emailController,
-              style: textStyle,
-              decoration: inputDecoration.copyWith(labelText: 'Notification Email'),
-              keyboardType: TextInputType.emailAddress,
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _passwordController,
-              style: textStyle,
-              decoration: inputDecoration.copyWith(labelText: 'New Admin Password'),
-              obscureText: true,
-            ),
-            const SizedBox(height: 16),
-            const Divider(height: 40, color: Colors.white24),
-            Text('Admin Note Page Configuration', style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.white)),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _adminBoardNameController,
-              style: textStyle,
-              decoration: inputDecoration.copyWith(labelText: 'Admin Board Name (Button Title)'),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _adminBoardPasswordController,
-              style: textStyle,
-              decoration: inputDecoration.copyWith(labelText: 'Admin Board Password'),
-              obscureText: true,
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: _saveSettings,
-                    child: const Text('Save Settings'),
-                  ),
                 ),
-                const SizedBox(width: 16),
-                IconButton.filled(
-                  icon: const Icon(Icons.download),
-                  tooltip: 'Load Content from Google Drive',
-                  onPressed: _syncData,
-                  style: IconButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
-                  ),
+                const Divider(height: 40, color: Colors.white24),
+                Text('Settings', style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.white)),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _appTitleController,
+                  style: textStyle,
+                  decoration: inputDecoration.copyWith(labelText: 'App Title'),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _emailController,
+                  style: textStyle,
+                  decoration: inputDecoration.copyWith(labelText: 'Notification Email'),
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _passwordController,
+                  style: textStyle,
+                  decoration: inputDecoration.copyWith(labelText: 'New Admin Password'),
+                  obscureText: true,
+                ),
+                const SizedBox(height: 16),
+                const Divider(height: 40, color: Colors.white24),
+                Text('Admin Note Page Configuration', style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.white)),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _adminBoardNameController,
+                  style: textStyle,
+                  decoration: inputDecoration.copyWith(labelText: 'Admin Board Name (Button Title)'),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _adminBoardPasswordController,
+                  style: textStyle,
+                  decoration: inputDecoration.copyWith(labelText: 'Admin Board Password'),
+                  obscureText: true,
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: _saveSettings,
+                        child: const Text('Save Settings'),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    IconButton.filled(
+                      icon: const Icon(Icons.download),
+                      tooltip: 'Load Content from Google Drive',
+                      onPressed: _syncData,
+                      style: IconButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        foregroundColor: Colors.white,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+          if (_isLoading)
+            Container(
+              color: Colors.black54,
+              child: const Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CircularProgressIndicator(),
+                    SizedBox(height: 20),
+                    Text("Syncing data...", style: TextStyle(color: Colors.white)),
+                  ],
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }

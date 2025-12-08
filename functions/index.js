@@ -127,6 +127,9 @@ exports.syncSheetsToFirestore = onCall({
     const db = admin.firestore();
 
     try {
+        console.log("Step 1: Fetching data from Google Sheets...");
+        console.log(`Spreadsheet ID: ${SPREADSHEET_ID}`);
+
         const noticesPromise = sheets.spreadsheets.values.get({
             spreadsheetId: SPREADSHEET_ID,
             range: "Notices!A2:C",
@@ -135,48 +138,59 @@ exports.syncSheetsToFirestore = onCall({
             spreadsheetId: SPREADSHEET_ID,
             range: "Schedules!A2:C",
         });
-
         const adminNotesPromise = sheets.spreadsheets.values.get({
             spreadsheetId: SPREADSHEET_ID,
-            range: "AdminNote!A1:C12", // Strictly fetch up to row 12 as requested
+            range: "AdminNote!A1:C12",
         });
 
+        console.log("Step 2: Awaiting Sheet API responses...");
         const [noticesResponse, schedulesResponse, adminNotesResponse] = await Promise.all([
             noticesPromise,
             schedulesPromise,
             adminNotesPromise,
         ]);
+
+        console.log("Step 3: Data received from Sheets.");
         const notices = noticesResponse.data.values || [];
         const schedules = schedulesResponse.data.values || [];
         const adminNotesAll = adminNotesResponse.data.values || [];
 
+        console.log(`Counts: Notices=${notices.length}, Schedules=${schedules.length}, AdminNotesRaw=${adminNotesAll.length}`);
+
         // AdminNote Parsing
-        // Row 1 (Index 0): C1 has boardName
-        // Data starts from Row 3 (Index 2)
         let boardNameFromSheet = "";
         let adminNotesData = [];
 
         if (adminNotesAll.length > 0) {
-            // Check C1 (Row 0, Col 2)
             if (adminNotesAll[0] && adminNotesAll[0].length >= 3) {
                 boardNameFromSheet = adminNotesAll[0][2] || "";
             }
-            // Data rows
             if (adminNotesAll.length > 2) {
-                adminNotesData = adminNotesAll.slice(2); // Skip first 2 rows
+                adminNotesData = adminNotesAll.slice(2);
             }
         }
+        console.log(`Parsed AdminNotes: ${adminNotesData.length} items. BoardName: ${boardNameFromSheet}`);
 
+        console.log("Step 4: Clearing old Firestore collections...");
         const noticesSnapshot = await db.collection("notices").get();
         const noticesBatch = db.batch();
         noticesSnapshot.docs.forEach((doc) => noticesBatch.delete(doc.ref));
         await noticesBatch.commit();
+        console.log("Notices cleared.");
+
+        const schedulesSnapshot = await db.collection("schedules").get();
+        const schedulesBatch = db.batch();
+        schedulesSnapshot.docs.forEach((doc) => schedulesBatch.delete(doc.ref));
         await schedulesBatch.commit();
+        console.log("Schedules cleared.");
 
         const adminNotesSnapshot = await db.collection("admin_notes").get();
         const adminNotesBatch = db.batch();
         adminNotesSnapshot.docs.forEach((doc) => adminNotesBatch.delete(doc.ref));
         await adminNotesBatch.commit();
+        console.log("AdminNotes cleared.");
+
+        console.log("Step 5: Writing new data to Firestore...");
 
         const noticesWriteBatch = db.batch();
         notices.forEach((row, index) => {
@@ -189,6 +203,7 @@ exports.syncSheetsToFirestore = onCall({
             });
         });
         await noticesWriteBatch.commit();
+        console.log("Notices written.");
 
         const schedulesWriteBatch = db.batch();
         schedules.forEach((row, index) => {
@@ -200,14 +215,12 @@ exports.syncSheetsToFirestore = onCall({
             });
         });
         await schedulesWriteBatch.commit();
+        console.log("Schedules written.");
 
         const adminNotesWriteBatch = db.batch();
         adminNotesData.forEach((row, index) => {
-            // Row structure based on image: A(index), B(Content), C(Image)
-            // We want B and C.
             const content = row[1] || "";
             const imageUrl = row[2] || "";
-
             if (content || imageUrl) {
                 const docRef = db.collection("admin_notes").doc();
                 adminNotesWriteBatch.set(docRef, {
@@ -218,15 +231,15 @@ exports.syncSheetsToFirestore = onCall({
             }
         });
         await adminNotesWriteBatch.commit();
+        console.log("AdminNotes written.");
 
-        // Update Board Name if found
         if (boardNameFromSheet) {
             await db.collection("settings").doc("admin_settings").set({
                 boardName: boardNameFromSheet
             }, { merge: true });
         }
 
-        console.log(`Notices ${notices.length}개, Schedules ${schedules.length}개 동기화 완료.`);
+        console.log("Sync completed successfully.");
         return {
             status: "success",
             noticesCount: notices.length,
@@ -234,8 +247,8 @@ exports.syncSheetsToFirestore = onCall({
             adminNotesCount: adminNotesData.length,
         };
     } catch (err) {
-        console.error("시트 동기화 오류:", err);
-        throw new HttpsError("internal", "시트를 동기화하는 도중 에러가 발생했습니다.");
+        console.error("FATAL ERROR in syncSheetsToFirestore:", err);
+        throw new HttpsError("internal", `Sync Error: ${err.message || err}`);
     }
 });
 

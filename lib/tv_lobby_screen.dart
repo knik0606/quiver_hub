@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_functions/cloud_functions.dart';
+
 import 'package:flutter/material.dart';
+import 'utils/sync_helper.dart';
 import 'attendance_page.dart';
 import 'notices_page.dart';
 import 'schedules_page.dart';
@@ -142,52 +143,6 @@ class TvLobbyScreen extends StatelessWidget {
   }
 
   Future<void> _syncData(BuildContext context) async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return const Dialog(
-          backgroundColor: Color(0xFF1E1E1E),
-          child: Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CircularProgressIndicator(),
-                SizedBox(width: 20),
-                Text("Syncing data...", style: TextStyle(color: Colors.white)),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-    try {
-      final callable =
-          FirebaseFunctions.instance.httpsCallable('syncSheetsToFirestore');
-      final result = await callable.call();
-      debugPrint('Sync result: ${result.data}');
-      if (context.mounted) {
-        Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Data synced successfully!')),
-        );
-      }
-    } on FirebaseFunctionsException catch (e) {
-      debugPrint('Sync error: ${e.code} - ${e.message}');
-      if (context.mounted) {
-        Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Sync failed: ${e.message}')),
-        );
-      }
-    } catch (e) {
-       if (context.mounted) {
-        Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Sync failed: $e')),
-        );
-      }
-    }
+    await SyncHelper.syncData(context);
   }
 }
