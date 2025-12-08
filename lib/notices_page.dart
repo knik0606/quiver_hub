@@ -105,11 +105,10 @@ class NoticesList extends StatelessWidget {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(12.0),
                           child: SizedBox(
-                            height: 300,
                             width: double.infinity,
                             child: WebCompatibleImage(
                               imageUrl: imageUrl,
-                              fit: BoxFit.cover,
+                              fit: BoxFit.fitWidth,
                             ),
                           ),
                         ),

@@ -94,11 +94,10 @@ class SchedulesList extends StatelessWidget {
                       )
                     else
                       SizedBox(
-                        height: 200, // Fixed height for list item
                         width: double.infinity,
                         child: WebCompatibleImage(
                           imageUrl: imageUrl,
-                          fit: BoxFit.cover,
+                          fit: BoxFit.fitWidth,
                         ),
                       ),
                   if (pageText.isNotEmpty)
