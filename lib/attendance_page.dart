@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 
-
+import 'services/email_service.dart';
+import 'services/google_sheets_service.dart';
 
 class AttendancePage extends StatelessWidget {
   const AttendancePage({super.key});
@@ -34,7 +35,6 @@ class AttendanceList extends StatefulWidget {
 }
 
 class _AttendanceListState extends State<AttendanceList> {
-
   // Helper to get today's start and end timestamps
   DateTime get _startOfDay {
     final now = DateTime.now();
@@ -50,7 +50,6 @@ class _AttendanceListState extends State<AttendanceList> {
       String newStatus, BuildContext context) async {
     final athletesCollection =
         FirebaseFirestore.instance.collection('athletes');
-    final mailCollection = FirebaseFirestore.instance.collection('mail');
 
     // Update status in athletes collection
     await athletesCollection.doc(docId).update({'status': newStatus});
@@ -73,14 +72,37 @@ class _AttendanceListState extends State<AttendanceList> {
       );
     }
 
-    // Trigger email via mail collection
+    // Asynchronously handle email and sheet logging using Dart services
+    _handleBackgroundServices(athleteName, newStatus);
+  }
+
+  Future<void> _handleBackgroundServices(
+      String athleteName, String newStatus) async {
     try {
-      await mailCollection.add({
-        'name': athleteName,
-        'status': newStatus,
-      });
+      final settingsDoc = await FirebaseFirestore.instance
+          .collection('settings')
+          .doc('admin_settings')
+          .get();
+      final recipientEmail =
+          settingsDoc.data()?['notificationEmail'] as String?;
+
+      if (recipientEmail != null && recipientEmail.isNotEmpty) {
+        final emailService = EmailService();
+        await emailService.sendAttendanceEmail(
+          recipientEmail: recipientEmail,
+          name: athleteName,
+          status: newStatus,
+        );
+      }
+
+      final sheetsService = GoogleSheetsService();
+      await sheetsService.logAttendanceToSheet(
+        name: athleteName,
+        status: newStatus,
+        timestamp: DateTime.now(),
+      );
     } catch (e) {
-      debugPrint('Email request error: $e');
+      debugPrint('Error in background services: $e');
     }
   }
 
@@ -145,7 +167,8 @@ class _AttendanceListState extends State<AttendanceList> {
             foregroundColor: Colors.white,
             icon: Icons.login,
             label: 'IN',
-            borderRadius: const BorderRadius.horizontal(left: Radius.circular(12)),
+            borderRadius:
+                const BorderRadius.horizontal(left: Radius.circular(12)),
           ),
           SlidableAction(
             onPressed: !isIN
@@ -156,7 +179,8 @@ class _AttendanceListState extends State<AttendanceList> {
             foregroundColor: Colors.white,
             icon: Icons.logout,
             label: 'OUT',
-            borderRadius: const BorderRadius.horizontal(right: Radius.circular(12)),
+            borderRadius:
+                const BorderRadius.horizontal(right: Radius.circular(12)),
           ),
         ],
       ),
@@ -164,11 +188,13 @@ class _AttendanceListState extends State<AttendanceList> {
         color: const Color(0xFF1E1E1E),
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        margin: const EdgeInsets.only(bottom: 0), // Margin handled by ListView padding/spacing if needed
+        margin: const EdgeInsets.only(
+            bottom: 0), // Margin handled by ListView padding/spacing if needed
         child: Theme(
           data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
           child: ExpansionTile(
-            tilePadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            tilePadding:
+                const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
             title: Text(
               athleteName,
               style: const TextStyle(
@@ -228,8 +254,10 @@ class _AttendanceListState extends State<AttendanceList> {
       stream: FirebaseFirestore.instance
           .collection('attendance_logs')
           .where('name', isEqualTo: athleteName)
-          .where('timestamp', isGreaterThanOrEqualTo: Timestamp.fromDate(_startOfDay))
-          .where('timestamp', isLessThanOrEqualTo: Timestamp.fromDate(_endOfDay))
+          .where('timestamp',
+              isGreaterThanOrEqualTo: Timestamp.fromDate(_startOfDay))
+          .where('timestamp',
+              isLessThanOrEqualTo: Timestamp.fromDate(_endOfDay))
           .orderBy('timestamp', descending: true)
           .snapshots(),
       builder: (context, snapshot) {

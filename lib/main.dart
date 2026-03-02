@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -16,7 +17,9 @@ import 'landing_page.dart';
 import 'admin_note_page.dart';
 import 'utils/sync_helper.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   runApp(const AppRoot());
 }
 
@@ -40,19 +43,20 @@ class _AppRootState extends State<AppRoot> {
   Future<void> _initializeFlutterFire() async {
     try {
       WidgetsFlutterBinding.ensureInitialized();
-      
+
       try {
         await Firebase.initializeApp(
           options: DefaultFirebaseOptions.currentPlatform,
         );
       } catch (e) {
-        if (e.toString().contains("duplicate") || e.toString().contains("already exists")) {
-           // Ignore
+        if (e.toString().contains("duplicate") ||
+            e.toString().contains("already exists")) {
+          // Ignore
         } else {
-           rethrow;
+          rethrow;
         }
       }
-      
+
       // Configure Persistence: OFF for Web (iOS fix), ON for Native
       try {
         FirebaseFirestore.instance.settings =
@@ -82,7 +86,7 @@ class _AppRootState extends State<AppRoot> {
               padding: const EdgeInsets.all(20),
               child: Text(
                 _error!,
-                style: const TextStyle(color: Colors.red, fontSize: 16), 
+                style: const TextStyle(color: Colors.red, fontSize: 16),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -99,9 +103,10 @@ class _AppRootState extends State<AppRoot> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                 CircularProgressIndicator(),
-                 SizedBox(height: 20),
-                 Text("Initializing App...", style: TextStyle(color: Colors.black)),
+                CircularProgressIndicator(),
+                SizedBox(height: 20),
+                Text("Initializing App...",
+                    style: TextStyle(color: Colors.black)),
               ],
             ),
           ),
@@ -191,7 +196,6 @@ class _MyAppState extends State<MyApp> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -211,12 +215,15 @@ class _MyAppState extends State<MyApp> {
           unselectedItemColor: Colors.white54,
         ),
       ),
-      initialRoute: kIsWeb ? '/' : '/app', // Web starts at Landing, Mobile starts at App
+      initialRoute:
+          kIsWeb ? '/' : '/app', // Web starts at Landing, Mobile starts at App
       routes: {
-        '/': (context) => kIsWeb ? const LandingPage() : MainPage(
-              hasNewMessage: _hasNewMessageGlobal,
-              onMarkAsRead: _markAsRead,
-            ),
+        '/': (context) => kIsWeb
+            ? const LandingPage()
+            : MainPage(
+                hasNewMessage: _hasNewMessageGlobal,
+                onMarkAsRead: _markAsRead,
+              ),
         '/app': (context) => MainPage(
               hasNewMessage: _hasNewMessageGlobal,
               onMarkAsRead: _markAsRead,
@@ -412,8 +419,8 @@ class _MainPageState extends State<MainPage> {
             if (_isAdminUnlocked) _resetLockTimer();
           },
           onPointerMove: (_) {
-             // Optional: De-bounce this if too frequent, but for simple timer reset it's okay
-             if (_isAdminUnlocked) _resetLockTimer();
+            // Optional: De-bounce this if too frequent, but for simple timer reset it's okay
+            if (_isAdminUnlocked) _resetLockTimer();
           },
           onPointerUp: (_) {
             if (_isAdminUnlocked) _resetLockTimer();

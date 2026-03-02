@@ -40,9 +40,16 @@
     App Loading...
   </div>
   <script>
-    window.flutterConfiguration = {
-      renderer: "html"
-    };
+    window.addEventListener('load', function(ev) {
+      _flutter.loader.loadEntrypoint({
+        onEntrypointLoaded: async function(engineInitializer) {
+          let appRunner = await engineInitializer.initializeEngine({
+            renderer: "html"
+          });
+          await appRunner.runApp();
+        }
+      });
+    });
   </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>

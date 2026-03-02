@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
+import 'services/email_service.dart';
+
 class MessagePage extends StatefulWidget {
   const MessagePage({super.key});
 
@@ -13,24 +15,54 @@ class _MessagePageState extends State<MessagePage> {
   final _messageController = TextEditingController();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  void _sendMessage() {
+  void _sendMessage() async {
     final messageText = _messageController.text.trim();
     if (messageText.isEmpty) {
       return;
     }
 
-    _firestore
-        .collection('chats')
-        .doc('main_thread')
-        .collection('messages')
-        .add({
-      'text': messageText,
-      'senderType': 'PLAYER',
-      'timestamp': FieldValue.serverTimestamp(),
-    });
-
     _messageController.clear();
     FocusScope.of(context).unfocus();
+
+    try {
+      final docRef = await _firestore
+          .collection('chats')
+          .doc('main_thread')
+          .collection('messages')
+          .add({
+        'text': messageText,
+        'senderType': 'PLAYER',
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+
+      _handleNewMessageEmail(messageText, 'PLAYER', docRef.id);
+    } catch (e) {
+      debugPrint('Error sending message: $e');
+    }
+  }
+
+  Future<void> _handleNewMessageEmail(
+      String messageText, String senderType, String messageId) async {
+    try {
+      final settingsDoc = await FirebaseFirestore.instance
+          .collection('settings')
+          .doc('admin_settings')
+          .get();
+      final recipientEmail =
+          settingsDoc.data()?['notificationEmail'] as String?;
+
+      if (recipientEmail != null && recipientEmail.isNotEmpty) {
+        final emailService = EmailService();
+        await emailService.sendNewMessageEmail(
+          recipientEmail: recipientEmail,
+          senderType: senderType,
+          messageText: messageText,
+          messageId: messageId,
+        );
+      }
+    } catch (e) {
+      debugPrint('Error sending chat notification email: $e');
+    }
   }
 
   @override

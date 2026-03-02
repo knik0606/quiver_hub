@@ -1,9 +1,10 @@
 import 'dart:async';
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
+import '../services/google_sheets_service.dart';
 
 class SyncHelper {
-  static Future<void> syncData(BuildContext context, {ValueChanged<bool>? onLoading}) async {
+  static Future<void> syncData(BuildContext context,
+      {ValueChanged<bool>? onLoading}) async {
     final bool useDialog = onLoading == null;
     bool isDialogShowing = false;
 
@@ -26,16 +27,19 @@ class SyncHelper {
                     children: [
                       CircularProgressIndicator(),
                       SizedBox(width: 20),
-                      Text("Syncing data...", style: TextStyle(color: Colors.white)),
+                      Text("Syncing data...",
+                          style: TextStyle(color: Colors.white)),
                     ],
                   ),
                   const SizedBox(height: 16),
                   TextButton(
                     onPressed: () {
-                      Navigator.of(dialogContext, rootNavigator: true).pop('dialog');
+                      Navigator.of(dialogContext, rootNavigator: true)
+                          .pop('dialog');
                       isDialogShowing = false;
                     },
-                    child: const Text("Cancel", style: TextStyle(color: Colors.redAccent)),
+                    child: const Text("Cancel",
+                        style: TextStyle(color: Colors.redAccent)),
                   )
                 ],
               ),
@@ -48,40 +52,29 @@ class SyncHelper {
     }
 
     try {
-      final callable = FirebaseFunctions.instance.httpsCallable('syncSheetsToFirestore');
-      
-      // 15-second timeout
-      final result = await callable.call().timeout(
+      final sheetsService = GoogleSheetsService();
+
+      // Using the local dart service instead of Firebase Functions
+      final data = await sheetsService.syncSheetsToFirestore().timeout(
         const Duration(seconds: 15),
         onTimeout: () {
           throw TimeoutException('The sync operation timed out.');
         },
       );
-      
-      debugPrint('Sync result: ${result.data}');
-      
-      final data = result.data as Map<String, dynamic>?;
-      final notices = data?['noticesCount'] ?? 0;
-      final schedules = data?['schedulesCount'] ?? 0;
-      final adminNotes = data?['adminNotesCount'] ?? 0;
+
+      debugPrint('Sync result: $data');
+
+      final notices = data['noticesCount'] ?? 0;
+      final schedules = data['schedulesCount'] ?? 0;
+      final adminNotes = data['adminNotesCount'] ?? 0;
 
       if (context.mounted) {
         // Show detailed success message
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Success! Synced: $notices Notices, $schedules Schedules, $adminNotes Admin Notes.'),
+            content: Text(
+                'Success! Synced: $notices Notices, $schedules Schedules, $adminNotes Admin Notes.'),
             backgroundColor: Colors.green,
-            duration: const Duration(seconds: 5),
-          ),
-        );
-      }
-    } on FirebaseFunctionsException catch (e) {
-      debugPrint('Sync error: ${e.code} - ${e.message}');
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Sync failed: ${e.message}'),
-            backgroundColor: Colors.red,
             duration: const Duration(seconds: 5),
           ),
         );
@@ -91,19 +84,20 @@ class SyncHelper {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Sync timed out. Server might be cold or busy.'),
+            content: Text('Sync timed out. Network might be slow.'),
             backgroundColor: Colors.orange,
             duration: Duration(seconds: 5),
           ),
         );
       }
     } catch (e) {
-      debugPrint('Sync unknown error: $e');
+      debugPrint('Sync error: $e');
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Sync failed: ${e.toString()}'),
             backgroundColor: Colors.red,
+            duration: const Duration(seconds: 5),
           ),
         );
       }
@@ -111,10 +105,10 @@ class SyncHelper {
       if (useDialog) {
         // Guaranteed to pop the dialog if still showing
         if (isDialogShowing && context.mounted) {
-          Navigator.of(context, rootNavigator: true).pop('dialog'); 
+          Navigator.of(context, rootNavigator: true).pop('dialog');
         }
       } else {
-        onLoading!(false);
+        onLoading(false);
       }
     }
   }

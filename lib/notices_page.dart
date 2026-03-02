@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/link.dart';
-import 'package:url_launcher/url_launcher.dart'; // Keep for other uses if needed, or remove if unused. Keeping for safety.
 import 'utils/launcher_helper.dart';
 import 'widgets/web_compatible_image.dart';
 
@@ -58,8 +56,7 @@ class NoticesList extends StatelessWidget {
           shrinkWrap: shrinkWrap,
           itemCount: noticeDocs.length,
           itemBuilder: (context, index) {
-            final noticeData =
-                noticeDocs[index].data() as Map<String, dynamic>;
+            final noticeData = noticeDocs[index].data() as Map<String, dynamic>;
             final String pageNumber =
                 noticeData['pageNumber'] ?? (index + 1).toString();
             final String content = noticeData['content'] ?? 'No content';
@@ -91,7 +88,8 @@ class NoticesList extends StatelessWidget {
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton.icon(
-                            onPressed: () => LauncherHelper.launch(imageUrl.trim()),
+                            onPressed: () =>
+                                LauncherHelper.launch(imageUrl.trim()),
                             icon: const Icon(Icons.open_in_new),
                             label: const Text('View Image'),
                             style: ElevatedButton.styleFrom(
@@ -123,4 +121,3 @@ class NoticesList extends StatelessWidget {
     );
   }
 }
-
