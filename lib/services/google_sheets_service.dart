@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:googleapis/sheets/v4.dart' as sheets;
 import 'package:googleapis_auth/auth_io.dart';
@@ -20,8 +21,9 @@ class GoogleSheetsService {
   }
 
   String _convertGoogleDriveUrl(String? url) {
-    if (url == null || url.isEmpty || !url.contains('drive.google.com'))
+    if (url == null || url.isEmpty || !url.contains('drive.google.com')) {
       return '';
+    }
     final regex = RegExp(r'drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)');
     final match = regex.firstMatch(url);
     if (match != null && match.groupCount >= 1) {
@@ -60,9 +62,9 @@ class GoogleSheetsService {
         'Attendance!A:D',
         valueInputOption: 'USER_ENTERED',
       );
-      print('Successfully logged attendance to sheet');
+      debugPrint('Successfully logged attendance to sheet');
     } catch (e) {
-      print('Error logging to sheet: $e');
+      debugPrint('Error logging to sheet: $e');
     } finally {
       client.close();
     }
@@ -187,7 +189,7 @@ class GoogleSheetsService {
         'adminNotesCount': adminNotesData.length,
       };
     } catch (err) {
-      print('FATAL ERROR in syncSheetsToFirestore: $err');
+      debugPrint('FATAL ERROR in syncSheetsToFirestore: $err');
       rethrow;
     } finally {
       client.close();

@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/link.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'utils/launcher_helper.dart';
 import 'widgets/web_compatible_image.dart';
 
@@ -11,9 +9,9 @@ class SchedulesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF121212),
-      body: const SchedulesList(),
+    return const Scaffold(
+      backgroundColor: Color(0xFF121212),
+      body: SchedulesList(),
     );
   }
 }
@@ -74,32 +72,34 @@ class SchedulesList extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   if (imageUrl.isNotEmpty)
-                  if (imageUrl.isNotEmpty)
-                    if (kIsWeb)
-                      SizedBox(
-                        width: double.infinity,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ElevatedButton.icon(
-                            onPressed: () => LauncherHelper.launch(imageUrl.trim()),
-                            icon: const Icon(Icons.open_in_new),
-                            label: const Text('View Image'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blueAccent,
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(vertical: 22),
+                    if (imageUrl.isNotEmpty)
+                      if (kIsWeb)
+                        SizedBox(
+                          width: double.infinity,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ElevatedButton.icon(
+                              onPressed: () =>
+                                  LauncherHelper.launch(imageUrl.trim()),
+                              icon: const Icon(Icons.open_in_new),
+                              label: const Text('View Image'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blueAccent,
+                                foregroundColor: Colors.white,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 22),
+                              ),
                             ),
                           ),
+                        )
+                      else
+                        SizedBox(
+                          width: double.infinity,
+                          child: WebCompatibleImage(
+                            imageUrl: imageUrl,
+                            fit: BoxFit.fitWidth,
+                          ),
                         ),
-                      )
-                    else
-                      SizedBox(
-                        width: double.infinity,
-                        child: WebCompatibleImage(
-                          imageUrl: imageUrl,
-                          fit: BoxFit.fitWidth,
-                        ),
-                      ),
                   if (pageText.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.all(20.0),
@@ -122,4 +122,3 @@ class SchedulesList extends StatelessWidget {
     );
   }
 }
-

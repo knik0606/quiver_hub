@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_web_libraries_in_flutter, deprecated_member_use
 import 'dart:html' as html;
 import 'dart:ui_web' as ui_web;
 import 'package:flutter/material.dart';
@@ -23,7 +24,7 @@ class WebCompatibleImageImpl extends StatelessWidget {
     // We re-register blindly or check? ui_web doesn't expose strict check.
     // But registering same key twice might throw or just overwrite.
     // To be safe, we assume standard usage.
-    
+
     ui_web.platformViewRegistry.registerViewFactory(viewType, (int viewId) {
       final img = html.ImageElement()
         ..src = processedUrl
@@ -44,9 +45,9 @@ class WebCompatibleImageImpl extends StatelessWidget {
         final segments = uri.pathSegments;
         final fileIndex = segments.indexOf('file');
         if (fileIndex != -1 && fileIndex + 2 < segments.length) {
-           final id = segments[fileIndex + 2];
-           // Use thumbnail API which is more reliable for embedding than export=view
-           return 'https://drive.google.com/thumbnail?id=$id&sz=w1000';
+          final id = segments[fileIndex + 2];
+          // Use thumbnail API which is more reliable for embedding than export=view
+          return 'https://drive.google.com/thumbnail?id=$id&sz=w1000';
         }
       } catch (e) {
         // Fallback to original if parsing fails

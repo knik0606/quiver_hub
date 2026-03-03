@@ -60,7 +60,7 @@ class _AppRootState extends State<AppRoot> {
       // Configure Persistence: OFF for Web (iOS fix), ON for Native
       try {
         FirebaseFirestore.instance.settings =
-            Settings(persistenceEnabled: !kIsWeb);
+            const Settings(persistenceEnabled: !kIsWeb);
       } catch (e) {
         // Ignore
       }

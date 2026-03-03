@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -40,11 +41,11 @@ class EmailService {
 
     try {
       final sendReport = await send(message, _smtpServer);
-      print('Attendance email sent successfully: $sendReport');
+      debugPrint('Attendance email sent successfully: $sendReport');
     } on MailerException catch (e) {
-      print('Error sending attendance email: ${e.message}');
+      debugPrint('Error sending attendance email: ${e.message}');
       for (var p in e.problems) {
-        print('Problem: ${p.code}: ${p.msg}');
+        debugPrint('Problem: ${p.code}: ${p.msg}');
       }
     }
   }
@@ -85,11 +86,11 @@ class EmailService {
 
     try {
       final sendReport = await send(message, _smtpServer);
-      print('Chat notification email sent successfully: $sendReport');
+      debugPrint('Chat notification email sent successfully: $sendReport');
     } on MailerException catch (e) {
-      print('Error sending chat email: ${e.message}');
+      debugPrint('Error sending chat email: ${e.message}');
       for (var p in e.problems) {
-        print('Problem: ${p.code}: ${p.msg}');
+        debugPrint('Problem: ${p.code}: ${p.msg}');
       }
     }
   }
