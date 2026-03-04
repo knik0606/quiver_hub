@@ -15,9 +15,20 @@ class GoogleSheetsService {
       throw Exception('GOOGLE_SERVICE_ACCOUNT_KEY is not set in .env');
     }
 
-    final credentials =
-        ServiceAccountCredentials.fromJson(json.decode(serviceAccountJson));
-    return await clientViaServiceAccount(credentials, _scopes);
+    String cleanJson = serviceAccountJson.trim();
+    if ((cleanJson.startsWith("'") && cleanJson.endsWith("'")) ||
+        (cleanJson.startsWith('"') && cleanJson.endsWith('"'))) {
+      cleanJson = cleanJson.substring(1, cleanJson.length - 1);
+    }
+
+    try {
+      final credentials =
+          ServiceAccountCredentials.fromJson(json.decode(cleanJson));
+      return await clientViaServiceAccount(credentials, _scopes);
+    } catch (e) {
+      throw Exception(
+          'Failed to decode GOOGLE_SERVICE_ACCOUNT_KEY JSON. Check .env format. Error: $e');
+    }
   }
 
   String _convertGoogleDriveUrl(String? url) {

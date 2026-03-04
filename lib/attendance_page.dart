@@ -35,6 +35,35 @@ class AttendanceList extends StatefulWidget {
 }
 
 class _AttendanceListState extends State<AttendanceList> {
+  @override
+  void initState() {
+    super.initState();
+    _deleteOldLogs();
+  }
+
+  Future<void> _deleteOldLogs() async {
+    try {
+      final twoDaysAgo = DateTime.now().subtract(const Duration(days: 2));
+      final logsCollection =
+          FirebaseFirestore.instance.collection('attendance_logs');
+      final oldLogsSnapshot = await logsCollection
+          .where('timestamp', isLessThan: Timestamp.fromDate(twoDaysAgo))
+          .get();
+
+      final batch = FirebaseFirestore.instance.batch();
+      for (var doc in oldLogsSnapshot.docs) {
+        batch.delete(doc.reference);
+      }
+      if (oldLogsSnapshot.docs.isNotEmpty) {
+        await batch.commit();
+        debugPrint(
+            'Deleted ${oldLogsSnapshot.docs.length} old attendance logs.');
+      }
+    } catch (e) {
+      debugPrint('Error deleting old logs: $e');
+    }
+  }
+
   // Helper to get today's start and end timestamps
   DateTime get _startOfDay {
     final now = DateTime.now();
