@@ -16,9 +16,10 @@ class GoogleSheetsService {
     }
 
     String cleanJson = serviceAccountJson.trim();
-    if ((cleanJson.startsWith("'") && cleanJson.endsWith("'")) ||
-        (cleanJson.startsWith('"') && cleanJson.endsWith('"'))) {
-      cleanJson = cleanJson.substring(1, cleanJson.length - 1);
+    final int startIndex = cleanJson.indexOf('{');
+    final int endIndex = cleanJson.lastIndexOf('}');
+    if (startIndex != -1 && endIndex != -1 && endIndex >= startIndex) {
+      cleanJson = cleanJson.substring(startIndex, endIndex + 1);
     }
 
     try {
