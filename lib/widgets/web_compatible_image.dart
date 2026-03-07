@@ -2,7 +2,8 @@
 import 'package:flutter/material.dart';
 
 // Conditional imports
-import 'web_compatible_image_mobile.dart' if (dart.library.html) 'web_compatible_image_web.dart';
+import 'web_compatible_image_mobile.dart'
+    if (dart.library.html) 'web_compatible_image_web.dart';
 
 class WebCompatibleImage extends StatelessWidget {
   final String imageUrl;
