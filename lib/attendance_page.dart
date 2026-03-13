@@ -116,12 +116,15 @@ class _AttendanceListState extends State<AttendanceList> {
           settingsDoc.data()?['notificationEmail'] as String?;
 
       if (recipientEmail != null && recipientEmail.isNotEmpty) {
+        debugPrint('>>> 알림 수신 이메일: $recipientEmail');
         final emailService = EmailService();
         await emailService.sendAttendanceEmail(
           recipientEmail: recipientEmail,
           name: athleteName,
           status: newStatus,
         );
+      } else {
+        debugPrint('>>> 알림 수신 이메일이 설정되지 않았습니다.');
       }
 
       final sheetsService = GoogleSheetsService();
@@ -131,7 +134,7 @@ class _AttendanceListState extends State<AttendanceList> {
         timestamp: DateTime.now(),
       );
     } catch (e) {
-      debugPrint('Error in background services: $e');
+      debugPrint('>>> Error in background services: $e');
     }
   }
 
