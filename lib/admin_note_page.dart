@@ -110,11 +110,11 @@ class AdminNoteList extends StatelessWidget {
   Widget build(BuildContext context) {
     // Assuming the sync function syncs 'AdminNote' sheet to 'admin_notes' collection
     // If not, this will be empty, but this is the logical implementation based on description.
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
+    return FutureBuilder<QuerySnapshot>(
+      future: FirebaseFirestore.instance
           .collection('admin_notes') 
           .orderBy('order')
-          .snapshots(),
+          .get(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());

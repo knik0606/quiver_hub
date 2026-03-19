@@ -16,6 +16,8 @@ import 'tv_lobby_screen.dart';
 import 'landing_page.dart';
 import 'admin_note_page.dart';
 import 'utils/sync_helper.dart';
+import 'utils/notice_manager.dart';
+import 'delete_all_messages_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -125,7 +127,7 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   final _audioPlayer = AudioPlayer();
   StreamSubscription<QuerySnapshot>? _globalMessageSubscription;
   int _globalMessageCount = -1;
@@ -134,8 +136,13 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _initializeAudio();
     _listenForNewMessagesGlobal();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      NoticeManager.checkAndShowNotice();
+    });
   }
 
   Future<void> _initializeAudio() async {
@@ -191,14 +198,23 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _globalMessageSubscription?.cancel();
     _audioPlayer.dispose();
     super.dispose();
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      NoticeManager.checkAndShowNotice();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: globalNavigatorKey,
       title: 'Quiver Hub',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -228,21 +244,36 @@ class _MyAppState extends State<MyApp> {
               hasNewMessage: _hasNewMessageGlobal,
               onMarkAsRead: _markAsRead,
             ),
+        '/guest': (context) => MainPage(
+              hasNewMessage: _hasNewMessageGlobal,
+              onMarkAsRead: _markAsRead,
+              viewMode: ViewMode.guest,
+            ),
+        '/web_admin': (context) => MainPage(
+              hasNewMessage: _hasNewMessageGlobal,
+              onMarkAsRead: _markAsRead,
+              viewMode: ViewMode.admin,
+            ),
         '/tv_lobby': (context) => const TvLobbyScreen(),
         '/admin_note': (context) => const AdminNotePage(),
+        '/delete_all_messages': (context) => const DeleteAllMessagesScreen(),
       },
     );
   }
 }
 
+enum ViewMode { guest, admin, combined }
+
 class MainPage extends StatefulWidget {
   final bool hasNewMessage;
   final VoidCallback onMarkAsRead;
+  final ViewMode viewMode;
 
   const MainPage({
     super.key,
     required this.hasNewMessage,
     required this.onMarkAsRead,
+    this.viewMode = ViewMode.combined,
   });
 
   @override
@@ -267,6 +298,9 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     _fetchSettings();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      NoticeManager.checkAndShowNotice();
+    });
   }
 
   @override
@@ -289,12 +323,33 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
-  static const List<Widget> _pages = <Widget>[
-    NoticesPage(),
-    SchedulesPage(),
-    AttendancePage(),
-    AdminPage(),
-  ];
+  List<Widget> get _pages {
+    final bool isUserAdmin = widget.viewMode == ViewMode.admin || _isAdminUnlocked;
+    switch (widget.viewMode) {
+      case ViewMode.guest:
+        return [
+          const NoticesPage(),
+          const SchedulesPage(),
+          const AttendancePage(isReadOnly: true),
+          MessagePage(isAdmin: isUserAdmin),
+        ];
+      case ViewMode.admin:
+        return const [
+          NoticesPage(),
+          SchedulesPage(),
+          AttendancePage(isReadOnly: false),
+          AdminPage(),
+        ];
+      case ViewMode.combined:
+        return [
+          const NoticesPage(),
+          const SchedulesPage(),
+          const AttendancePage(isReadOnly: false),
+          MessagePage(isAdmin: isUserAdmin),
+          const AdminPage(),
+        ];
+    }
+  }
 
   void _resetLockTimer() {
     _lockTimer?.cancel();
@@ -315,7 +370,7 @@ class _MainPageState extends State<MainPage> {
   }
 
   void _onItemTapped(int index) {
-    if (index == 3 && !_isAdminUnlocked) {
+    if (widget.viewMode == ViewMode.combined && index == 4 && !_isAdminUnlocked) {
       _showPasswordDialog();
     } else {
       if (_isAdminUnlocked) _resetLockTimer();
@@ -356,7 +411,7 @@ class _MainPageState extends State<MainPage> {
                       if (mounted) {
                         setState(() {
                           _isAdminUnlocked = true;
-                          _selectedIndex = 3;
+                          _selectedIndex = 4;
                         });
                         _resetLockTimer();
                       }
@@ -395,10 +450,64 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
+  int get _displayIndex {
+    if (widget.viewMode == ViewMode.combined && _selectedIndex == 4 && !_isAdminUnlocked) {
+      return 2;
+    }
+    return _selectedIndex;
+  }
+
+  List<BottomNavigationBarItem> get _bottomNavBarItems {
+    final baseItems = [
+      BottomNavigationBarItem(
+        icon: _buildIconWithBadge(Icons.campaign_outlined, _hasNewNotices),
+        label: 'Notices',
+      ),
+      BottomNavigationBarItem(
+        icon: _buildIconWithBadge(Icons.calendar_today_outlined, _hasNewSchedule),
+        label: 'Schedule',
+      ),
+      BottomNavigationBarItem(
+        icon: _buildIconWithBadge(Icons.check_circle_outline, _hasNewAttendanceUpdate),
+        label: 'Attendance',
+      ),
+    ];
+
+    if (widget.viewMode == ViewMode.guest) {
+      baseItems.add(
+        BottomNavigationBarItem(
+          icon: _buildIconWithBadge(Icons.message_outlined, widget.hasNewMessage),
+          label: 'Message',
+        ),
+      );
+    } else if (widget.viewMode == ViewMode.admin) {
+      baseItems.add(
+        BottomNavigationBarItem(
+          icon: _buildIconWithBadge(Icons.admin_panel_settings_outlined, false),
+          label: 'Admin',
+        ),
+      );
+    } else {
+      // combined
+      baseItems.add(
+        BottomNavigationBarItem(
+          icon: _buildIconWithBadge(Icons.message_outlined, widget.hasNewMessage),
+          label: 'Message',
+        ),
+      );
+      baseItems.add(
+        BottomNavigationBarItem(
+          icon: _buildIconWithBadge(Icons.admin_panel_settings_outlined, false),
+          label: 'Admin',
+        ),
+      );
+    }
+    return baseItems;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final int displayIndex =
-        (_selectedIndex == 3 && !_isAdminUnlocked) ? 2 : _selectedIndex;
+    final int displayIndex = _displayIndex;
 
     return Title(
       title: _appTitle,
@@ -425,50 +534,12 @@ class _MainPageState extends State<MainPage> {
           onPointerUp: (_) {
             if (_isAdminUnlocked) _resetLockTimer();
           },
-          child: _pages.elementAt(displayIndex),
-        ),
-        floatingActionButton: displayIndex != 3 // Hide on Admin Page (index 3)
-            ? FloatingActionButton(
-                onPressed: () {
-                  widget.onMarkAsRead();
-                  if (mounted) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const MessagePage()),
-                    );
-                  }
-                },
-                tooltip: 'Send a message',
-                child: _buildIconWithBadge(
-                    Icons.message_outlined, widget.hasNewMessage),
-              )
-            : null,
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon:
-                  _buildIconWithBadge(Icons.campaign_outlined, _hasNewNotices),
-              label: 'Notices',
-            ),
-            BottomNavigationBarItem(
-              icon: _buildIconWithBadge(
-                  Icons.calendar_today_outlined, _hasNewSchedule),
-              label: 'Schedule',
-            ),
-            BottomNavigationBarItem(
-              icon: _buildIconWithBadge(
-                  Icons.check_circle_outline, _hasNewAttendanceUpdate),
-              label: 'Attendance',
-            ),
-            BottomNavigationBarItem(
-              icon: _buildIconWithBadge(
-                  Icons.admin_panel_settings_outlined, false),
-              label: 'Admin',
-            ),
-          ],
-          currentIndex: displayIndex,
+        child: _pages.elementAt(displayIndex),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        items: _bottomNavBarItems,
+        currentIndex: displayIndex,
           onTap: _onItemTapped,
         ),
       ),

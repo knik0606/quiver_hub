@@ -38,7 +38,7 @@ class _LandingPageState extends State<LandingPage> {
      _showGenericPasswordDialog(
       context: context,
       passwordField: 'adminPassword',
-      onSuccess: () => Navigator.of(context).pushNamed('/app'),
+      onSuccess: () => Navigator.of(context).pushNamed('/web_admin'),
     );
   }
 
@@ -160,7 +160,7 @@ class _LandingPageState extends State<LandingPage> {
                   label: '▶ Enter',
                   icon: Icons.tv,
                   onPressed: () {
-                    Navigator.of(context).pushNamed('/tv_lobby');
+                    Navigator.of(context).pushNamed('/guest');
                   },
                   isPrimary: true,
                 ),

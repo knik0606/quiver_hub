@@ -2,18 +2,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
-
-import 'services/email_service.dart';
 import 'services/google_sheets_service.dart';
 
 class AttendancePage extends StatelessWidget {
-  const AttendancePage({super.key});
+  final bool isReadOnly;
+
+  const AttendancePage({super.key, this.isReadOnly = false});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Color(0xFF121212), // Dark background
-      body: AttendanceList(),
+    return Scaffold(
+      backgroundColor: const Color(0xFF121212), // Dark background
+      body: AttendanceList(isReadOnly: isReadOnly),
     );
   }
 }
@@ -38,30 +38,6 @@ class _AttendanceListState extends State<AttendanceList> {
   @override
   void initState() {
     super.initState();
-    _deleteOldLogs();
-  }
-
-  Future<void> _deleteOldLogs() async {
-    try {
-      final twoDaysAgo = DateTime.now().subtract(const Duration(days: 2));
-      final logsCollection =
-          FirebaseFirestore.instance.collection('attendance_logs');
-      final oldLogsSnapshot = await logsCollection
-          .where('timestamp', isLessThan: Timestamp.fromDate(twoDaysAgo))
-          .get();
-
-      final batch = FirebaseFirestore.instance.batch();
-      for (var doc in oldLogsSnapshot.docs) {
-        batch.delete(doc.reference);
-      }
-      if (oldLogsSnapshot.docs.isNotEmpty) {
-        await batch.commit();
-        debugPrint(
-            'Deleted ${oldLogsSnapshot.docs.length} old attendance logs.');
-      }
-    } catch (e) {
-      debugPrint('Error deleting old logs: $e');
-    }
   }
 
   // Helper to get today's start and end timestamps
@@ -108,22 +84,6 @@ class _AttendanceListState extends State<AttendanceList> {
   Future<void> _handleBackgroundServices(
       String athleteName, String newStatus) async {
     try {
-      final settingsDoc = await FirebaseFirestore.instance
-          .collection('settings')
-          .doc('admin_settings')
-          .get();
-      final recipientEmail =
-          settingsDoc.data()?['notificationEmail'] as String?;
-
-      if (recipientEmail != null && recipientEmail.isNotEmpty) {
-        final emailService = EmailService();
-        await emailService.sendAttendanceEmail(
-          recipientEmail: recipientEmail,
-          name: athleteName,
-          status: newStatus,
-        );
-      }
-
       final sheetsService = GoogleSheetsService();
       await sheetsService.logAttendanceToSheet(
         name: athleteName,

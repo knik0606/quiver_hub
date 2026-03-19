@@ -28,11 +28,11 @@ class SchedulesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
+    return FutureBuilder<QuerySnapshot>(
+      future: FirebaseFirestore.instance
           .collection('schedules')
           .orderBy('order')
-          .snapshots(),
+          .get(),
       builder: (context, snapshot) {
         // ... existing checks ...
         if (snapshot.connectionState == ConnectionState.waiting) {

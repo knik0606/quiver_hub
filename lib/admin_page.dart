@@ -17,6 +17,8 @@ class _AdminPageState extends State<AdminPage> {
   final _appTitleController = TextEditingController();
   final _adminBoardNameController = TextEditingController();
   final _adminBoardPasswordController = TextEditingController();
+  final _noticePopupContentController = TextEditingController();
+  final _noticePopupCountController = TextEditingController();
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   bool _isLoading = false;
@@ -38,6 +40,8 @@ class _AdminPageState extends State<AdminPage> {
           _passwordController.text = data['adminPassword'] ?? '';
           _adminBoardNameController.text = data['boardName'] ?? '';
           _adminBoardPasswordController.text = data['boardPassword'] ?? '';
+          _noticePopupContentController.text = data['noticePopupContent'] ?? '';
+          _noticePopupCountController.text = (data['noticePopupCount'] ?? 0).toString();
         });
       }
     } catch (e) {
@@ -66,12 +70,43 @@ class _AdminPageState extends State<AdminPage> {
     );
   }
 
+  void _deleteAllMessages() async {
+    bool confirm = await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF1E1E1E),
+        title: const Text('Delete All Messages?', style: TextStyle(color: Colors.white)),
+        content: const Text('This will permanently delete all chat messages. Are you sure?', style: TextStyle(color: Colors.white70)),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(context).pop(false), child: const Text('Cancel')),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true), 
+            child: const Text('Delete', style: TextStyle(color: Colors.redAccent)),
+          ),
+        ],
+      )
+    ) ?? false;
+
+    if (confirm) {
+      final messagesRef = _firestore.collection('chats').doc('main_thread').collection('messages');
+      final snapshots = await messagesRef.get();
+      for (var doc in snapshots.docs) {
+        await doc.reference.delete();
+      }
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('All messages deleted.')));
+      }
+    }
+  }
+
   void _saveSettings() {
     final email = _emailController.text;
     final password = _passwordController.text;
     final appTitle = _appTitleController.text;
     final boardName = _adminBoardNameController.text;
     final boardPassword = _adminBoardPasswordController.text;
+    final noticeContent = _noticePopupContentController.text;
+    final noticeCount = int.tryParse(_noticePopupCountController.text) ?? 0;
 
     final settingsDoc = _firestore.collection('settings').doc('admin_settings');
 
@@ -91,6 +126,16 @@ class _AdminPageState extends State<AdminPage> {
     if (boardPassword.isNotEmpty) {
       settingsToUpdate['boardPassword'] = boardPassword;
     }
+    settingsToUpdate['noticePopupContent'] = noticeContent;
+    settingsToUpdate['noticePopupCount'] = noticeCount;
+    
+    // Update noticeId so clients know a new notice is available, if we are actually setting it.
+    // If we only edit text, it still updates the ID to trigger a reset on the client sides.
+    if (noticeContent.isNotEmpty && noticeCount > 0) {
+      settingsToUpdate['noticeId'] = DateTime.now().millisecondsSinceEpoch.toString();
+    } else {
+      settingsToUpdate['noticeId'] = '';
+    }
 
     if (settingsToUpdate.isNotEmpty) {
       settingsDoc.set(settingsToUpdate, SetOptions(merge: true));
@@ -102,6 +147,8 @@ class _AdminPageState extends State<AdminPage> {
       _passwordController.clear();
       _adminBoardNameController.clear();
       _adminBoardPasswordController.clear();
+      _noticePopupContentController.clear();
+      _noticePopupCountController.clear();
       
       // Reload to show saved values (optional, but good for feedback)
       _loadSettings();
@@ -210,6 +257,23 @@ class _AdminPageState extends State<AdminPage> {
                   obscureText: true,
                 ),
                 const SizedBox(height: 16),
+                const SizedBox(height: 16),
+                const Divider(height: 40, color: Colors.white24),
+                Text('Notice Popup Configuration', style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.white)),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _noticePopupContentController,
+                  style: textStyle,
+                  maxLines: 2,
+                  decoration: inputDecoration.copyWith(labelText: 'Notice Popup Content (Clear to disable)'),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _noticePopupCountController,
+                  style: textStyle,
+                  keyboardType: TextInputType.number,
+                  decoration: inputDecoration.copyWith(labelText: 'Popup Display Count'),
+                ),
                 const Divider(height: 40, color: Colors.white24),
                 Text('Admin Note Page Configuration', style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.white)),
                 const SizedBox(height: 16),
@@ -246,6 +310,24 @@ class _AdminPageState extends State<AdminPage> {
                     ),
                   ],
                 ),
+                const SizedBox(height: 24),
+                const Divider(height: 40, color: Colors.white24),
+                Text('Data Management', style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.white)),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: _deleteAllMessages,
+                    icon: const Icon(Icons.delete_forever),
+                    label: const Text('Delete All Chat Messages'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.redAccent.withAlpha(50),
+                      foregroundColor: Colors.redAccent,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 32),
               ],
             ),
           ),
