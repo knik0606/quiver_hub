@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'services/google_sheets_service.dart';
+import 'services/email_service.dart';
 
 class AttendancePage extends StatelessWidget {
   final bool isReadOnly;
@@ -84,6 +85,25 @@ class _AttendanceListState extends State<AttendanceList> {
   Future<void> _handleBackgroundServices(
       String athleteName, String newStatus) async {
     try {
+      final settingsDoc = await FirebaseFirestore.instance
+          .collection('settings')
+          .doc('admin_settings')
+          .get();
+      final recipientEmail =
+          settingsDoc.data()?['notificationEmail'] as String?;
+
+      if (recipientEmail != null && recipientEmail.isNotEmpty) {
+        debugPrint('>>> 알림 수신 이메일: $recipientEmail');
+        final emailService = EmailService();
+        await emailService.sendAttendanceEmail(
+          recipientEmail: recipientEmail,
+          name: athleteName,
+          status: newStatus,
+        );
+      } else {
+        debugPrint('>>> 알림 수신 이메일이 설정되지 않았습니다.');
+      }
+
       final sheetsService = GoogleSheetsService();
       await sheetsService.logAttendanceToSheet(
         name: athleteName,
@@ -91,7 +111,7 @@ class _AttendanceListState extends State<AttendanceList> {
         timestamp: DateTime.now(),
       );
     } catch (e) {
-      debugPrint('Error in background services: $e');
+      debugPrint('>>> Error in background services: $e');
     }
   }
 

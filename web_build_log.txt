@@ -1,0 +1,297 @@
+[ +372 ms] Artifact Instance of 'MaterialFonts' is not required, skipping update.
+[        ] Artifact Instance of 'GradleWrapper' is not required, skipping update.
+[        ] Artifact Instance of 'AndroidGenSnapshotArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'AndroidInternalBuildArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IOSEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterWebSdk' is not required, skipping update.
+[   +1 ms] Artifact Instance of 'LegacyCanvasKitRemover' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterSdk' is not required, skipping update.
+[        ] Artifact Instance of 'WindowsEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'MacOSEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'LinuxEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'LinuxFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'MacOSFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterRunnerSDKArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterRunnerDebugSymbols' is not required, skipping update.
+[        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FontSubsetArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'PubDependencies' is not required, skipping update.
+[        ] executing: [C:\src\flutter/] git -c log.showSignature=false log HEAD -n 1 --pretty=format:%ad --date=iso
+[ +128 ms] Exit code 0 from: git -c log.showSignature=false log HEAD -n 1 --pretty=format:%ad --date=iso
+[        ] 2025-12-11 11:50:07 -0500
+[  +12 ms] Artifact Instance of 'AndroidGenSnapshotArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'AndroidInternalBuildArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IOSEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterWebSdk' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterEngineStamp' is not required, skipping update.
+[        ] Artifact Instance of 'LegacyCanvasKitRemover' is not required, skipping update.
+[   +2 ms] Artifact Instance of 'WindowsEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'MacOSEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'LinuxEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'LinuxFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'MacOSFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterRunnerSDKArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterRunnerDebugSymbols' is not required, skipping update.
+[  +52 ms] Artifact Instance of 'MaterialFonts' is not required, skipping update.
+[        ] Artifact Instance of 'GradleWrapper' is not required, skipping update.
+[        ] Artifact Instance of 'AndroidGenSnapshotArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'AndroidInternalBuildArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IOSEngineArtifacts' is not required, skipping update.
+[   +1 ms] Artifact Instance of 'FlutterEngineStamp' is not required, skipping update.
+[   +2 ms] Artifact Instance of 'FlutterSdk' is not required, skipping update.
+[        ] Artifact Instance of 'WindowsEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'MacOSEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'LinuxEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'LinuxFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'MacOSFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterRunnerSDKArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterRunnerDebugSymbols' is not required, skipping update.
+[        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FontSubsetArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'PubDependencies' is not required, skipping update.
+[  +12 ms] Skipping pub get: version match.
+[  +77 ms] Found plugin url_launcher at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher-6.3.2\
+[   +3 ms] Found plugin url_launcher_windows at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_windows-3.1.5\
+[   +4 ms] Found plugin url_launcher_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_web-2.4.1\
+[   +5 ms] Found plugin url_launcher_macos at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_macos-3.2.3\
+[   +2 ms] Found plugin url_launcher_linux at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_linux-3.2.2\
+[   +2 ms] Found plugin url_launcher_ios at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_ios-6.3.4\
+[   +2 ms] Found plugin url_launcher_android at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_android-6.3.20\
+[   +2 ms] Found plugin just_audio at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\just_audio-0.9.46\
+[   +6 ms] Found plugin path_provider at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider-2.1.5\
+[   +1 ms] Found plugin path_provider_windows at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_windows-2.3.0\
+[   +5 ms] Found plugin path_provider_linux at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_linux-2.2.1\
+[   +5 ms] Found plugin path_provider_foundation at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_foundation-2.4.2\
+[   +2 ms] Found plugin path_provider_android at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_android-2.2.18\
+[   +1 ms] Found plugin just_audio_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\just_audio_web-0.4.16\
+[   +3 ms] Found plugin audio_session at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\audio_session-0.1.25\
+[   +3 ms] Found plugin image_picker at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker-1.2.0\
+[   +1 ms] Found plugin image_picker_windows at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_windows-0.2.2\
+[   +6 ms] Found plugin file_selector_windows at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\file_selector_windows-0.9.3+4\
+[   +3 ms] Found plugin image_picker_macos at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_macos-0.2.2\
+[   +1 ms] Found plugin file_selector_macos at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\file_selector_macos-0.9.4+4\
+[   +1 ms] Found plugin image_picker_linux at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_linux-0.2.2\
+[   +1 ms] Found plugin file_selector_linux at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\file_selector_linux-0.9.3+2\
+[   +1 ms] Found plugin image_picker_ios at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_ios-0.8.13\
+[   +1 ms] Found plugin image_picker_for_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_for_web-3.1.0\
+[   +2 ms] Found plugin image_picker_android at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.13+1\
+[   +1 ms] Found plugin flutter_plugin_android_lifecycle at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_plugin_android_lifecycle-2.0.30\
+[   +4 ms] Found plugin firebase_storage at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_storage-12.4.10\
+[   +1 ms] Found plugin firebase_storage_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_storage_web-3.10.17\
+[   +2 ms] Found plugin firebase_core at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_core-3.15.2\
+[   +1 ms] Found plugin firebase_core_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_core_web-2.24.1\
+[   +3 ms] Found plugin firebase_auth at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_auth-5.7.0\
+[   +1 ms] Found plugin firebase_auth_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_auth_web-5.15.3\
+[   +3 ms] Found plugin cloud_functions at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\cloud_functions-5.6.2\
+[   +1 ms] Found plugin cloud_functions_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\cloud_functions_web-4.11.5\
+[   +2 ms] Found plugin cloud_firestore at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\cloud_firestore-5.6.12\
+[   +1 ms] Found plugin cloud_firestore_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\cloud_firestore_web-4.4.12\
+[   +2 ms] Found plugin audioplayers at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\audioplayers-6.5.1\
+[   +3 ms] Found plugin audioplayers_windows at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\audioplayers_windows-4.2.1\
+[   +2 ms] Found plugin audioplayers_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\audioplayers_web-5.1.1\
+[   +1 ms] Found plugin audioplayers_linux at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\audioplayers_linux-4.2.1\
+[   +1 ms] Found plugin audioplayers_darwin at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\audioplayers_darwin-6.3.0\
+[   +1 ms] Found plugin audioplayers_android at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\audioplayers_android-5.2.1\
+[  +59 ms] Found plugin url_launcher at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher-6.3.2\
+[        ] Found plugin url_launcher_windows at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_windows-3.1.5\
+[   +2 ms] Found plugin url_launcher_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_web-2.4.1\
+[   +2 ms] Found plugin url_launcher_macos at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_macos-3.2.3\
+[   +1 ms] Found plugin url_launcher_linux at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_linux-3.2.2\
+[   +1 ms] Found plugin url_launcher_ios at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_ios-6.3.4\
+[        ] Found plugin url_launcher_android at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_android-6.3.20\
+[   +1 ms] Found plugin just_audio at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\just_audio-0.9.46\
+[   +3 ms] Found plugin path_provider at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider-2.1.5\
+[   +1 ms] Found plugin path_provider_windows at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_windows-2.3.0\
+[   +2 ms] Found plugin path_provider_linux at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_linux-2.2.1\
+[   +1 ms] Found plugin path_provider_foundation at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_foundation-2.4.2\
+[   +1 ms] Found plugin path_provider_android at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_android-2.2.18\
+[        ] Found plugin just_audio_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\just_audio_web-0.4.16\
+[   +3 ms] Found plugin audio_session at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\audio_session-0.1.25\
+[   +1 ms] Found plugin image_picker at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker-1.2.0\
+[        ] Found plugin image_picker_windows at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_windows-0.2.2\
+[   +3 ms] Found plugin file_selector_windows at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\file_selector_windows-0.9.3+4\
+[   +1 ms] Found plugin image_picker_macos at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_macos-0.2.2\
+[        ] Found plugin file_selector_macos at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\file_selector_macos-0.9.4+4\
+[        ] Found plugin image_picker_linux at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_linux-0.2.2\
+[        ] Found plugin file_selector_linux at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\file_selector_linux-0.9.3+2\
+[   +1 ms] Found plugin image_picker_ios at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_ios-0.8.13\
+[   +1 ms] Found plugin image_picker_for_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_for_web-3.1.0\
+[   +2 ms] Found plugin image_picker_android at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.13+1\
+[   +1 ms] Found plugin flutter_plugin_android_lifecycle at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_plugin_android_lifecycle-2.0.30\
+[   +3 ms] Found plugin firebase_storage at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_storage-12.4.10\
+[   +1 ms] Found plugin firebase_storage_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_storage_web-3.10.17\
+[   +1 ms] Found plugin firebase_core at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_core-3.15.2\
+[   +1 ms] Found plugin firebase_core_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_core_web-2.24.1\
+[   +2 ms] Found plugin firebase_auth at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_auth-5.7.0\
+[   +1 ms] Found plugin firebase_auth_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_auth_web-5.15.3\
+[   +3 ms] Found plugin cloud_functions at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\cloud_functions-5.6.2\
+[   +1 ms] Found plugin cloud_functions_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\cloud_functions_web-4.11.5\
+[   +1 ms] Found plugin cloud_firestore at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\cloud_firestore-5.6.12\
+[   +1 ms] Found plugin cloud_firestore_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\cloud_firestore_web-4.4.12\
+[   +1 ms] Found plugin audioplayers at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\audioplayers-6.5.1\
+[   +1 ms] Found plugin audioplayers_windows at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\audioplayers_windows-4.2.1\
+[   +1 ms] Found plugin audioplayers_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\audioplayers_web-5.1.1\
+[        ] Found plugin audioplayers_linux at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\audioplayers_linux-4.2.1\
+[        ] Found plugin audioplayers_darwin at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\audioplayers_darwin-6.3.0\
+[        ] Found plugin audioplayers_android at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\audioplayers_android-5.2.1\
+[  +12 ms] Skipping generating web_plugin_registrant.dart because it is up-to-date.
+[  +33 ms] Found plugin url_launcher at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher-6.3.2\
+[        ] Found plugin url_launcher_windows at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_windows-3.1.5\
+[   +2 ms] Found plugin url_launcher_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_web-2.4.1\
+[   +2 ms] Found plugin url_launcher_macos at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_macos-3.2.3\
+[        ] Found plugin url_launcher_linux at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_linux-3.2.2\
+[        ] Found plugin url_launcher_ios at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_ios-6.3.4\
+[        ] Found plugin url_launcher_android at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_android-6.3.20\
+[        ] Found plugin just_audio at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\just_audio-0.9.46\
+[   +3 ms] Found plugin path_provider at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider-2.1.5\
+[        ] Found plugin path_provider_windows at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_windows-2.3.0\
+[   +1 ms] Found plugin path_provider_linux at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_linux-2.2.1\
+[   +1 ms] Found plugin path_provider_foundation at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_foundation-2.4.2\
+[   +1 ms] Found plugin path_provider_android at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_android-2.2.18\
+[        ] Found plugin just_audio_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\just_audio_web-0.4.16\
+[   +2 ms] Found plugin audio_session at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\audio_session-0.1.25\
+[   +2 ms] Found plugin image_picker at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker-1.2.0\
+[   +1 ms] Found plugin image_picker_windows at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_windows-0.2.2\
+[   +3 ms] Found plugin file_selector_windows at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\file_selector_windows-0.9.3+4\
+[   +1 ms] Found plugin image_picker_macos at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_macos-0.2.2\
+[        ] Found plugin file_selector_macos at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\file_selector_macos-0.9.4+4\
+[        ] Found plugin image_picker_linux at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_linux-0.2.2\
+[   +1 ms] Found plugin file_selector_linux at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\file_selector_linux-0.9.3+2\
+[   +1 ms] Found plugin image_picker_ios at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_ios-0.8.13\
+[   +1 ms] Found plugin image_picker_for_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_for_web-3.1.0\
+[   +1 ms] Found plugin image_picker_android at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.13+1\
+[   +1 ms] Found plugin flutter_plugin_android_lifecycle at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_plugin_android_lifecycle-2.0.30\
+[   +4 ms] Found plugin firebase_storage at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_storage-12.4.10\
+[   +1 ms] Found plugin firebase_storage_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_storage_web-3.10.17\
+[   +1 ms] Found plugin firebase_core at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_core-3.15.2\
+[   +1 ms] Found plugin firebase_core_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_core_web-2.24.1\
+[   +2 ms] Found plugin firebase_auth at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_auth-5.7.0\
+[        ] Found plugin firebase_auth_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_auth_web-5.15.3\
+[   +2 ms] Found plugin cloud_functions at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\cloud_functions-5.6.2\
+[   +1 ms] Found plugin cloud_functions_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\cloud_functions_web-4.11.5\
+[   +2 ms] Found plugin cloud_firestore at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\cloud_firestore-5.6.12\
+[   +1 ms] Found plugin cloud_firestore_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\cloud_firestore_web-4.4.12\
+[   +1 ms] Found plugin audioplayers at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\audioplayers-6.5.1\
+[   +1 ms] Found plugin audioplayers_windows at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\audioplayers_windows-4.2.1\
+[   +1 ms] Found plugin audioplayers_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\audioplayers_web-5.1.1\
+[   +1 ms] Found plugin audioplayers_linux at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\audioplayers_linux-4.2.1\
+[   +1 ms] Found plugin audioplayers_darwin at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\audioplayers_darwin-6.3.0\
+[        ] Found plugin audioplayers_android at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\audioplayers_android-5.2.1\
+[   +6 ms] Generating C:\Users\kkuku\Documents\FlutterProjects\quiver_hub\android\app\src\main\java\io\flutter\plugins\GeneratedPluginRegistrant.java
+[   +1 ms] Skipping generating GeneratedPluginRegistrant.java because it is up-to-date.
+[   +6 ms] Skipping generating generated_plugin_registrant.h because it is up-to-date.
+[   +1 ms] Skipping generating generated_plugin_registrant.cc because it is up-to-date.
+[   +1 ms] Skipping generating generated_plugins.cmake because it is up-to-date.
+[   +2 ms] Skipping generating generated_plugin_registrant.h because it is up-to-date.
+[   +1 ms] Skipping generating generated_plugin_registrant.cc because it is up-to-date.
+[   +1 ms] Skipping generating generated_plugins.cmake because it is up-to-date.
+[   +3 ms] Skipping generating GeneratedPluginRegistrant.h because it is up-to-date.
+[   +1 ms] Skipping generating GeneratedPluginRegistrant.m because it is up-to-date.
+[   +1 ms] Skipping generating GeneratedPluginRegistrant.swift because it is up-to-date.
+[ +183 ms] Found plugin url_launcher at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher-6.3.2\
+[   +1 ms] Found plugin url_launcher_windows at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_windows-3.1.5\
+[   +3 ms] Found plugin url_launcher_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_web-2.4.1\
+[   +2 ms] Found plugin url_launcher_macos at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_macos-3.2.3\
+[        ] Found plugin url_launcher_linux at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_linux-3.2.2\
+[        ] Found plugin url_launcher_ios at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_ios-6.3.4\
+[   +1 ms] Found plugin url_launcher_android at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_android-6.3.20\
+[   +1 ms] Found plugin just_audio at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\just_audio-0.9.46\
+[   +4 ms] Found plugin path_provider at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider-2.1.5\
+[   +1 ms] Found plugin path_provider_windows at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_windows-2.3.0\
+[   +2 ms] Found plugin path_provider_linux at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_linux-2.2.1\
+[   +1 ms] Found plugin path_provider_foundation at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_foundation-2.4.2\
+[   +1 ms] Found plugin path_provider_android at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_android-2.2.18\
+[        ] Found plugin just_audio_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\just_audio_web-0.4.16\
+[   +2 ms] Found plugin audio_session at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\audio_session-0.1.25\
+[   +2 ms] Found plugin image_picker at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker-1.2.0\
+[   +1 ms] Found plugin image_picker_windows at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_windows-0.2.2\
+[   +4 ms] Found plugin file_selector_windows at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\file_selector_windows-0.9.3+4\
+[   +2 ms] Found plugin image_picker_macos at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_macos-0.2.2\
+[   +1 ms] Found plugin file_selector_macos at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\file_selector_macos-0.9.4+4\
+[   +1 ms] Found plugin image_picker_linux at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_linux-0.2.2\
+[   +1 ms] Found plugin file_selector_linux at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\file_selector_linux-0.9.3+2\
+[        ] Found plugin image_picker_ios at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_ios-0.8.13\
+[        ] Found plugin image_picker_for_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_for_web-3.1.0\
+[   +1 ms] Found plugin image_picker_android at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.13+1\
+[        ] Found plugin flutter_plugin_android_lifecycle at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_plugin_android_lifecycle-2.0.30\
+[   +3 ms] Found plugin firebase_storage at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_storage-12.4.10\
+[        ] Found plugin firebase_storage_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_storage_web-3.10.17\
+[   +1 ms] Found plugin firebase_core at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_core-3.15.2\
+[        ] Found plugin firebase_core_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_core_web-2.24.1\
+[   +2 ms] Found plugin firebase_auth at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_auth-5.7.0\
+[   +1 ms] Found plugin firebase_auth_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_auth_web-5.15.3\
+[  +41 ms] Found plugin cloud_functions at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\cloud_functions-5.6.2\
+[   +1 ms] Found plugin cloud_functions_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\cloud_functions_web-4.11.5\
+[   +2 ms] Found plugin cloud_firestore at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\cloud_firestore-5.6.12\
+[   +1 ms] Found plugin cloud_firestore_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\cloud_firestore_web-4.4.12\
+[   +3 ms] Found plugin audioplayers at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\audioplayers-6.5.1\
+[   +2 ms] Found plugin audioplayers_windows at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\audioplayers_windows-4.2.1\
+[   +1 ms] Found plugin audioplayers_web at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\audioplayers_web-5.1.1\
+[   +1 ms] Found plugin audioplayers_linux at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\audioplayers_linux-4.2.1\
+[   +1 ms] Found plugin audioplayers_darwin at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\audioplayers_darwin-6.3.0\
+[   +2 ms] Found plugin audioplayers_android at C:\Users\kkuku\AppData\Local\Pub\Cache\hosted\pub.dev\audioplayers_android-5.2.1\
+[   +1 ms] generated_plugin_registrant.dart not found. Skipping.
+[   +1 ms] Compiling lib\main.dart for the Web...
+[   +4 ms] Initializing file store
+[   +2 ms] Done initializing file store
+[  +29 ms] Skipping target: web_entrypoint
+[   +1 ms] invalidated build due to missing files: C:\Users\kkuku\Documents\FlutterProjects\quiver_hub\web\*\index.html, C:\Users\kkuku\Documents\FlutterProjects\quiver_hub\web\flutter_bootstrap.js
+[   +2 ms] Skipping target: dart_build
+[   +1 ms] Skipping target: gen_localizations
+[   +2 ms] web_templated_files: Starting due to {InvalidatedReasonKind.buildKeyChanged: The target build key changed., InvalidatedReasonKind.outputMissing: The following outputs were missing: C:\Users\kkuku\Documents\FlutterProjects\quiver_hub\build\web\*\index.html, InvalidatedReasonKind.inputMissing: The following inputs were missing: C:\Users\kkuku\Documents\FlutterProjects\quiver_hub\web\*\index.html,C:\Users\kkuku\Documents\FlutterProjects\quiver_hub\web\flutter_bootstrap.js, InvalidatedReasonKind.inputChanged: The following inputs have updated contents: C:\Users\kkuku\Documents\FlutterProjects\quiver_hub\build\web\flutter_bootstrap.js}
+[   +1 ms] web_static_assets: Starting due to {InvalidatedReasonKind.outputMissing: The following outputs were missing: C:\Users\kkuku\Documents\FlutterProjects\quiver_hub\.dart_tool\flutter_build\5364b8767b75f355b643533c9fb70ddb\flutter.js,C:\Users\kkuku\Documents\FlutterProjects\quiver_hub\.dart_tool\flutter_build\5364b8767b75f355b643533c9fb70ddb\canvaskit\canvaskit.js,C:\Users\kkuku\Documents\FlutterProjects\quiver_hub\.dart_tool\flutter_build\5364b8767b75f355b643533c9fb70ddb\canvaskit\canvaskit.js.symbols,C:\Users\kkuku\Documents\FlutterProjects\quiver_hub\.dart_tool\flutter_build\5364b8767b75f355b643533c9fb70ddb\canvaskit\canvaskit.wasm,C:\Users\kkuku\Documents\FlutterProjects\quiver_hub\.dart_tool\flutter_build\5364b8767b75f355b643533c9fb70ddb\canvaskit\chromium\canvaskit.js,C:\Users\kkuku\Documents\FlutterProjects\quiver_hub\.dart_tool\flutter_build\5364b8767b75f355b643533c9fb70ddb\canvaskit\chromium\canvaskit.js.symbols,C:\Users\kkuku\Documents\FlutterProjects\quiver_hub\.dart_tool\flutter_build\5364b8767b75f355b643533c9fb70ddb\canvaskit\chromium\canvaskit.wasm,C:\Users\kkuku\Documents\FlutterProjects\quiver_hub\.dart_tool\flutter_build\5364b8767b75f355b643533c9fb70ddb\canvaskit\skwasm.js,C:\Users\kkuku\Documents\FlutterProjects\quiver_hub\.dart_tool\flutter_build\5364b8767b75f355b643533c9fb70ddb\canvaskit\skwasm.js.symbols,C:\Users\kkuku\Documents\FlutterProjects\quiver_hub\.dart_tool\flutter_build\5364b8767b75f355b643533c9fb70ddb\canvaskit\skwasm.wasm,C:\Users\kkuku\Documents\FlutterProjects\quiver_hub\.dart_tool\flutter_build\5364b8767b75f355b643533c9fb70ddb\canvaskit\skwasm_heavy.js,C:\Users\kkuku\Documents\FlutterProjects\quiver_hub\.dart_tool\flutter_build\5364b8767b75f355b643533c9fb70ddb\canvaskit\skwasm_heavy.js.symbols,C:\Users\kkuku\Documents\FlutterProjects\quiver_hub\.dart_tool\flutter_build\5364b8767b75f355b643533c9fb70ddb\canvaskit\skwasm_heavy.wasm}
+[  +87 ms] web_static_assets: Complete
+[   +3 ms] dart2js: Starting due to {}
+[   +6 ms] executing: C:\src\flutter\bin\cache\dart-sdk\bin\dart.exe compile js --platform-binaries=C:\src\flutter\bin\cache\flutter_web_sdk\kernel --invoker=flutter_tool -Ddart.vm.product=true -DFLUTTER_VERSION=3.38.5 -DFLUTTER_CHANNEL=stable -DFLUTTER_GIT_URL=https://github.com/flutter/flutter.git -DFLUTTER_FRAMEWORK_REVISION=f6ff1529fd -DFLUTTER_ENGINE_REVISION=1527ae0ec5 -DFLUTTER_DART_VERSION=3.10.4 -DFLUTTER_WEB_USE_SKIA=true -DFLUTTER_WEB_USE_SKWASM=false -DFLUTTER_WEB_CANVASKIT_URL=https://www.gstatic.com/flutter-canvaskit/1527ae0ec577a4ef50e65f6fefcfc1326707d9bf/ --native-null-assertions --no-source-maps -O4 --minify -o C:\Users\kkuku\Documents\FlutterProjects\quiver_hub\.dart_tool\flutter_build\5364b8767b75f355b643533c9fb70ddb\app.dill --packages=C:\Users\kkuku\Documents\FlutterProjects\quiver_hub\.dart_tool\package_config.json --cfe-only C:\Users\kkuku\Documents\FlutterProjects\quiver_hub\.dart_tool\flutter_build\5364b8767b75f355b643533c9fb70ddb\main.dart
+[   +2 ms] dart2wasm: Starting due to {}
+[   +1 ms] executing: C:\src\flutter\bin\cache\dart-sdk\bin\dart.exe compile wasm --packages=C:\Users\kkuku\Documents\FlutterProjects\quiver_hub\.dart_tool\package_config.json --extra-compiler-option=--platform=C:\src\flutter\bin\cache\flutter_web_sdk\kernel\dart2wasm_platform.dill -Ddart.vm.profile=false -Ddart.vm.product=true --extra-compiler-option=--delete-tostring-package-uri=dart:ui --extra-compiler-option=--delete-tostring-package-uri=package:flutter --extra-compiler-option=--import-shared-memory --extra-compiler-option=--shared-memory-max-pages=32768 -DFLUTTER_VERSION=3.38.5 -DFLUTTER_CHANNEL=stable -DFLUTTER_GIT_URL=https://github.com/flutter/flutter.git -DFLUTTER_FRAMEWORK_REVISION=f6ff1529fd -DFLUTTER_ENGINE_REVISION=1527ae0ec5 -DFLUTTER_DART_VERSION=3.10.4 -DFLUTTER_WEB_USE_SKIA=false -DFLUTTER_WEB_USE_SKWASM=true -DFLUTTER_WEB_CANVASKIT_URL=https://www.gstatic.com/flutter-canvaskit/1527ae0ec577a4ef50e65f6fefcfc1326707d9bf/ --extra-compiler-option=--depfile=C:\Users\kkuku\Documents\FlutterProjects\quiver_hub\.dart_tool\flutter_build\5364b8767b75f355b643533c9fb70ddb\dart2wasm.d -O2 --strip-wasm --no-source-maps --minify --extra-compiler-option=--dry-run -o C:\Users\kkuku\Documents\FlutterProjects\quiver_hub\.dart_tool\flutter_build\5364b8767b75f355b643533c9fb70ddb\main.dart.wasm C:\Users\kkuku\Documents\FlutterProjects\quiver_hub\.dart_tool\flutter_build\5364b8767b75f355b643533c9fb70ddb\main.dart
+[  +68 ms] web_templated_files: Complete
+[+9953 ms] Unhandled exception:
+           Unsupported operation: Cannot extract a file path from a org-dartlang-untranslatable-uri URI
+           #0      _Uri.toFilePath (dart:core/uri.dart:3433)
+           #1      DryRunSummarizer._lintChecks (package:dart2wasm/dry_run.dart:150)
+           #2      DryRunSummarizer.summarize (package:dart2wasm/dry_run.dart:221)
+           #3      compileToModule (package:dart2wasm/compile.dart:224)
+           <asynchronous suspension>
+           #4      generateWasm (package:dart2wasm/generate_wasm.dart:81)
+           <asynchronous suspension>
+           #5      main (file:///C:/b/s/w/ir/x/w/sdk/pkg/dart2wasm/bin/dart2wasm.dart:10)
+           <asynchronous suspension>
+[  +21 ms] dart2wasm: Complete
+[ +970 ms] Error: Couldn't resolve the package 'googleapis_auth' in 'package:googleapis_auth/auth_io.dart'.
+           lib/services/google_sheets_service.dart:5:8:
+           Error: Not found: 'package:googleapis_auth/auth_io.dart'
+           import 'package:googleapis_auth/auth_io.dart';
+                  ^
+           lib/services/google_sheets_service.dart:12:10:
+           Error: Type 'AuthClient' not found.
+             Future<AuthClient> _getAuthClient() async {
+                    ^^^^^^^^^^
+           lib/services/google_sheets_service.dart:27:11:
+           Error: The getter 'ServiceAccountCredentials' isn't defined for the type 'GoogleSheetsService'.
+            - 'GoogleSheetsService' is from 'package:quiver_hub/services/google_sheets_service.dart' ('lib/services/google_sheets_service.dart').
+                     ServiceAccountCredentials.fromJson(json.decode(cleanJson));
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+           lib/services/google_sheets_service.dart:28:20:
+           Error: The method 'clientViaServiceAccount' isn't defined for the type 'GoogleSheetsService'.
+            - 'GoogleSheetsService' is from 'package:quiver_hub/services/google_sheets_service.dart' ('lib/services/google_sheets_service.dart').
+                 return await clientViaServiceAccount(credentials, _scopes);
+                              ^^^^^^^^^^^^^^^^^^^^^^^
+           Error: Compilation failed.
+[   +1 ms] Persisting file store
+[   +2 ms] Done persisting file store
+[   +4 ms] Compiling lib\main.dart for the Web... (completed in 11.2s)
+[        ] "flutter web" took 12,024ms.
+[        ] Running 1 shutdown hook
+[   +2 ms] Shutdown hooks complete
+[ +163 ms] exiting with code 1
