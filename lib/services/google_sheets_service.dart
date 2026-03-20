@@ -52,7 +52,7 @@ class GoogleSheetsService {
       final String boardNameFromSheet = data['boardName'] ?? '';
 
       // 1. Clear old Firestore collections using batches for efficiency
-      Future<void> _clearCollection(String path) async {
+      Future<void> clearCollection(String path) async {
         final snapshot = await db.collection(path).get();
         if (snapshot.docs.isNotEmpty) {
           final batch = db.batch();
@@ -63,9 +63,9 @@ class GoogleSheetsService {
         }
       }
 
-      await _clearCollection('notices');
-      await _clearCollection('schedules');
-      await _clearCollection('admin_notes');
+      await clearCollection('notices');
+      await clearCollection('schedules');
+      await clearCollection('admin_notes');
 
       // 2. Write new data to Firestore
       final noticesBatch = db.batch();
