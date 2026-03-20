@@ -81,43 +81,48 @@ exports.sendEmailOnNewMessage = functions.firestore
     }
   });
 
-exports.sendEmailOnAttendance = functions.firestore
-  .document('attendance_logs/{logId}')
-  .onCreate(async (snap, context) => {
-    const data = snap.data();
-    
-    try {
-      const recipientEmail = await getAdminEmail();
-      if (!recipientEmail) {
-        console.log('Recipient email is not configured, skipping');
-        return null;
-      }
-
-      const { timeString, dateString } = formatDateTime(data.timestamp);
-      const name = data.name || 'Unknown Athlete';
-      const status = data.status || 'UNKNOWN';
-
-      const emailSubject = `[${status}] - ${name} (${timeString}) - ${dateString}`;
-      
-      const mailOptions = {
-        from: `Quiver Hub <${gmailEmail}>`,
-        to: recipientEmail,
-        subject: emailSubject,
-        html: `
-          <p><b>Athlete:</b> ${name}</p>
-          <p><b>Status:</b> ${status}</p>
-          <p><b>Time:</b> ${timeString} - ${dateString}</p>
-        `,
-      };
-
-      await mailTransport.sendMail(mailOptions);
-      console.log('Attendance email sent to:', recipientEmail);
-      return null;
-    } catch (error) {
-      console.error('Error sending attendance email:', error);
-      return null;
-    }
-  });
+/**
+ * This function is temporarily disabled to avoid duplicate notifications.
+ * The Flutter app now calls a Google Apps Script (GAS) directly to handle 
+ * email notifications and sheet logging in the correct timezone (KST).
+ */
+// exports.sendEmailOnAttendance = functions.firestore
+//   .document('attendance_logs/{logId}')
+//   .onCreate(async (snap, context) => {
+//     const data = snap.data();
+//     
+//     try {
+//       const recipientEmail = await getAdminEmail();
+//       if (!recipientEmail) {
+//         console.log('Recipient email is not configured, skipping');
+//         return null;
+//       }
+// 
+//       const { timeString, dateString } = formatDateTime(data.timestamp);
+//       const name = data.name || 'Unknown Athlete';
+//       const status = data.status || 'UNKNOWN';
+// 
+//       const emailSubject = `[${status}] - ${name} (${timeString}) - ${dateString}`;
+//       
+//       const mailOptions = {
+//         from: `Quiver Hub <${gmailEmail}>`,
+//         to: recipientEmail,
+//         subject: emailSubject,
+//         html: `
+//           <p><b>Athlete:</b> ${name}</p>
+//           <p><b>Status:</b> ${status}</p>
+//           <p><b>Time:</b> ${timeString} - ${dateString}</p>
+//         `,
+//       };
+// 
+//       await mailTransport.sendMail(mailOptions);
+//       console.log('Attendance email sent to:', recipientEmail);
+//       return null;
+//     } catch (error) {
+//       console.error('Error sending attendance email:', error);
+//       return null;
+//     }
+//   });
 
 // ============================================================
 // SCHEDULED CLEANUP: Delete records older than 2 days

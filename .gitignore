@@ -55,3 +55,4 @@ app.*.map.json
 quiver-hub-6d49720fd4e8.json
 .env.firebase/
 .firebase/
+.env
