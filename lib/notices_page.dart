@@ -16,7 +16,7 @@ class NoticesPage extends StatelessWidget {
   }
 }
 
-class NoticesList extends StatelessWidget {
+class NoticesList extends StatefulWidget {
   final ScrollPhysics? physics;
   final bool shrinkWrap;
 
@@ -27,44 +27,86 @@ class NoticesList extends StatelessWidget {
   });
 
   @override
+  State<NoticesList> createState() => _NoticesListState();
+}
+
+class _NoticesListState extends State<NoticesList> {
+  late Stream<QuerySnapshot> _noticesStream;
+
+  @override
+  void initState() {
+    super.initState();
+    _noticesStream = FirebaseFirestore.instance
+        .collection('notices')
+        .orderBy('order')
+        .snapshots();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return FutureBuilder<QuerySnapshot>(
-      future: FirebaseFirestore.instance
-          .collection('notices')
-          .orderBy('order')
-          .get(),
+    return StreamBuilder<QuerySnapshot>(
+      stream: _noticesStream,
       builder: (context, snapshot) {
-        // ... checks ...
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
         if (snapshot.hasError) {
           return Center(
-              child: Text('Error: ${snapshot.error}',
-                  style: const TextStyle(color: Colors.white)));
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error_outline, color: Colors.redAccent, size: 48),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Error: ${snapshot.error}',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.white70, fontSize: 16),
+                  ),
+                ],
+              ),
+            ),
+          );
         }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(
+              color: Colors.blueAccent,
+            ),
+          );
+        }
+
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
           return const Center(
-              child: Text('No notices found.',
-                  style: TextStyle(color: Colors.grey)));
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.campaign_outlined, color: Colors.grey, size: 64),
+                SizedBox(height: 16),
+                Text(
+                  'No notices found.',
+                  style: TextStyle(color: Colors.grey, fontSize: 18),
+                ),
+              ],
+            ),
+          );
         }
 
         final noticeDocs = snapshot.data!.docs;
 
         return ListView.builder(
-          physics: physics,
-          shrinkWrap: shrinkWrap,
+          physics: widget.physics,
+          shrinkWrap: widget.shrinkWrap,
           itemCount: noticeDocs.length,
           itemBuilder: (context, index) {
             final noticeData = noticeDocs[index].data() as Map<String, dynamic>;
             final String pageNumber =
-                noticeData['pageNumber'] ?? (index + 1).toString();
+                noticeData['pageNumber']?.toString() ?? (index + 1).toString();
             final String content = noticeData['content'] ?? 'No content';
             final String imageUrl = noticeData['imageUrl'] ?? '';
 
             return Card(
               color: const Color(0xFF1E1E1E),
-              margin: const EdgeInsets.all(12.0),
+              margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               elevation: 4,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16)),
@@ -82,7 +124,6 @@ class NoticesList extends StatelessWidget {
                       ),
                     ),
                     if (imageUrl.isNotEmpty) ...[
-                      const SizedBox(height: 16),
                       const SizedBox(height: 16),
                       if (kIsWeb)
                         SizedBox(
@@ -102,7 +143,8 @@ class NoticesList extends StatelessWidget {
                       else
                         ClipRRect(
                           borderRadius: BorderRadius.circular(12.0),
-                          child: SizedBox(
+                          child: Container(
+                            constraints: const BoxConstraints(minHeight: 100),
                             width: double.infinity,
                             child: WebCompatibleImage(
                               imageUrl: imageUrl,

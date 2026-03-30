@@ -332,11 +332,12 @@ class _MainPageState extends State<MainPage> {
           MessagePage(isAdmin: isUserAdmin),
         ];
       case ViewMode.admin:
-        return const [
-          NoticesPage(),
-          SchedulesPage(),
-          AttendancePage(isReadOnly: false),
-          AdminPage(),
+        return [
+          const NoticesPage(),
+          const SchedulesPage(),
+          const AttendancePage(isReadOnly: false),
+          MessagePage(isAdmin: isUserAdmin),
+          const AdminPage(),
         ];
       case ViewMode.combined:
         return [
@@ -479,6 +480,12 @@ class _MainPageState extends State<MainPage> {
         ),
       );
     } else if (widget.viewMode == ViewMode.admin) {
+      baseItems.add(
+        BottomNavigationBarItem(
+          icon: _buildIconWithBadge(Icons.message_outlined, widget.hasNewMessage),
+          label: 'Message',
+        ),
+      );
       baseItems.add(
         BottomNavigationBarItem(
           icon: _buildIconWithBadge(Icons.admin_panel_settings_outlined, false),
