@@ -19,9 +19,13 @@ class _AdminPageState extends State<AdminPage> {
   final _adminBoardPasswordController = TextEditingController();
   final _noticePopupContentController = TextEditingController();
   final _noticePopupCountController = TextEditingController();
+  final _telegramBotTokenController = TextEditingController();
+  final _telegramChatIdController = TextEditingController();
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   bool _isLoading = false;
+  String _notificationMethod = 'telegram';
+  bool _isTelegramEditing = false;
 
   @override
   void initState() {
@@ -42,6 +46,9 @@ class _AdminPageState extends State<AdminPage> {
           _adminBoardPasswordController.text = data['boardPassword'] ?? '';
           _noticePopupContentController.text = data['noticePopupContent'] ?? '';
           _noticePopupCountController.text = (data['noticePopupCount'] ?? 0).toString();
+          _notificationMethod = data['notificationMethod'] ?? 'telegram';
+          _telegramBotTokenController.text = data['telegramBotToken'] ?? '';
+          _telegramChatIdController.text = data['telegramChatId'] ?? '';
         });
       }
     } catch (e) {
@@ -126,6 +133,7 @@ class _AdminPageState extends State<AdminPage> {
     if (boardPassword.isNotEmpty) {
       settingsToUpdate['boardPassword'] = boardPassword;
     }
+    settingsToUpdate['notificationMethod'] = _notificationMethod;
     settingsToUpdate['noticePopupContent'] = noticeContent;
     settingsToUpdate['noticePopupCount'] = noticeCount;
     
@@ -152,6 +160,27 @@ class _AdminPageState extends State<AdminPage> {
       
       // Reload to show saved values (optional, but good for feedback)
       _loadSettings();
+    }
+  }
+
+  Future<void> _saveTelegramSettings() async {
+    final token = _telegramBotTokenController.text.trim();
+    final chatId = _telegramChatIdController.text.trim();
+    if (token.isEmpty || chatId.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Bot Token과 Chat ID를 모두 입력해주세요.')),
+      );
+      return;
+    }
+    await _firestore.collection('settings').doc('admin_settings').set(
+      {'telegramBotToken': token, 'telegramChatId': chatId},
+      SetOptions(merge: true),
+    );
+    if (mounted) {
+      setState(() => _isTelegramEditing = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Telegram 설정이 저장됐습니다.')),
+      );
     }
   }
 
@@ -243,6 +272,25 @@ class _AdminPageState extends State<AdminPage> {
                   decoration: inputDecoration.copyWith(labelText: 'App Title'),
                 ),
                 const SizedBox(height: 16),
+                const Text('Notification Method', style: TextStyle(color: Colors.white70)),
+                const SizedBox(height: 8),
+                SegmentedButton<String>(
+                  segments: const [
+                    ButtonSegment(
+                      value: 'telegram',
+                      icon: Icon(Icons.send),
+                      label: Text('Telegram'),
+                    ),
+                    ButtonSegment(
+                      value: 'email',
+                      icon: Icon(Icons.email_outlined),
+                      label: Text('Email'),
+                    ),
+                  ],
+                  selected: {_notificationMethod},
+                  onSelectionChanged: (val) => setState(() => _notificationMethod = val.first),
+                ),
+                const SizedBox(height: 16),
                 TextField(
                   controller: _emailController,
                   style: textStyle,
@@ -256,7 +304,78 @@ class _AdminPageState extends State<AdminPage> {
                   decoration: inputDecoration.copyWith(labelText: 'New Admin Password'),
                   obscureText: true,
                 ),
+                const SizedBox(height: 24),
+                const Divider(height: 1, color: Colors.white24),
                 const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Telegram Settings', style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.white)),
+                    _isTelegramEditing
+                        ? Row(
+                            children: [
+                              TextButton(
+                                onPressed: () => setState(() => _isTelegramEditing = false),
+                                child: const Text('Cancel', style: TextStyle(color: Colors.white54)),
+                              ),
+                              ElevatedButton(
+                                onPressed: _saveTelegramSettings,
+                                child: const Text('Save'),
+                              ),
+                            ],
+                          )
+                        : IconButton(
+                            icon: const Icon(Icons.edit_outlined, color: Colors.white70),
+                            tooltip: 'Edit Telegram Settings',
+                            onPressed: () => setState(() => _isTelegramEditing = true),
+                          ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.white10,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Text(
+                    '📌 Telegram 봇 알림 설정\n'
+                    '• Bot Token: BotFather에서 /newbot 으로 발급\n'
+                    '• Chat ID: 봇에게 메시지 전송 후 getUpdates API로 확인\n'
+                    '• 현재 봇: @QuiverHub_notify_bot\n'
+                    '• 알림 방식을 Telegram으로 선택 시 이 정보가 사용됩니다',
+                    style: TextStyle(color: Colors.white60, fontSize: 12, height: 1.6),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                AbsorbPointer(
+                  absorbing: !_isTelegramEditing,
+                  child: Opacity(
+                    opacity: _isTelegramEditing ? 1.0 : 0.5,
+                    child: Column(
+                      children: [
+                        TextField(
+                          controller: _telegramBotTokenController,
+                          style: textStyle,
+                          obscureText: !_isTelegramEditing,
+                          decoration: inputDecoration.copyWith(
+                            labelText: 'Bot Token',
+                            suffixIcon: const Icon(Icons.lock_outline, color: Colors.white38, size: 16),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        TextField(
+                          controller: _telegramChatIdController,
+                          style: textStyle,
+                          decoration: inputDecoration.copyWith(
+                            labelText: 'Chat ID',
+                            suffixIcon: const Icon(Icons.lock_outline, color: Colors.white38, size: 16),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
                 const SizedBox(height: 16),
                 const Divider(height: 40, color: Colors.white24),
                 Text('Notice Popup Configuration', style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.white)),

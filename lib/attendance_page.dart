@@ -89,19 +89,22 @@ class _AttendanceListState extends State<AttendanceList> {
           .collection('settings')
           .doc('admin_settings')
           .get();
-      final recipientEmail =
-          settingsDoc.data()?['notificationEmail'] as String?;
+      final data = settingsDoc.data();
+      final notificationMethod = data?['notificationMethod'] as String? ?? 'telegram';
+      final recipientEmail = data?['notificationEmail'] as String?;
 
-      if (recipientEmail != null && recipientEmail.isNotEmpty) {
-        debugPrint('>>> 알림 수신 이메일: $recipientEmail');
+      if (notificationMethod == 'email' && recipientEmail != null && recipientEmail.isNotEmpty) {
+        debugPrint('>>> 이메일 알림 전송: $recipientEmail');
         final emailService = EmailService();
         await emailService.sendAttendanceEmail(
           recipientEmail: recipientEmail,
           name: athleteName,
           status: newStatus,
         );
+      } else if (notificationMethod == 'telegram') {
+        debugPrint('>>> Telegram 알림은 Firebase Function이 처리합니다.');
       } else {
-        debugPrint('>>> 알림 수신 이메일이 설정되지 않았습니다.');
+        debugPrint('>>> 알림 수신 정보가 설정되지 않았습니다.');
       }
 
       final sheetsService = GoogleSheetsService();

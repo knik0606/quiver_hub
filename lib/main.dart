@@ -281,7 +281,6 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
   bool _isAdminUnlocked = false;
-  Timer? _lockTimer;
   String _appTitle = 'Quiver Hub';
 
   final bool _hasNewNotices = false;
@@ -303,7 +302,6 @@ class _MainPageState extends State<MainPage> {
 
   @override
   void dispose() {
-    _lockTimer?.cancel();
     super.dispose();
   }
 
@@ -350,29 +348,10 @@ class _MainPageState extends State<MainPage> {
     }
   }
 
-  void _resetLockTimer() {
-    _lockTimer?.cancel();
-    _lockTimer = Timer(const Duration(seconds: 30), () {
-      if (mounted) {
-        setState(() {
-          _isAdminUnlocked = false;
-        });
-        if (ScaffoldMessenger.of(context).mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Admin mode has been locked due to inactivity.'),
-            ),
-          );
-        }
-      }
-    });
-  }
-
   void _onItemTapped(int index) {
     if (widget.viewMode == ViewMode.combined && index == 4 && !_isAdminUnlocked) {
       _showPasswordDialog();
     } else {
-      if (_isAdminUnlocked) _resetLockTimer();
       setState(() {
         _selectedIndex = index;
       });
@@ -412,7 +391,6 @@ class _MainPageState extends State<MainPage> {
                           _isAdminUnlocked = true;
                           _selectedIndex = 4;
                         });
-                        _resetLockTimer();
                       }
                       Navigator.of(context).pop();
                     } else {
@@ -528,19 +506,7 @@ class _MainPageState extends State<MainPage> {
             ),
           ],
         ),
-        body: Listener(
-          onPointerDown: (_) {
-            if (_isAdminUnlocked) _resetLockTimer();
-          },
-          onPointerMove: (_) {
-            // Optional: De-bounce this if too frequent, but for simple timer reset it's okay
-            if (_isAdminUnlocked) _resetLockTimer();
-          },
-          onPointerUp: (_) {
-            if (_isAdminUnlocked) _resetLockTimer();
-          },
-        child: _pages.elementAt(displayIndex),
-      ),
+        body: _pages.elementAt(displayIndex),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         items: _bottomNavBarItems,
