@@ -36,9 +36,11 @@ async function getAdminSettings() {
 }
 
 function formatDateTime(dateObj) {
-  const date = (dateObj && dateObj.toDate) ? dateObj.toDate() : (dateObj || new Date());
-  const timeString = `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
-  const dateString = `${String(date.getFullYear()).substring(2)}/${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}`;
+  const utcDate = (dateObj && dateObj.toDate) ? dateObj.toDate() : (dateObj || new Date());
+  // UTC+9 (KST)
+  const date = new Date(utcDate.getTime() + 9 * 60 * 60 * 1000);
+  const timeString = `${String(date.getUTCHours()).padStart(2, '0')}:${String(date.getUTCMinutes()).padStart(2, '0')}`;
+  const dateString = `${String(date.getUTCFullYear()).substring(2)}/${String(date.getUTCMonth() + 1).padStart(2, '0')}/${String(date.getUTCDate()).padStart(2, '0')}`;
   return { timeString, dateString };
 }
 

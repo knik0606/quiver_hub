@@ -93,25 +93,18 @@ class _AttendanceListState extends State<AttendanceList> {
       final notificationMethod = data?['notificationMethod'] as String? ?? 'telegram';
       final recipientEmail = data?['notificationEmail'] as String?;
 
-      if (notificationMethod == 'email' && recipientEmail != null && recipientEmail.isNotEmpty) {
-        debugPrint('>>> 이메일 알림 전송: $recipientEmail');
-        final emailService = EmailService();
-        await emailService.sendAttendanceEmail(
-          recipientEmail: recipientEmail,
-          name: athleteName,
-          status: newStatus,
-        );
-      } else if (notificationMethod == 'telegram') {
-        debugPrint('>>> Telegram 알림은 Firebase Function이 처리합니다.');
-      } else {
-        debugPrint('>>> 알림 수신 정보가 설정되지 않았습니다.');
-      }
-
-      final sheetsService = GoogleSheetsService();
-      await sheetsService.logAttendanceToSheet(
+      // GAS는 항상 호출 (시트 기록 목적)
+      // Telegram 모드: 빈 이메일 전달 → GAS가 시트만 기록하고 이메일은 발송 안 함
+      // Email 모드: 실제 이메일 전달 → GAS가 시트 기록 + 이메일 발송
+      final emailForGas = (notificationMethod == 'email' && recipientEmail != null)
+          ? recipientEmail
+          : '';
+      debugPrint('>>> GAS 호출 (시트 기록${notificationMethod == 'email' ? ' + 이메일 발송' : ''})');
+      final emailService = EmailService();
+      await emailService.sendAttendanceEmail(
+        recipientEmail: emailForGas,
         name: athleteName,
         status: newStatus,
-        timestamp: DateTime.now(),
       );
     } catch (e) {
       debugPrint('>>> Error in background services: $e');
